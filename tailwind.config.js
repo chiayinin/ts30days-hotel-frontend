@@ -42,6 +42,9 @@ export default {
         10: '#FDECEF'
       }
     },
+    container: {
+      center: true,
+    },
     extend: {},
   },
   plugins: [],
