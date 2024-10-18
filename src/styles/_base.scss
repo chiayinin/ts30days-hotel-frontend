@@ -1,0 +1,79 @@
+@mixin bold {
+  @apply font-bold;
+}
+
+@mixin medium {
+  @apply font-medium;
+}
+
+@mixin heading {
+  @apply leading-[120%] tracking-[5%];
+  @include bold;
+}
+
+@mixin body {
+  @apply leading-[150%] tracking-[2%];
+}
+
+
+// 全域字型
+@layer base {
+  html {
+    font-family: 'Noto Serif TC',  system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    @apply text-neutral-80;
+  }
+  h1 {
+    @apply text-5xl;
+    @include heading;
+  }
+  h2 {
+    @apply text-4xl;
+    @include heading;
+  }
+  h3 {
+    @apply text-[32px];
+    @include heading;
+  }
+  h4 {
+    @apply text-[28px];
+    @include heading;
+  }
+  h5 {
+    @apply text-2xl;
+    @include heading;
+  }
+  h6 {
+    @apply text-xl;
+    @include heading;
+  }
+}
+
+.text-title {
+  @apply text-xs;
+  @include body;
+  @include bold;
+}
+
+.text-subtitle {
+  @apply text-sm;
+  @include body;
+  @include bold;
+}
+
+.text-body {
+  @apply text-sm;
+  @include body;
+  @include medium;
+}
+
+.text-body2 {
+  @apply text-sm;
+  @include body;
+  @include medium;
+}
+
+.text-tiny {
+  @apply text-xs;
+  @include body;
+  @include medium;
+}
