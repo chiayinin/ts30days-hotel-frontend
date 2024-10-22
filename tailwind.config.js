@@ -6,12 +6,14 @@ export default {
   ],
   theme: {
     colors: {
+      'transparent': 'transparent',
       'primary': {
         120: '#7B6651',
         100: '#BF9D7D',
         80: '#D0B79F',
         60: '#E1D1C2',
         40: '#F1EAE4',
+        10: '#F7F2EE',
         'tint': '#FAF7F5'
       },
       'neutral': {
