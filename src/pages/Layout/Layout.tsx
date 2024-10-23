@@ -6,14 +6,13 @@ const Layout = () => {
   return (<>
     {/* Header */}
     <Header></Header>
-<p>Layout page</p>
     {/* Main */}
     <main>
       <Outlet />
     </main>
 
     {/* Footer */}
-    <Footer></Footer>
+    {/* <Footer></Footer> */}
   </>)
 }
 
