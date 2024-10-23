@@ -31,8 +31,7 @@ export const Header = () => {
 
 
   return(<>
-  <header className="flex justify-between items-center px-3 py-4 md:px-20 md:py-6 bg-neutral-bg h-[72px] md:h-[120px]">
-  {/* bg-transparent */}
+  <header className="flex justify-between items-center px-3 py-4 md:px-20 md:py-6 bg-transparent h-[72px] md:h-[120px]">
     <Link to={'/'} className="w-[110px] md:w-[196px]"><img src={Logo} alt="享樂酒店" /></Link>
     <nav >
       <ul className={`bg-neutral-bg flex flex-col justify-center items-center fixed w-full bg-gray-900 text-center h-screen  top-0 left-0 px-5 gap-4 transition-transform duration-300 ease-in-out md:flex-row md:static md:bg-transparent md:translate-x-0 md:justify-between md:h-auto  ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
