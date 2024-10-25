@@ -21,7 +21,10 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
-      "@assets/*":["./src/assets/*"]
+      "@assets/*":["./src/assets/*"],
+      "@types":["./src/types/index.ts"],
+      "@core":["./src/core/index.ts"],
+      "@apis":["./src/apis/index.ts"],
     },
   },
   "include": ["src"]
