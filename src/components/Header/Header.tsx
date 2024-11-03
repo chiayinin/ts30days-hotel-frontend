@@ -1,15 +1,22 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from 'react';
+import { Link, useLocation, redirect } from "react-router-dom";
+import { useState, useEffect, useContext, useRef } from 'react';
 
 import Logo from "@assets/images/logo_white.svg";
+import IconProfile from "@assets/icons/icon-profile.svg?react";
 
-import { GlobalContext, KEY_TOKEN } from "@core";
+import { GlobalContext } from "@core";
+import { logout } from "@apis";
 
+import { MyToast, MyToastProps } from "@components";
+
+/**
+ * 導覽列的元件
+ */
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
   const { user, dispatch } = useContext(GlobalContext);
-  const navigate = useNavigate();
+  const toastRef = useRef<{ show: (props: MyToastProps) => void } | null>(null);
 
   // 漢堡選單切換
   const toggleMenu = () => {
@@ -22,15 +29,16 @@ export const Header = () => {
   // 首頁、房間頁背景透明
   const beTransparent = ['/', '/room'].includes(pathname);
   // 是否顯示 nav 連結(登入、註冊頁不顯示)
-  const showLinks = ['login', 'registration'].includes(pathname);
-  // // 前往「我的帳戶」頁面
-  // const goToMyAccount = () => {
-  //   navigate('/my-account');
-  // };
-  // // 登出
-  // const logout = () => {
+  const showLinks = !['login', 'registration'].includes(pathname);
 
-  // }
+  // 登出
+  const handleLogout = () => {
+    logout();
+    toastRef.current?.show({ severity: 'success', summary:'登出', detail: '已成功登出。' });
+    dispatch({ type: 'SET_USER', payload: null });
+    redirect('/');
+  }
+
 
   useEffect(() => {
     // 768px是切換到桌機的斷點，切換回桌機時，isOpen設置為false
@@ -49,14 +57,23 @@ export const Header = () => {
   }, []);
 
   return(<>
-  <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] ${ beTransparent ? 'bg-transparent' : 'bg-neutral-bg' }`}>
+  <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] bg-neutral-bg`}>
+  {/* ${ beTransparent ? 'bg-transparent' : 'bg-neutral-bg' } */}
     <Link to={'/'} className="w-[110px] md:w-[196px]"><img src={Logo} alt="享樂酒店" /></Link>
     <nav>
       { showLinks && (
       <ul className={`bg-neutral-bg flex flex-col justify-center items-center fixed w-full bg-gray-900 text-center h-screen  top-0 left-0 px-5 gap-4 transition-transform duration-300 ease-in-out md:flex-row md:static md:bg-transparent md:translate-x-0 md:justify-between md:h-auto  ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <li className={isOpen ? 'w-full' : ''}><Link to={'/room'} onClick={closeMenu} className="btn-ghost">客房旅宿</Link></li>
-        <li className={isOpen ? 'w-full' : ''}><Link to={'/login'} onClick={closeMenu} className="btn-ghost">會員登入</Link></li>
-        <li className={isOpen ? 'w-full' : ''}><Link to={'/booking'} onClick={closeMenu} className="btn-primary">立即訂房</Link></li>
+        { !user
+        ? (<>
+          <li className={`${isOpen ? 'w-full' : ''}`}>
+            <Link to={'/my-account'} onClick={closeMenu} className="btn-ghost"><IconProfile className="fill-transparent stroke-neutral-0 mr-2 inline"/>Jessica</Link>
+          </li>
+          <li className={`btn-ghost cursor-pointer ${isOpen ? 'w-full' : ''}`} onClick={handleLogout}>登出</li>
+        </>)
+        : <li className={isOpen ? 'w-full' : ''}><Link to={'/login'} className="btn-ghost">會員登入</Link></li>
+        }
+        <li className={isOpen ? 'w-full' : ''}><Link to={'/booking'} className="btn-primary">立即訂房</Link></li>
       </ul>
       ) }
     </nav>
@@ -67,6 +84,8 @@ export const Header = () => {
       <span className={`bg-neutral-0 rounded-full block w-6 h-1 mx-1 transition-opacity ${isOpen ? 'opacity-0' : 'opacity-100'}`}></span>
       <span className={`bg-neutral-0 rounded-full block w-6 h-1 mx-1 transition-transform ${isOpen ? 'transform -translate-y-2 -rotate-45' : ''}`}></span>
     </div>
+    {/* Toast */}
+    <MyToast ref={toastRef} />
   </header>
   </>)
 }

@@ -1,5 +1,7 @@
 import { redirect } from 'react-router-dom';
-import { fetchData, getFromStorage, KEY_TOKEN } from '@core';
+import axios from 'axios';
+
+import { fetchData, getFromStorage, clearStorage, KEY_TOKEN } from '@core';
 import { User } from '@types';
 
 export const signUp = async (params: User) => fetchData<User>('post', '/user/signup', params);
@@ -17,3 +19,8 @@ export const loginGuard = async () => {
   };
   return null;
 };
+
+export const logout = () => {
+  delete axios.defaults.headers.common["Authorization"];
+  clearStorage('COOKIE');
+}
