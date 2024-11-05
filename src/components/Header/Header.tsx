@@ -5,9 +5,8 @@ import Logo from "@assets/images/logo_white.svg";
 import IconProfile from "@assets/icons/icon-profile.svg?react";
 
 import { GlobalContext } from "@core";
-import { logout, getUser, login } from "@apis";
+import { logout } from "@apis";
 import { MyToast, MyToastProps } from "@components";
-import { Password } from "primereact/password";
 
 /**
  * 導覽列的元件
@@ -55,13 +54,6 @@ export const Header = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  // const loginInfo = {
-  //   "email": "lisa@test.com",
-  //   "password": "lisa1234"
-  // }
-  // login(loginInfo)
-  getUser('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzI5YjgzYjU2NTNhZWJiNjBmMDBjMjAiLCJpYXQiOjE3MzA3ODczODcsImV4cCI6MTczMTM5MjE4N30.lkTTIp_RBwoj0fsSiLSvpywsRAuVGRr6nlGplMsqlPg')
 
   return(<>
   <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] bg-neutral-bg`}>

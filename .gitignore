@@ -29,4 +29,4 @@ dist-ssr
 *.env
 
 # demo
-*.demo
+*.demo.ts
