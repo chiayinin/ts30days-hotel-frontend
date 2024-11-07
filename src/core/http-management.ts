@@ -1,5 +1,4 @@
 import { KEY_TOKEN, storeInStorage } from './storage-management.ts';
-// import axios from 'axios';
 import axios from './../../axios.config';
 
 /**

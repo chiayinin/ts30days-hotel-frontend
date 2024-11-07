@@ -1,4 +1,4 @@
-import { useRef, forwardRef, useImperativeHandle } from 'react';
+import { useRef, forwardRef, useImperativeHandle, } from 'react';
 import { Toast } from 'primereact/toast';
 
 export type MyToastProps = {
