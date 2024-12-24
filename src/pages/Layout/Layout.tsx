@@ -7,7 +7,7 @@ const Layout = () => {
     {/* Header */}
     <Header></Header>
     {/* Main */}
-    <main className='bg-purple-100'>
+    <main className='bg-primary-10'>
       <Outlet />
     </main>
 

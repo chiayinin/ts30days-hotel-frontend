@@ -1,9 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
+import axios from "axios";
 
-import Home from "./pages/Home/Home";
+import { getNewsData } from './apis/index';
+
 
 // 頁面元件
 import Layout from "./pages/Layout/Layout";
+import Home from "./pages/Home/Home";
 
 export const router = createBrowserRouter([
   {
@@ -12,7 +15,9 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Home />
+        // loader: async () => getNewsData(),
+        loader: async () => axios.all([ getNewsData() ]),
+        element: <Home />,
       },
     ]
   }
