@@ -58,22 +58,22 @@ const Home = () => {
     </section>
   </Swiper>
   {/* news */}
-  <section className="bg-primary-10 container py-20 relative">
-    <img className="absolute bg-cover w-[100px] h-[100px] top-10 right-6" src={dot}></img>
-    <img className="absolute bg-cover w-[100px] h-[100px] -bottom-10 left-6" src={dot}></img>
-    <p className="h3 md:h1 text-primary-100 block relative pb-6 md:pb-10 after:block after:w-[140px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:-bottom-0 after:md:-bottom-0">最新<br />消息</p>
-    <ul className="mt-10 space-y-10">
-      { newsData.length > 0 ? newsData.map((news, index) => (
-        <li key={`${news._id}-${index}`}>
-          <figure className="w-[351px] h-[294px] bg-cover mb-6">
+  <section className="bg-primary-10 container py-20 relative md:flex md:py-[120px]">
+    <img className="absolute bg-cover w-[100px] h-[100px] top-10 right-6 md:w-[200px] md:h-[200px] 2xl:top-[100px] 2xl:-right-[132px] " src={dot}></img>
+    <img className="absolute bg-cover w-[100px] h-[100px] -bottom-10 left-6 md:w-[200px] md:h-[200px] md:-bottom-20 md:-left-[112px]" src={dot}></img>
+    <p className="h3 md:h1 text-primary-100 relative mb-20 after:block after:w-[140px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:top-[104px] after:md:top-40 md:basis-2/12 md:mb-0">最新<br />消息</p>
+    <ul className="space-y-10 md:basis-10/12">
+      { newsData.map((news, index) => (
+        <li key={`${news._id}-${index}`} className="md:flex md:justify-start md:items-center">
+          <figure className="min-w-[351px] h-[294px] bg-cover mb-6 md:min-w-[474px] md:mr-6 md:mb-0">
             <img className="w-full h-full bg-cover rounded-lg" src={news.image} alt={news.title} />
           </figure>
           <div>
-            <h3 className="h4 mb-2">{ news.title }</h3>
-            <p className="text-body2">{ news.description }</p>
+            <h3 className="h4 mb-2 md:h3 md:mb-6">{ news.title }</h3>
+            <p className="text-body2 md:text-body">{ news.description }</p>
           </div>
         </li>
-      )) : <p>not data</p> }
+      )) }
     </ul>
   </section>
   </>);
