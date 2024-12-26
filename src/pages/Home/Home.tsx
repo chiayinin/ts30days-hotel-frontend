@@ -80,9 +80,9 @@ const Home = () => {
   {/* about us */}
   <section className="bg-neutral-bg pt-20 pb-[120px] w-full">
     <div className="w-full bg-cover bg-top bg-no-repeat relative" style={{ backgroundImage: `url(${aboutIMG})` }} >
-      <div className="relative inset-y-10 left-[10%] md:inset-y-20 w-10/12 text-neutral-0 p-6 bg-gradient-to-b from-[#140F0ACC] to-[#BE9C7C] border-b border-l border-neutral-0 rounded-t-[40px] backdrop-blur-[20px] rounded-l-[40px]">
-        <p className="h3 mb-10 relative after:block after:w-[161px] after:h-[2px] after:rounded-full after:bg-neutral-0 after:absolute after:top-1/2 after:left-[106px]">關於<br />我們</p>
-        <div className="space-y-4 md:space-y-10">
+      <div className="relative inset-y-10 left-[10%] xl:left-[20%] 2xl:left-[30%] md:inset-y-20 w-10/12 xl:w-9/12 2xl:w-7/12 md:max-w-[1044px] text-neutral-0 p-6 xl:p-20 bg-gradient-to-b from-[#140F0ACC] to-[#BE9C7C] border-b border-l border-neutral-0 rounded-t-[40px] backdrop-blur-[20px] rounded-l-[40px]">
+        <p className="h3 mb-10 xl:mb-20 relative after:block after:w-[161px] after:h-[2px] after:rounded-full after:bg-neutral-0 after:absolute after:top-1/2 after:left-[106px]">關於<br />我們</p>
+        <div className="space-y-4 xl:space-y-10">
           <p className="text-body2 md:text-body">
             享樂酒店，位於美麗島高雄的心臟地帶，是這座城市的璀璨瑰寶與傲人地標。<br />我們的存在，不僅僅是為了提供奢華的住宿體驗，更是為了將高雄的美麗與活力，獻給每一位蒞臨的旅客。
           </p>
