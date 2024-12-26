@@ -15,6 +15,7 @@ import banner004 from '@assets/images/banner-004.jpg';
 import banner005 from '@assets/images/banner-005.jpg';
 import banner006 from '@assets/images/banner-006.jpg';
 import dot from '@assets/images/home-dot.png';
+import aboutIMG from '@assets/images/home-about.png';
 
 const banners = [banner001, banner002, banner003, banner004, banner005, banner006];
 
@@ -75,6 +76,28 @@ const Home = () => {
         </li>
       )) }
     </ul>
+  </section>
+  {/* about us */}
+  <section className="bg-neutral-bg pt-20 pb-[120px] w-full">
+    <div className="w-full bg-cover bg-top bg-no-repeat relative" style={{ backgroundImage: `url(${aboutIMG})` }} >
+      <div className="relative inset-y-10 left-[10%] md:inset-y-20 w-10/12 text-neutral-0 p-6 bg-gradient-to-b from-[#140F0ACC] to-[#BE9C7C] border-b border-l border-neutral-0 rounded-t-[40px] backdrop-blur-[20px] rounded-l-[40px]">
+        <p className="h3 mb-10 relative after:block after:w-[161px] after:h-[2px] after:rounded-full after:bg-neutral-0 after:absolute after:top-1/2 after:left-[106px]">關於<br />我們</p>
+        <div className="space-y-4 md:space-y-10">
+          <p className="text-body2 md:text-body">
+            享樂酒店，位於美麗島高雄的心臟地帶，是這座城市的璀璨瑰寶與傲人地標。<br />我們的存在，不僅僅是為了提供奢華的住宿體驗，更是為了將高雄的美麗與活力，獻給每一位蒞臨的旅客。
+          </p>
+          <p className="text-body2 md:text-body">
+            我們的酒店，擁有時尚典雅的裝潢，每一個細節都充滿著藝術與設計的精緻。<br />我們的員工，都以熱情的服務與專業的態度，讓每一位客人都能感受到賓至如歸的溫暖。
+          </p>
+          <p className="text-body2 md:text-body">
+            在這裡，您可以遙望窗外，欣賞高雄的城市景色，感受這座城市的繁華與活力；您也可以舒適地坐在我們的餐廳，品嚐精緻的佳餚，體驗無與倫比的味覺盛宴。
+          </p>
+          <p className="text-body2 md:text-body">
+            享樂酒店，不僅是您在高雄的住宿之選，更是您感受高雄魅力的最佳舞台。我們期待著您的蒞臨，讓我們共同編織一段難忘的高雄故事。
+          </p>
+        </div>
+      </div>
+    </div>
   </section>
   </>);
 };
