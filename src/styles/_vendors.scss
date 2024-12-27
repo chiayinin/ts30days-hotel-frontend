@@ -11,3 +11,6 @@
 .swiper-pagination-bullet-active {
   @apply bg-primary-100 w-[60px]
 }
+.swiper-button-prev, .swiper-button-next {
+  @apply after:content-[''] after:hidden before:content-[''] before:hidden text-primary-100 static m-4 w-auto h-auto
+}

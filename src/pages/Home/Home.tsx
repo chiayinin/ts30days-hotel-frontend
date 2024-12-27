@@ -6,7 +6,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import { News } from '@types';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade,  Pagination } from 'swiper/modules';
+import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 
 import banner001 from '@assets/images/banner-001.jpg';
 import banner002 from '@assets/images/banner-002.jpg';
@@ -15,6 +15,10 @@ import banner004 from '@assets/images/banner-004.jpg';
 import banner005 from '@assets/images/banner-005.jpg';
 import banner006 from '@assets/images/banner-006.jpg';
 import dot from '@assets/images/home-dot.png';
+import bgIMG from '@assets/images/home-bg.png';
+// import line1IMG from '@assets/images/home-line.png';
+import line2IMG from '@assets/images/home-line2.png';
+import line3IMG from '@assets/images/home-line3.png';
 import aboutIMG from '@assets/images/home-about.png';
 
 const banners = [banner001, banner002, banner003, banner004, banner005, banner006];
@@ -26,10 +30,10 @@ const Home = () => {
   return(<>
   {/* banner */}
   <Swiper
-    autoplay={{ // 自動輪播 swiper
-      delay: 4 * 1000, // 每兩秒切換下一張
-    }}
-    loop={true} // 輪播結束後回到第一張繼續輪播
+    // autoplay={{ // 自動輪播 swiper
+    //   delay: 4 * 1000, // 每兩秒切換下一張
+    // }}
+    // loop={true} // 輪播結束後回到第一張繼續輪播
     effect={'fade'}
     pagination={{
       clickable: true,
@@ -97,6 +101,55 @@ const Home = () => {
           </p>
         </div>
       </div>
+    </div>
+  </section>
+  {/* room */}
+  {/* bg-neutral-bg */}
+  <section className=" text-neutral-0 py-20 relative overflow-x-clip">
+    <img className="absolute -top-5 -right-20 min-h-[84px] md:min-h-[188px]" src={line3IMG} alt="" />
+    <div className="container">
+      <Swiper
+        // autoplay={{ // 自動輪播 swiper
+        //   delay: 4 *9000, // 每兩秒切換下一張
+        // }}
+        // loop={true} // 輪播結束後回到第一張繼續輪播
+        effect={'fade'}
+        pagination={{
+          clickable: true,
+        }}
+        // navigation={true}
+        navigation={{
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        }}
+        modules={[Autoplay, EffectFade, Navigation, Pagination]}
+        className="w-full md:w-[600px] xl:w-[900px] h-[300px] md:h-[600px] xl:h-[900px] mb-6"
+      >
+        {banners.map((banner, index) => (
+          <SwiperSlide key={index} className="w-full h-full">
+            <figure className="w-full h-full">
+              <img className="w-full h-full bg-cover rounded-t-lg backdrop-blur-[20px] bg-gradient-to-b from-neutral-0/30 to-neutral-0" src={banner} alt="" />
+            </figure>
+          </SwiperSlide> ))}
+      </Swiper>
+      <div className="space-y-6 relative">
+        <img className="absolute top-0 right-0"  src={bgIMG} alt="" />
+        <div className="space-y-2">
+          <p className="h4 md:h2">尊爵雙人房</p>
+          <p className="text-body2 md:text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
+        </div>
+        <p className="h5 md:h3">NT$ 10,000</p>
+        <Link to="/room" className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>查看更多<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
+        <div className="flex justify-end items-center">
+          <div className="swiper-button-prev">
+            <span className="material-symbols-outlined">arrow_back</span>
+          </div>
+          <div className="swiper-button-next">
+            <span className="material-symbols-outlined">arrow_forward</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
   </>);
