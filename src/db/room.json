@@ -1,0 +1,134 @@
+[
+  {
+    "name": "尊爵雙人房",
+    "description": "享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。",
+    "imageUrl": "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-1.png?raw=true",
+    "imageUrlList": [
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-2.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-3.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-4.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room2-5.png?raw=true"
+    ],
+    "areaInfo": "24坪",
+    "bedInfo": "一張大床",
+    "maxPeople": 4,
+    "price": 10000,
+    "layoutInfo": [
+      {
+        "title": "市景",
+        "isProvide": true
+      }
+    ],
+    "facilityInfo": [
+      {
+        "title": "平面電視",
+        "isProvide": true
+      }
+    ],
+    "amenityInfo": [
+      {
+        "title": "衛生紙",
+        "isProvide": true
+      }
+    ]
+  },
+  {
+    "name": "景觀雙人房",
+    "description": "景觀雙人房擁有絕美的高雄市景觀，讓您在舒適的環境中欣賞城市之美。",
+    "imageUrl": "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room3-1.png?raw=true",
+    "imageUrlList": [
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room3-2.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room3-3.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room3-4.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room3-5.png?raw=true"
+    ],
+    "areaInfo": "28坪",
+    "bedInfo": "一張大床",
+    "maxPeople": 4,
+    "price": 10000,
+    "layoutInfo": [
+      {
+        "title": "市景",
+        "isProvide": true
+      }
+    ],
+    "facilityInfo": [
+      {
+        "title": "平面電視",
+        "isProvide": true
+      }
+    ],
+    "amenityInfo": [
+      {
+        "title": "衛生紙",
+        "isProvide": true
+      }
+    ]
+  },
+  {
+    "name": "豪華雅緻房",
+    "description": "享受高級的住宿體驗，豪華雅緻房提供給您舒適寬敞的空間和精緻的裝潢。",
+    "imageUrl": "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room4-1.png?raw=true",
+    "imageUrlList": [
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room4-2.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room4-3.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room4-4.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room4-5.png?raw=true"
+    ],
+    "areaInfo": "36坪",
+    "bedInfo": "兩張大床",
+    "maxPeople": 4,
+    "price": 10000,
+    "layoutInfo": [
+      {
+        "title": "市景",
+        "isProvide": true
+      }
+    ],
+    "facilityInfo": [
+      {
+        "title": "平面電視",
+        "isProvide": true
+      }
+    ],
+    "amenityInfo": [
+      {
+        "title": "衛生紙",
+        "isProvide": true
+      }
+    ]
+  },
+  {
+    "name": "景觀尊榮家庭房",
+    "description": "景觀尊榮家庭房不僅有寬敞的空間，還有絕美的市景視野，是帶給家庭最尊榮的待遇。",
+    "imageUrl": "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room5-1.png?raw=true",
+    "imageUrlList": [
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room5-2.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room5-3.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room5-4.png?raw=true",
+      "https://github.com/hexschool/2022-web-layout-training/blob/main/typescript-hotel/%E6%A1%8C%E6%A9%9F%E7%89%88/room5-5.png?raw=true"
+    ],
+    "areaInfo": "48坪",
+    "bedInfo": "兩張大床",
+    "maxPeople": 4,
+    "price": 10000,
+    "layoutInfo": [
+      {
+        "title": "市景",
+        "isProvide": true
+      }
+    ],
+    "facilityInfo": [
+      {
+        "title": "平面電視",
+        "isProvide": true
+      }
+    ],
+    "amenityInfo": [
+      {
+        "title": "衛生紙",
+        "isProvide": true
+      }
+    ]
+  }
+]

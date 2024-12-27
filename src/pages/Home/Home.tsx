@@ -1,12 +1,10 @@
-// import { useContext } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 
-// import { GlobalContext } from "@core";
-
-import { News } from '@types';
+import { News, Rooms } from '@types';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
+import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 
 import banner001 from '@assets/images/banner-001.jpg';
 import banner002 from '@assets/images/banner-002.jpg';
@@ -17,23 +15,42 @@ import banner006 from '@assets/images/banner-006.jpg';
 import dot from '@assets/images/home-dot.png';
 import bgIMG from '@assets/images/home-bg.png';
 // import line1IMG from '@assets/images/home-line.png';
-import line2IMG from '@assets/images/home-line2.png';
+// import line2IMG from '@assets/images/home-line2.png';
 import line3IMG from '@assets/images/home-line3.png';
 import aboutIMG from '@assets/images/home-about.png';
 
 const banners = [banner001, banner002, banner003, banner004, banner005, banner006];
 
 const Home = () => {
-  // const{ user } = useContext(GlobalContext);
-  const [newsData]  = useLoaderData() as [News[]] ;
+  const [newsData, roomsData]  = useLoaderData() as [News[], Rooms[]] ;
+  const [ currentRoomIndex, setCurrentRoomIndex ] = useState(0);
+  const [ currentRoom, setCurrentRoom ] = useState(roomsData[currentRoomIndex]);
+
+  useEffect(() => {
+    setCurrentRoom(roomsData[currentRoomIndex]);
+  }, [currentRoomIndex]);
+
+  const handlePrevRoom = () => {
+    let index = currentRoomIndex - 1;
+
+    if(index < 0) index = roomsData.length - 1;
+    setCurrentRoomIndex(index);
+  };
+
+  const handleNextRoom = () => {
+    let index = currentRoomIndex + 1;
+
+    if(index >= roomsData.length) index = 0;
+    setCurrentRoomIndex(index);
+  };
 
   return(<>
   {/* banner */}
   <Swiper
-    // autoplay={{ // 自動輪播 swiper
-    //   delay: 4 * 1000, // 每兩秒切換下一張
-    // }}
-    // loop={true} // 輪播結束後回到第一張繼續輪播
+    autoplay={{ // 自動輪播 swiper
+      delay: 4 * 1000, // 每兩秒切換下一張
+    }}
+    loop={true} // 輪播結束後回到第一張繼續輪播
     effect={'fade'}
     pagination={{
       clickable: true,
@@ -108,41 +125,37 @@ const Home = () => {
     <img className="absolute -top-5 -right-20 xl:top-[15%] md:-right-1/3 xl:w-11/12 min-h-[84px] xl:max-h-[188px] z-[1]" src={line3IMG} alt="" />
     <div className="container md:flex md:justify-center 2xl:justify-end md:items-end md:gap-x-10 xl:gap-x-20 2xl:h-[900px] 2xl:relative">
       <Swiper
-        // autoplay={{ // 自動輪播 swiper
-        //   delay: 4 *9000, // 每兩秒切換下一張
-        // }}
-        // loop={true} // 輪播結束後回到第一張繼續輪播
+        autoplay={{ // 自動輪播 swiper
+          delay: 4 *9000, // 每兩秒切換下一張
+        }}
+        loop={true} // 輪播結束後回到第一張繼續輪播
         effect={'fade'}
         pagination={{
           clickable: true,
         }}
-        navigation={{
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        }}
-        modules={[Autoplay, EffectFade, Navigation, Pagination]}
+        modules={[Autoplay, EffectFade, Pagination]}
         className="w-[351px] h-[300px] xl:w-[630px] xl:h-[600px] 2xl:w-[900px] 2xl:h-[900px] mb-6 md:m-0 2xl:absolute 2xl:top-0 2xl:-left-80 z-0"
       >
-        {banners.map((banner, index) => (
+        {currentRoom.imageUrlList.map((image, index) => (
           <SwiperSlide key={index} className="w-full h-full">
-            <figure className="w-full h-full">
-              <img className="w-full h-full bg-cover rounded-t-lg backdrop-blur-[20px] bg-gradient-to-b from-neutral-0/30 to-neutral-0" src={banner} alt="" />
+            <figure className="w-full h-full" key={`${currentRoom._id}-${index}`}>
+              <img className="w-full h-full bg-cover rounded-t-lg backdrop-blur-[20px] bg-gradient-to-b from-neutral-0/30 to-neutral-0" src={image} alt={currentRoom.name} />
             </figure>
           </SwiperSlide> ))}
       </Swiper>
       <div className="space-y-6 relative 2xl:w-[628px]">
         <img className="absolute top-0 right-0"  src={bgIMG} alt="" />
         <div className="space-y-2">
-          <p className="h4 xl:h2">尊爵雙人房</p>
-          <p className="text-body2 xl:text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
+          <p className="h4 xl:h2">{ currentRoom.name }</p>
+          <p className="text-body2 xl:text-body">{ currentRoom.description }</p>
         </div>
-        <p className="h5 xl:h3">NT$ 10,000</p>
-        <Link to="/room" className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>查看更多<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
+        <p className="h5 xl:h3">NT$ {currentRoom.price}</p>
+        <Link to={`/room/${currentRoom._id}`} className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>查看更多<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
         <div className="flex justify-end items-center">
-          <div className="swiper-button-prev">
+          <div className="text-primary-100 m-4 w-auto h-auto cursor-pointer" onClick={handlePrevRoom}>
             <span className="material-symbols-outlined">arrow_back</span>
           </div>
-          <div className="swiper-button-next">
+          <div className="text-primary-100 m-4 w-auto h-auto cursor-pointer" onClick={handleNextRoom}>
             <span className="material-symbols-outlined">arrow_forward</span>
           </div>
         </div>
