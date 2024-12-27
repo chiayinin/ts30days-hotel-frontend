@@ -104,10 +104,9 @@ const Home = () => {
     </div>
   </section>
   {/* room */}
-  {/* bg-neutral-bg */}
-  <section className=" text-neutral-0 py-20 relative overflow-x-clip">
-    <img className="absolute -top-5 -right-20 min-h-[84px] md:min-h-[188px]" src={line3IMG} alt="" />
-    <div className="container">
+  <section className="bg-neutral-bg text-neutral-0 py-20 xl:py-[120px] relative overflow-x-clip">
+    <img className="absolute -top-5 -right-20 xl:top-[15%] md:-right-1/3 xl:w-11/12 min-h-[84px] xl:max-h-[188px] z-[1]" src={line3IMG} alt="" />
+    <div className="container md:flex md:justify-center 2xl:justify-end md:items-end md:gap-x-10 xl:gap-x-20 2xl:h-[900px] 2xl:relative">
       <Swiper
         // autoplay={{ // 自動輪播 swiper
         //   delay: 4 *9000, // 每兩秒切換下一張
@@ -117,13 +116,12 @@ const Home = () => {
         pagination={{
           clickable: true,
         }}
-        // navigation={true}
         navigation={{
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         }}
         modules={[Autoplay, EffectFade, Navigation, Pagination]}
-        className="w-full md:w-[600px] xl:w-[900px] h-[300px] md:h-[600px] xl:h-[900px] mb-6"
+        className="w-[351px] h-[300px] xl:w-[630px] xl:h-[600px] 2xl:w-[900px] 2xl:h-[900px] mb-6 md:m-0 2xl:absolute 2xl:top-0 2xl:-left-80 z-0"
       >
         {banners.map((banner, index) => (
           <SwiperSlide key={index} className="w-full h-full">
@@ -132,13 +130,13 @@ const Home = () => {
             </figure>
           </SwiperSlide> ))}
       </Swiper>
-      <div className="space-y-6 relative">
+      <div className="space-y-6 relative 2xl:w-[628px]">
         <img className="absolute top-0 right-0"  src={bgIMG} alt="" />
         <div className="space-y-2">
-          <p className="h4 md:h2">尊爵雙人房</p>
-          <p className="text-body2 md:text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
+          <p className="h4 xl:h2">尊爵雙人房</p>
+          <p className="text-body2 xl:text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
         </div>
-        <p className="h5 md:h3">NT$ 10,000</p>
+        <p className="h5 xl:h3">NT$ 10,000</p>
         <Link to="/room" className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>查看更多<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
         <div className="flex justify-end items-center">
           <div className="swiper-button-prev">
@@ -149,7 +147,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
     </div>
   </section>
   </>);
