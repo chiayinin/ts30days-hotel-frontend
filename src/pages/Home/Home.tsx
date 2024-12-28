@@ -162,6 +162,19 @@ const Home = () => {
       </div>
     </div>
   </section>
+  {/* food */}
+  <section className="py-40 xl:py-[120px]">
+  <p className="h3 md:h1 text-primary-100 relative mb-20 md:mb-40 after:block after:w-[200px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:top-1/2 after:left-[106px]">佳餚<br />美饌</p>
+  <div>
+    <div className="w-[300px] h-[480px] rounded-lg">
+      <div className="text-neutral-0 p-4 md:p-6  bg-gradient-to-b from-neutral-0/0 to-[#140F0A]/[77.6%] backdrop-blur-[20px]">
+        <p className="h5 mb-4 md:mb-6">蔬食<span className="inline-block float-end leading-7 text-subtitle md:text-title">SUN-MON
+        11:00 - 20:30</span></p>
+        <p className="text-body2 md:text-body">安排一場與地球的約會！超過50種有機小農蔬果、歐陸風味「全植料理」、專人鮮切蔬食吃到飽以及好萊塢明星指定鮮壓康普茶、比利時植物奶，美味推薦：普羅旺斯燉菜、烤芋頭煙燻藜麥。</p>
+      </div>
+    </div>
+  </div>
+  </section>
   </>);
 };
 
