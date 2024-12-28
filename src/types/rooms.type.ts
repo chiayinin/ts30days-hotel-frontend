@@ -5,7 +5,7 @@ export type facility = {
   isProvide: boolean;
 };
 
-export type Rooms = Partial<BaseObj> & {
+export type Room = Partial<BaseObj> & {
   name: string;
   description: string;
   imageUrl: string;

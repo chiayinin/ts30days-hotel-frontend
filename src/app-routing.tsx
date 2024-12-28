@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import axios from "axios";
 
-import { getNewsData, getRoomsData } from './apis/index';
+import { getNewsData, getRoomsData, getFoodsData } from './apis/index';
 
 
 // 頁面元件
@@ -16,7 +16,7 @@ export const router = createBrowserRouter([
       {
         path: '',
         // loader: async () => getNewsData(),
-        loader: async () => axios.all([ getNewsData(), getRoomsData() ]),
+        loader: async () => axios.all([ getNewsData(), getRoomsData(), getFoodsData() ]),
         element: <Home />,
       },
     ]

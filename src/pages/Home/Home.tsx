@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 
-import { News, Rooms } from '@types';
+import { New, Room, Food } from '@types';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
+import { Autoplay, EffectFade, Pagination, Navigation, Virtual } from 'swiper/modules';
 
 import banner001 from '@assets/images/banner-001.jpg';
 import banner002 from '@assets/images/banner-002.jpg';
@@ -14,7 +14,7 @@ import banner005 from '@assets/images/banner-005.jpg';
 import banner006 from '@assets/images/banner-006.jpg';
 import dot from '@assets/images/home-dot.png';
 import bgIMG from '@assets/images/home-bg.png';
-// import line1IMG from '@assets/images/home-line.png';
+import line1IMG from '@assets/images/home-line.png';
 // import line2IMG from '@assets/images/home-line2.png';
 import line3IMG from '@assets/images/home-line3.png';
 import aboutIMG from '@assets/images/home-about.png';
@@ -22,7 +22,7 @@ import aboutIMG from '@assets/images/home-about.png';
 const banners = [banner001, banner002, banner003, banner004, banner005, banner006];
 
 const Home = () => {
-  const [newsData, roomsData]  = useLoaderData() as [News[], Rooms[]] ;
+  const [ newsData, roomsData, foodsData ]  = useLoaderData() as [New[], Room[], Food[]] ;
   const [ currentRoomIndex, setCurrentRoomIndex ] = useState(0);
   const [ currentRoom, setCurrentRoom ] = useState(roomsData[currentRoomIndex]);
 
@@ -126,7 +126,7 @@ const Home = () => {
     <div className="container md:flex md:justify-center 2xl:justify-end md:items-end md:gap-x-10 xl:gap-x-20 2xl:h-[900px] 2xl:relative">
       <Swiper
         autoplay={{ // 自動輪播 swiper
-          delay: 4 *9000, // 每兩秒切換下一張
+          delay: 4 *1000, // 每兩秒切換下一張
         }}
         loop={true} // 輪播結束後回到第一張繼續輪播
         effect={'fade'}
@@ -163,17 +163,34 @@ const Home = () => {
     </div>
   </section>
   {/* food */}
-  <section className="py-40 xl:py-[120px]">
-  <p className="h3 md:h1 text-primary-100 relative mb-20 md:mb-40 after:block after:w-[200px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:top-1/2 after:left-[106px]">佳餚<br />美饌</p>
-  <div>
-    <div className="w-[300px] h-[480px] rounded-lg">
-      <div className="text-neutral-0 p-4 md:p-6  bg-gradient-to-b from-neutral-0/0 to-[#140F0A]/[77.6%] backdrop-blur-[20px]">
-        <p className="h5 mb-4 md:mb-6">蔬食<span className="inline-block float-end leading-7 text-subtitle md:text-title">SUN-MON
-        11:00 - 20:30</span></p>
-        <p className="text-body2 md:text-body">安排一場與地球的約會！超過50種有機小農蔬果、歐陸風味「全植料理」、專人鮮切蔬食吃到飽以及好萊塢明星指定鮮壓康普茶、比利時植物奶，美味推薦：普羅旺斯燉菜、烤芋頭煙燻藜麥。</p>
-      </div>
+  <section className="relative">
+    <img className="absolute top-[5%] left-[5%] w-[188px] h-[1068px] hidden 2xl:block" src={line1IMG} alt="" />
+    <img className="absolute -top-[5%] right-[10%] w-[200px] h-[200px] hidden xl:block" src={dot} alt="" />
+    <div className="py-40 xl:py-[120px] container">
+      <p className="h3 md:h1 text-primary-100 relative mb-10 md:mb-20 after:block after:w-[200px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:top-1/2 after:left-[106px]">佳餚<br />美饌</p>
+      <Swiper
+        speed={1000}
+        autoplay={{ // 自動輪播 swiper
+          delay: 1 * 1000, // 每兩秒切換下一張
+          disableOnInteraction: false,
+        }}
+        loop={true} // 輪播結束後回到第一張繼續輪播
+        slidesPerView={'auto'}
+        spaceBetween={24}
+        modules={[Autoplay]}
+      >
+        {foodsData.map((food, index) => (
+          <SwiperSlide key={index} className="w-[300px] h-[480px] xl:w-[416px] xl:h-[600px]">
+            <div className="w-full h-full rounded-lg flex items-end overflow-hidden bg-center" style={{ backgroundImage: `url(${food.image})` }}>
+              <div className="text-neutral-0 p-4 xl:p-6 backdrop-blur-[20px] bg-gradient-to-b from-transparent/0 to-[#140F0A]/[77.6%] h-[182px] xl:h-[192px]">
+                <p className="h5 mb-4 xl:mb-6 flex justify-between items-center">{food.title}<span className="inline-block text-subtitle md:text-title">{food.diningTime}</span></p>
+                <p className="text-body2 xl:text-body">{food.description}</p>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
-  </div>
   </section>
   </>);
 };

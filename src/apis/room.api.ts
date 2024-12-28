@@ -1,4 +1,4 @@
 import { fetchData } from "@core";
-import { Rooms } from '@types';
+import { Room } from '@types';
 
-export const getRoomsData = async () => fetchData<Rooms[]>('get', 'rooms');
+export const getRoomsData = async () => fetchData<Room[]>('get', 'rooms').catch(() => [] as Room[]);;
