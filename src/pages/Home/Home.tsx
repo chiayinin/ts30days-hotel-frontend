@@ -4,7 +4,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import { New, Room, Food } from '@types';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectFade, Pagination, Navigation, Virtual } from 'swiper/modules';
+import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 
 import banner001 from '@assets/images/banner-001.jpg';
 import banner002 from '@assets/images/banner-002.jpg';
@@ -18,6 +18,11 @@ import line1IMG from '@assets/images/home-line.png';
 // import line2IMG from '@assets/images/home-line2.png';
 import line3IMG from '@assets/images/home-line3.png';
 import aboutIMG from '@assets/images/home-about.png';
+import mapDeskIMG from '@assets/images/homt-map-desk.png';
+import mapMobileIMG from '@assets/images/homt-map-mobile.png';
+import CarIcon from '@assets/icons/icon-car.svg?react'
+import TrainIcon from '@assets/icons/icon-train.svg?react'
+import LuxurycarIcon from '@assets/icons/icon-luxurycar.svg?react'
 
 const banners = [banner001, banner002, banner003, banner004, banner005, banner006];
 
@@ -190,6 +195,40 @@ const Home = () => {
           </SwiperSlide>
         ))}
       </Swiper>
+    </div>
+  </section>
+  {/* map */}
+  <section className="bg-neutral-bg text-neutral-0 py-20 xl:py-[120px]">
+    <div className="container">
+      <p className="h3 md:h1 text-primary-100 relative mb-10 md:mb-20 after:block after:w-[200px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:top-1/2 after:left-[106px]">交通<br />方式</p>
+      <figure className="w-full h-[400px] md:h-[360px] rounded-lg space-y-4 mb-6 md:mb-10">
+        <figcaption className="mb-4 text-title">台灣高雄市新興區六角路123號</figcaption>
+        <img className="bg-cover bg-center block md:hidden" src={mapMobileIMG} alt="交通方式" />
+        <img className="bg-cover bg-center hidden md:block " src={mapDeskIMG} alt="交通方式" />
+      </figure>
+      <ul className="flex flex-col md:flex-row justify-between items-start gap-6">
+        <li className="space-y-2 md:space-y-4">
+          <div className="text-primary-100">
+            <CarIcon  className="w-12 h-12 md:w-20 md:h-20" color="inherit"></CarIcon>
+          </div>
+          <p className="text-title md:h5">自行開車</p>
+          <p className="text-body2 md:text-body">如果您選擇自行開車，可以透過國道一號下高雄交流道，往市區方向行駛，並依路標指示即可抵達「享樂酒店」。飯店內設有停車場，讓您停車方便。</p>
+        </li>
+        <li className="space-y-2">
+          <div className="text-primary-100">
+            <TrainIcon  className="w-12 h-12 md:w-20 md:h-20" color="inherit"></TrainIcon>
+          </div>
+          <p className="text-title md:h5">高鐵/火車</p>
+          <p className="text-body2 md:text-body">如果您是搭乘高鐵或火車，可於左營站下車，外頭有計程車站，搭乘計程車約20分鐘即可抵達。或者您也可以轉乘捷運紅線至中央公園站下車，步行約10分鐘便可抵達。</p>
+        </li>
+        <li className="space-y-2">
+          <div className="text-primary-100">
+            <LuxurycarIcon  className="w-12 h-12 md:w-20 md:h-20" color="inherit"></LuxurycarIcon>
+          </div>
+          <p className="text-title md:h5">禮賓車服務</p>
+          <p className="text-body2 md:text-body">承億酒店提供禮賓專車接送服務，但因目的地遠近會有不同的收費，請撥打電話將由專人為您服務洽詢專線：(07)123-4567</p>
+        </li>
+      </ul>
     </div>
   </section>
   </>);
