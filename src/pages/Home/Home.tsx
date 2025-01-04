@@ -15,7 +15,7 @@ import banner006 from '@assets/images/banner-006.jpg';
 import dot from '@assets/images/home-dot.png';
 import bgIMG from '@assets/images/home-bg.png';
 import line1IMG from '@assets/images/home-line.png';
-// import line2IMG from '@assets/images/home-line2.png';
+import line2IMG from '@assets/images/home-line2.png';
 import line3IMG from '@assets/images/home-line3.png';
 import aboutIMG from '@assets/images/home-about.png';
 import mapDeskIMG from '@assets/images/homt-map-desk.png';
@@ -198,10 +198,11 @@ const Home = () => {
     </div>
   </section>
   {/* map */}
-  <section className="bg-neutral-bg text-neutral-0 py-20 xl:py-[120px]">
+  <section className="bg-neutral-bg text-neutral-0 pt-20 py-[124px] xl:pt-[120px] xl:pb-[268px] relative">
+    <img className="absolute bottom-0 left-0 min-h-[84px] " src={line2IMG} alt="" />
     <div className="container">
       <p className="h3 md:h1 text-primary-100 relative mb-10 md:mb-20 after:block after:w-[200px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:top-1/2 after:left-[106px]">交通<br />方式</p>
-      <figure className="w-full h-[400px] md:h-[360px] rounded-lg space-y-4 mb-6 md:mb-10">
+      <figure className="w-full min-h-[400px] md:h-[360px] rounded-lg space-y-4 mb-6 md:mb-10">
         <figcaption className="mb-4 text-title">台灣高雄市新興區六角路123號</figcaption>
         <img className="bg-cover bg-center block md:hidden" src={mapMobileIMG} alt="交通方式" />
         <img className="bg-cover bg-center hidden md:block " src={mapDeskIMG} alt="交通方式" />
