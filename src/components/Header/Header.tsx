@@ -13,6 +13,7 @@ import { MyToast, MyToastProps } from "@components";
  */
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, dispatch } = useContext(GlobalContext);
@@ -51,17 +52,26 @@ export const Header = () => {
         setIsOpen(false);
       }
     };
+    // 頁面滾動
+    const handleScroll = () => {
+      const offset = window.scrollY;
+
+      if(offset > 72) setIsScrolled(true);
+      else setIsScrolled(false);
+    };
 
     // 監聽視窗變化事件
     window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll);
     // 在組件卸載時移除監聽器
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return(<>
-  <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] fixed top-0 left-0 z-20 w-full ${ beTransparent ? 'bg-transparent' : 'bg-neutral-bg' }`}>
+    <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] fixed top-0 left-0 z-20 w-full ease-in-out duration-300 ${ beTransparent && isScrolled ? 'bg-neutral-bg' : 'bg-transparent' }`}>
     <Link to={'/'} className="w-[110px] md:w-[196px]"><img src={Logo} alt="享樂酒店" /></Link>
     <nav>
       { showLinks && (
