@@ -2,7 +2,7 @@
 @use 'base' as b;
 
 @mixin structure {
-  @apply px-8 py-4 border rounded-lg block;
+  @apply p-5 md:px-8 md:py-4 border rounded-lg block;
   @include b.bold;
 }
 @mixin focusActiveRing {
@@ -13,18 +13,18 @@
 }
 
 .btn-primary {
-  @apply bg-primary-100 text-neutral-0 border-primary-100 hover:bg-primary-120 hover:border-primary-120;
+  @apply bg-primary-100 text-neutral-0 border-primary-100 hover:bg-primary-120 hover:border-primary-120 cursor-pointer;
   @include structure;
   @include focusActiveRing;
   @include fadeOut;
 }
 .btn-primary-disable {
-  @apply  bg-primary-40 border-primary-40 text-neutral-60;
+  @apply bg-primary-40 border-primary-40 text-neutral-60;
   @include structure;
 }
 
 .btn-secondary {
-  @apply bg-neutral-0 border-primary-100 text-primary-100 hover:bg-primary-10 hover:border-primary-120 hover:text-primary-120;
+  @apply bg-neutral-0 border-primary-100 text-primary-100 hover:bg-primary-10 hover:border-primary-120 hover:text-primary-120 cursor-pointer;
   @include structure;
   @include focusActiveRing;
   @include fadeOut;
@@ -34,8 +34,15 @@
   @include structure;
 }
 
+.btn-tertiary {
+  @apply bg-neutral-0 text-neutral-100 border-neutral-0 hover:bg-neutral-50 hover:border-neutral-50  cursor-pointer;
+  @include structure;
+  @include focusActiveRing;
+  @include fadeOut;
+}
+
 .btn-ghost {
-  @apply p-4 text-neutral-0 hover:text-primary-100 block;
+  @apply p-4 text-neutral-0 hover:text-primary-100 block cursor-pointer;
   @include b.bold;
   @include focusActiveRing;
   @include fadeOut;
@@ -46,7 +53,7 @@
 }
 
 .btn-text {
-  @apply underline underline-offset-4 text-primary-100 hover:text-primary-120 block;
+  @apply underline underline-offset-4 text-primary-100 hover:text-primary-120 block cursor-pointer;
   @include b.bold;
   @include focusActiveRing;
   @include fadeOut;

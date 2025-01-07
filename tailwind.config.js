@@ -8,6 +8,12 @@ export default {
   theme: {
     container: {
       center: true,
+      padding: {
+        DEFAULT: '12px' // 左右 padding
+      },
+      screens: {
+        DEFAULT: '1296px' // 固定寬度
+      }
     },
     extend: {
       colors: {

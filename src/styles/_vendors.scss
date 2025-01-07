@@ -3,3 +3,14 @@
 
 /* import Google font icon */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+// Swiper
+.swiper-pagination-bullet {
+  @apply bg-primary-40 w-8 h-1 rounded-[100px]
+}
+.swiper-pagination-bullet-active {
+  @apply bg-primary-100 w-[60px]
+}
+// .swiper-button-prev, .swiper-button-next {
+//   @apply after:content-[''] after:hidden before:content-[''] before:hidden text-primary-100 static m-4 w-auto h-auto
+// }

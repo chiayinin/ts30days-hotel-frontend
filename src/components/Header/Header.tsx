@@ -13,6 +13,7 @@ import { MyToast, MyToastProps } from "@components";
  */
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, dispatch } = useContext(GlobalContext);
@@ -51,21 +52,30 @@ export const Header = () => {
         setIsOpen(false);
       }
     };
+    // 頁面滾動
+    const handleScroll = () => {
+      const offset = window.scrollY;
+
+      if(offset > 72) setIsScrolled(true);
+      else setIsScrolled(false);
+    };
 
     // 監聽視窗變化事件
     window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll);
     // 在組件卸載時移除監聽器
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return(<>
-  <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] ${ beTransparent ? 'bg-transparent' : 'bg-neutral-bg' }`}>
+    <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] fixed top-0 left-0 z-20 w-full ease-in-out duration-300 ${ beTransparent && isScrolled ? 'bg-neutral-bg' : 'bg-transparent' }`}>
     <Link to={'/'} className="w-[110px] md:w-[196px]"><img src={Logo} alt="享樂酒店" /></Link>
     <nav>
       { showLinks && (
-      <ul className={`bg-neutral-bg flex flex-col justify-center items-center fixed w-full text-center h-screen  top-0 left-0 px-5 gap-4 transition-transform duration-300 ease-in-out md:flex-row md:static md:bg-transparent md:translate-x-0 md:justify-between md:h-auto  ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <ul className={`bg-neutral-bg flex flex-col justify-center items-center fixed w-full text-center h-screen top-0 left-0  gap-4 transition-transform duration-300 ease-in-out md:flex-row md:static md:bg-transparent md:translate-x-0 md:justify-between md:h-auto  ${isOpen ? 'translate-x-0 px-5' : '-translate-x-full'}`}>
         <li className={isOpen ? 'w-full' : ''}><Link to={'/room'} className="btn-ghost">客房旅宿</Link></li>
         { user
         ? (<>
@@ -82,7 +92,7 @@ export const Header = () => {
     </nav>
     {/* hamburger */}
     {/* hidden */}
-    <div onClick={toggleMenu} className="bg-neutral-bg cursor-pointer space-y-1 block p-1 md:hidden">
+    <div onClick={toggleMenu} className="cursor-pointer space-y-1 block p-1 md:hidden">
       <span className={`bg-neutral-0 rounded-full block w-6 h-1 mx-1 transition-transform ${isOpen ? 'transform translate-y-2 rotate-45' : ''}`}></span>
       <span className={`bg-neutral-0 rounded-full block w-6 h-1 mx-1 transition-opacity ${isOpen ? 'opacity-0' : 'opacity-100'}`}></span>
       <span className={`bg-neutral-0 rounded-full block w-6 h-1 mx-1 transition-transform ${isOpen ? 'transform -translate-y-2 -rotate-45' : ''}`}></span>
