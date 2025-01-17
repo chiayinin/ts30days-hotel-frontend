@@ -1,15 +1,12 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { login } from "@apis";
-import { Checkbox} from "primereact/checkbox";
 
 import { Header } from "@components";
 import { Footer } from "@components";
 import registerIMG from '@assets/images/register.png';
-import { classNames } from "primereact/utils";
 
 
 type Form = {
@@ -18,7 +15,6 @@ type Form = {
 }
 
 const Login = () => {
-  const [checked, setChecked] = useState(false);
 
   const validate = yup.object({
     email: yup.string().email("電子郵件的格式有誤").required("欄位不得為空"),
@@ -47,10 +43,14 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<Form> = async (data: Form) => {
     try {
-      console.log(data)
-      await login(data);
+      const respense = await login(data);
+      console.log('respense:', respense);
+      // console.log(data)
+      // const respense = await login(data);
+      // console.log('respense:', respense);
+
       // 成功登入視窗
-      navigate('/');
+      // navigate('/');
     } catch (error) {
       console.dir('error:', error)
       // 失敗登入視窗
