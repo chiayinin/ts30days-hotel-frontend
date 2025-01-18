@@ -2,12 +2,24 @@ import { createContext, Dispatch, Reducer } from "react";
 import { User } from "@types";
 
 /**
+ * 對話框的設定
+ */
+export type MyToastProps = {
+  severity?: "success" | "info" | "warn" | "error" | "secondary" | "contrast" | undefined;
+  summary?: string;
+  detail?: string;
+  life?: number;
+  display: boolean;
+};
+
+/**
  * Reducer 的動作類型
  */
 export type ReducerActionType = 'SET_USER' | 'SET_TOAST';
 
 export type GlobalState = {
   user: User | null;
+  toastPayload: MyToastProps;
   dispatch: Dispatch<ReducerAction>;
 }
 
@@ -35,6 +47,9 @@ export const reducer: Reducer<ReducerState, ReducerAction> = (state, action) => 
     case 'SET_USER':
       state = { ...state, user: action.payload as User | null };
       break;
+    case 'SET_TOAST':
+      state = { ...state, toastPayload: action.payload as MyToastProps}
+      break;
     default:
       throw new Error("Invalid action type");
   }
@@ -48,5 +63,6 @@ export const GlobalContext = createContext<GlobalState>({
   // products: [],
   // orders: [],
   user: null,
+  toastPayload: { display: false },
   dispatch: () => null,
 })

@@ -1,13 +1,14 @@
+import { useContext } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { login } from "@apis";
 
+import { login } from "@apis";
 import { Header } from "@components";
 import { Footer } from "@components";
 import registerIMG from '@assets/images/register.png';
-
+import { GlobalContext } from '@core';
 
 type Form = {
   email: string;
@@ -15,6 +16,8 @@ type Form = {
 }
 
 const Login = () => {
+  const { dispatch } = useContext(GlobalContext)
+  const navigate = useNavigate();
 
   const validate = yup.object({
     email: yup.string().email("電子郵件的格式有誤").required("欄位不得為空"),
@@ -34,27 +37,19 @@ const Login = () => {
     }
   });
 
-  console.log('errors:', errors);
-  console.log('isValid:', isValid);
-
-
-  const navigate = useNavigate();
-
-
   const onSubmit: SubmitHandler<Form> = async (data: Form) => {
-    try {
-      const respense = await login(data);
-      console.log('respense:', respense);
-      // console.log(data)
-      // const respense = await login(data);
-      // console.log('respense:', respense);
-
-      // 成功登入視窗
-      // navigate('/');
-    } catch (error) {
-      console.dir('error:', error)
-      // 失敗登入視窗
-    }
+    const response = await login(data);
+    await dispatch({ type: 'SET_USER', payload: response });
+    dispatch({
+      type: 'SET_TOAST',
+      payload: {
+        severity: 'success',
+        summary: '登入',
+        detail: '已成功登入。',
+        display: true,
+      },
+    });
+    navigate('/');
   };
 
   return(<>

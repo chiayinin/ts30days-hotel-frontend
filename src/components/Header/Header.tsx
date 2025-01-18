@@ -6,7 +6,6 @@ import IconProfile from "@assets/icons/icon-profile.svg?react";
 
 import { GlobalContext } from "@core";
 import { logout } from "@apis";
-import { MyToast, MyToastProps } from "@components";
 
 /**
  * 導覽列的元件
@@ -17,7 +16,6 @@ export const Header = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, dispatch } = useContext(GlobalContext);
-  const toastRef = useRef<{ show: (props: MyToastProps) => void } | null>(null);
 
   // 漢堡選單切換
   const toggleMenu = () => {
@@ -35,9 +33,18 @@ export const Header = () => {
   // 登出
   const handleLogout = () => {
     logout();
-    toastRef.current?.show({ severity: 'success', summary:'登出', detail: '已成功登出。' });
     dispatch({ type: 'SET_USER', payload: null });
+    dispatch({
+      type: 'SET_TOAST',
+      payload: {
+        severity: 'success',
+        summary: '登出',
+        detail: '已成功登出。',
+        display: true,
+      },
+    });
     navigate('/');
+    closeMenu();
   };
 
   useEffect(() => {
@@ -99,8 +106,6 @@ export const Header = () => {
       <span className={`bg-neutral-0 rounded-full block w-6 h-1 mx-1 transition-transform ${isOpen ? 'transform -translate-y-2 -rotate-45' : ''}`}></span>
     </div>
     </>) }
-    {/* Toast */}
-    <MyToast ref={toastRef} />
   </header>
   </>)
 }

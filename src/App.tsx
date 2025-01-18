@@ -5,6 +5,8 @@ import { useEffect, useReducer } from 'react';
 import { getFromStorage, GlobalContext, KEY_TOKEN, reducer } from '@core';
 import { getUser } from '@apis';
 
+import { MyToast } from '@components';
+
 // style
 import Tailwind from 'primereact/passthrough/tailwind';
 import 'swiper/css';
@@ -14,7 +16,10 @@ import 'swiper/css/effect-fade';
 
 
 const App = () => {
-  const [{ user }, dispatch ] = useReducer(reducer, {user: null});
+  const [{ user, toastPayload }, dispatch ] = useReducer(reducer, {
+    user: null,
+    toastPayload: { display: false }
+  });
 
   useEffect(() => {
     const token = getFromStorage(KEY_TOKEN, 'COOKIE');
@@ -32,10 +37,11 @@ const App = () => {
   });
 
   return (
-    <GlobalContext.Provider value={{user, dispatch}}>
+    <GlobalContext.Provider value={{user, toastPayload, dispatch}}>
       <PrimeReactProvider value={{ unstyled: true, pt: Tailwind }}>
         <RouterProvider router={router}>
         </RouterProvider>
+        <MyToast />
       </PrimeReactProvider>
 
     </GlobalContext.Provider>
