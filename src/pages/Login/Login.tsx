@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,8 +20,15 @@ const Login = () => {
   const navigate = useNavigate();
 
   const validate = yup.object({
-    email: yup.string().email("電子郵件的格式有誤").required("欄位不得為空"),
-    password: yup.string().min(6).required("欄位不得為空"),
+    email: yup.string()
+      .email("電子郵件的格式有誤")
+      .required("欄位不得為空"),
+    password: yup
+      .string()
+      .transform((value) => value.toLowerCase().replace(/\s+/g, "")) // 將大寫轉換為小寫，並移除所有空白
+      .min(8, "密碼需至少 8 碼以上")
+      .matches(/^(?=.*[a-z])(?=.*\d).+$/, "密碼需包含英文及數字")
+      .required("欄位不得為空"), // 密碼需至少 8 碼以上，並英數混合
   });
 
   const {
@@ -38,18 +45,34 @@ const Login = () => {
   });
 
   const onSubmit: SubmitHandler<Form> = async (data: Form) => {
-    const response = await login(data);
-    await dispatch({ type: 'SET_USER', payload: response });
-    dispatch({
-      type: 'SET_TOAST',
-      payload: {
-        severity: 'success',
-        summary: '登入',
-        detail: '已成功登入。',
-        display: true,
-      },
-    });
-    navigate('/');
+    await dispatch({ type: 'SET_LOADER', payload: true });
+    try {
+      const response = await login(data);
+
+      await dispatch({ type: 'SET_USER', payload: response });
+      await dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'success',
+          summary: '登入',
+          detail: '已成功登入。',
+          display: true,
+        },
+      });
+      navigate('/');
+    } catch(err) {
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '登入失敗',
+          detail: `${err}`,
+          display: true
+        }
+      });
+    } finally {
+      await dispatch({ type: 'SET_LOADER', payload: false });
+    }
   };
 
   return(<>
@@ -72,7 +95,7 @@ const Login = () => {
           </div>
           <div className="space-y-2">
             <label className="block">密碼</label>
-            <input type="password" placeholder="請輸入密碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("password")}/>
+            <input type="password" placeholder="密碼需至少 8 碼以上，並英數混合，不分大小寫" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("password")}/>
             <p className="text-tiny md:text-subtitle text-danger-100">{errors.password?.message}</p>
           </div>
           <div className="flex justify-between items-center">

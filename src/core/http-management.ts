@@ -45,12 +45,9 @@ export const fetchData = async <T = unknown>(
   } catch (error: unknown) {
     if (isAxiosError(error)) {
       // 處理 AxiosError
-      console.dir(error)
-      console.error('Axios error:', error.response?.data || error.message);
       throw new Error(error.response?.data?.message || error.message);
     } else {
       // 處理未知錯誤
-      console.error('Unexpected error:', (error as Error).message);
       throw new Error((error as Error).message);
     }
   }

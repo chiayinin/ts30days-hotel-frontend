@@ -10,7 +10,6 @@ const Layout = () => {
     <main className='bg-primary-10'>
       <Outlet />
     </main>
-
     {/* Footer */}
     <Footer></Footer>
   </>)
