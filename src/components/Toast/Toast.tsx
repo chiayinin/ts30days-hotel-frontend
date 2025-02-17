@@ -1,23 +1,22 @@
-import { useRef, forwardRef, useImperativeHandle, } from 'react';
+import { useRef, forwardRef, useContext, useEffect } from 'react';
 import { Toast } from 'primereact/toast';
-
-export type MyToastProps = {
-  severity: "success" | "info" | "warn" | "error" | "secondary" | "contrast" | undefined;
-  summary: string;
-  detail?: string;
-  life?: number;
-};
+import { GlobalContext } from '@core';
 
 export const MyToast = forwardRef((_, ref) => {
-  const toast = useRef<Toast>(null);
+  const { toastPayload, dispatch } = useContext(GlobalContext);
+  const toastRef = useRef<Toast>(null);
 
-  useImperativeHandle(ref, () => ({
-    show: ({ severity, summary, detail, life = 3000 }: MyToastProps) => {
-      toast.current?.show({ severity, summary, detail, life });
-    },
-  }));
+  useEffect(() => {
+    if(toastPayload.display) {
+      toastRef.current?.show({
+        severity: toastPayload.severity,
+        summary: toastPayload.summary,
+        detail: toastPayload.detail,
+        life: toastPayload.life || 3000,
+      });
+    };
+  }, [toastPayload, dispatch]);
 
-  return (
-    <Toast ref={toast} />
-    );
+  // 將 ref 傳遞給內部的 Toast
+  return(<Toast ref={toastRef} />)
 });

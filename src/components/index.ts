@@ -1,4 +1,5 @@
 export * from './Dialog/Dialog';
 export * from './Footer/Footer';
 export * from './Header/Header';
-export * from './Toast/Toast'
+export * from './Toast/Toast';
+export * from './Loader/Loader';
