@@ -27,7 +27,7 @@ export const router =  createBrowserRouter([
     loader: loginGuard
   },
   {
-    path: '/singup',
+    path: '/singnup',
     element: <Singnup />,
     loader: loginGuard
   }

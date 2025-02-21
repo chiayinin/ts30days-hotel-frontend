@@ -8,7 +8,7 @@ import { MyToast } from '@components';
 import { Loader } from '@components';
 
 // style
-import Tailwind from 'primereact/passthrough/tailwind';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -40,7 +40,7 @@ const App = () => {
 
   return (
     <GlobalContext.Provider value={{user, toastPayload, isLoading, dispatch}}>
-      <PrimeReactProvider value={{ unstyled: true, pt: Tailwind }}>
+      <PrimeReactProvider>
         <Loader />
         <RouterProvider router={router} />
         <MyToast />
