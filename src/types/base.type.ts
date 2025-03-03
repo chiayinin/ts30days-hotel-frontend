@@ -3,3 +3,8 @@ export type BaseObj = {
   createAt: string;
   updateAt: string;
 }
+
+export type BaseItem = {
+  label: string;
+  value: string;
+}

@@ -7,7 +7,7 @@ import { getNewsData, getRoomsData, getFoodsData, loginGuard } from './apis/inde
 import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
-import Singnup from "./pages/Singnup/Singnup";
+import Signup from "./pages/Signup/Signup";
 
 export const router =  createBrowserRouter([
   {
@@ -27,8 +27,8 @@ export const router =  createBrowserRouter([
     loader: loginGuard
   },
   {
-    path: '/singnup',
-    element: <Singnup />,
+    path: '/signup',
+    element: <Signup />,
     loader: loginGuard
   }
 ])

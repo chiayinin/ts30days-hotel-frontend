@@ -29,6 +29,15 @@ const App = () => {
         try {
           const user = await getUser(token);
           dispatch({type: 'SET_USER', payload: user});
+          dispatch({
+            type: 'SET_TOAST',
+            payload: {
+              severity: 'success',
+              summary: '已登入',
+              detail: '已登入，轉首頁。',
+              display: true,
+            },
+          });
         } catch(err) {
           console.log('get iser err', err);
         }

@@ -14,7 +14,3 @@ export type User = Partial<BaseObj> & {
   birthday: string;
   address: Address;
 };
-
-export type Verify = {
-  email: string;
-};
