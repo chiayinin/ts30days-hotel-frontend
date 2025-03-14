@@ -8,7 +8,7 @@ import { MyToast } from '@components';
 import { Loader } from '@components';
 
 // style
-import Tailwind from 'primereact/passthrough/tailwind';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -29,6 +29,15 @@ const App = () => {
         try {
           const user = await getUser(token);
           dispatch({type: 'SET_USER', payload: user});
+          dispatch({
+            type: 'SET_TOAST',
+            payload: {
+              severity: 'success',
+              summary: '已登入',
+              detail: '已登入，轉首頁。',
+              display: true,
+            },
+          });
         } catch(err) {
           console.log('get iser err', err);
         }
@@ -40,7 +49,7 @@ const App = () => {
 
   return (
     <GlobalContext.Provider value={{user, toastPayload, isLoading, dispatch}}>
-      <PrimeReactProvider value={{ unstyled: true, pt: Tailwind }}>
+      <PrimeReactProvider>
         <Loader />
         <RouterProvider router={router} />
         <MyToast />
