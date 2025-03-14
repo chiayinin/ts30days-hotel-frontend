@@ -8,6 +8,7 @@ import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
+import RoomMain from "./pages/RoomMain/RoomMain";
 
 export const router =  createBrowserRouter([
   {
@@ -18,6 +19,11 @@ export const router =  createBrowserRouter([
         path: '',
         loader: async () => axios.all([ getNewsData(), getRoomsData(), getFoodsData() ]),
         element: <Home />,
+      },
+      {
+        path: '/room',
+        // loader: ,
+        element: <RoomMain />,
       },
     ]
   },
