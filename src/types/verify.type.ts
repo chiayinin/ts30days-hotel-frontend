@@ -1,5 +1,6 @@
 export type Verify = {
   email: string;
+  isEmailExists?: boolean
 };
 
 export type LoginForm = Verify & {

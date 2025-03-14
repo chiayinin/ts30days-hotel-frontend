@@ -1,26 +1,40 @@
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { ValiEmailForm } from '@types';
 import { VALI_EMAIL_SCHEMA } from '@constants';
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 type ValiEmailFormProps = {
   nextStep: (data: ValiEmailForm) => void;
   defaultValues?: ValiEmailForm;
+  resetFields?: boolean;
+  setResetFields?: Dispatch<SetStateAction<boolean>>;
 };
 
-const ValiEmail = ({ nextStep, defaultValues }: ValiEmailFormProps) => {
-
+const ValiEmail = ({ nextStep, defaultValues, resetFields, setResetFields }: ValiEmailFormProps) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm<ValiEmailForm>({
     resolver: yupResolver(VALI_EMAIL_SCHEMA),
     mode: 'onChange',
     defaultValues
   });
+
+  useEffect(() => {
+    if(resetFields) {
+      reset({
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+      setResetFields?.(false);
+    }
+  }, [resetFields, reset, setResetFields])
 
   const valiEmailSubmit: SubmitHandler<ValiEmailForm> = (data) => nextStep(data);
 
