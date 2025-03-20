@@ -22,7 +22,7 @@ export const router =  createBrowserRouter([
       },
       {
         path: '/room',
-        // loader: ,
+        loader: async () => getRoomsData(),
         element: <RoomMain />,
       },
     ]

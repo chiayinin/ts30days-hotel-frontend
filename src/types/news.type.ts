@@ -1,7 +1,7 @@
 import { BaseObj } from './base.type';
 
 export type New = Partial<BaseObj> & {
-  title: string;
+  title?: string;
   description: string;
-  image: string;
+  image?: string;
 }
