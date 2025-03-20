@@ -9,10 +9,16 @@ export default {
     container: {
       center: true,
       padding: {
-        DEFAULT: '12px' // 左右 padding
+        DEFAULT: '12px', // 左右 padding
+        // lg: '24px',
+        // xl: '36px',
+        // '2xl': '36px'
       },
       screens: {
-        DEFAULT: '1296px' // 固定寬度
+        DEFAULT: '1296px', // 固定寬度
+        // lg: '1024px',
+        // xl: '1280px',
+        // '2xl': '1296px'
       }
     },
     extend: {
