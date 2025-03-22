@@ -1,5 +1,6 @@
 import { FAKE_LAYOUT_INFO, FAKE_FACILITY_INFO, FAKE_AMENITY_INFO } from "@constants";
 import { RoomBasicInfo } from "@components";
+import { RoomFacilityInfo } from "@components";
 
 const RoomDetail = () => {
   return(<>
@@ -18,22 +19,8 @@ const RoomDetail = () => {
     </div>
     <div>
       <h3>房間格局</h3>
-      <ul className="bg-neutral-0 p-6 rounded-lg flex justify-start items-cente flex-wrap gap-6">
-        {
-          FAKE_FACILITY_INFO.map((item, index) => (
-            <li key={index} className="w-28">
-              {
-                item.isProvide ?
-                  <span className="material-symbols-outlined align-bottom text-primary-100">check</span> :
-                  <span className="material-symbols-outlined align-bottom text-primary-100">close</span>
-              }
-              <span className="ml-2 text-title align-bottom">{item.title}</span>
-            </li>
-          ))
-        }
-      </ul>
+      <RoomFacilityInfo list={FAKE_FACILITY_INFO} />
     </div>
-
   </section>
   </>);
 };
