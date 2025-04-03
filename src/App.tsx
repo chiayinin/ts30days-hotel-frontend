@@ -9,10 +9,12 @@ import { Loader } from '@components';
 
 // style
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import 'primeicons/primeicons.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
+
 
 const App = () => {
   const [{ user, toastPayload, isLoading }, dispatch ] = useReducer(reducer, {
