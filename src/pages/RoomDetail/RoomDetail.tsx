@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
+import { Calendar } from 'primereact/calendar';
+import { Nullable } from "primereact/ts-helpers";
 
 import { FAKE_LAYOUT_INFO, FAKE_FACILITY_INFO, FAKE_AMENITY_INFO } from "@constants";
 import { RoomBasicInfo } from "@components";
@@ -10,6 +12,16 @@ const RoomDetail = () => {
   const [bookingPeople, setBookingPeople] = useState<number>(2);
   const foo = (e: InputNumberValueChangeEvent) => setBookingPeople(e.value);
   const maxBookingPeople = 4;
+  const [startDate, setStartDate] = useState<Nullable<Date>>(null);
+  const [endDate, setEndDate] = useState<Nullable<Date>>(null);
+  const onChangeStartDate = (e) => {
+    setStartDate(e.value)
+  }
+  const minEndDate = new Date();
+  const minStartDate = new Date(minEndDate.getTime() - 24 * 60 * 60 * 1000);
+
+  // const maxStartDate = 不可以超過 end
+
 
   return(<>
   {/* swiper */}
@@ -63,8 +75,34 @@ const RoomDetail = () => {
         <h2 className="h2 align-middle mb-2">尊爵雙人房</h2>
         <p className="text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
       </div>
-      <div>
-        Date
+      <div className="flex gap-4">
+        <div className="border border-neutral-100 rounded-lg p-4">
+          <label htmlFor="startDateCalendar" className="font-bold block mb-2">
+            入住
+          </label>
+          <Calendar
+            id="startDateCalendar"
+            value={startDate}
+            onChange={onChangeStartDate} dateFormat="yy/mm/dd"
+            minDate={minStartDate}
+            placeholder="請選擇入住日期"
+            // inputClassName="shadow-none ring-2 ring-primary-100"
+            showButtonBar />
+        </div>
+        <div className="border border-neutral-100 rounded-lg p-4">
+          <label htmlFor="endDateCalendar" className="font-bold block mb-2">
+            退房
+          </label>
+          <Calendar
+          id="endDateCalendar"
+          value={endDate}
+          onChange={(e) => setEndDate(e.value)}
+          dateFormat="yy/mm/dd"
+          minDate={minEndDate}
+          placeholder="請選擇退房日期"
+          // inputClassName="focus:shadow-none focus:ring-2 focus:ring-primary-100"
+          showButtonBar />
+        </div>
       </div>
       <div className="flex justify-between items-center">
         <span className="text-title text-neutral-100">人數</span>

@@ -51,5 +51,12 @@
   }
 }
 .p-stepper-panels {
-  @apply bg-transparent text-inherit p-0
+  @apply bg-transparent text-inherit p-0;
+}
+// Calendar
+.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
+  box-shadow: 0 0 0 0.2rem #BF9D7D;
+}
+.p-inputtext:enabled:focus {
+  box-shadow: 0 0 0 0.2rem #BF9D7D;
 }
