@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { Calendar } from 'primereact/calendar';
 import { Nullable } from "primereact/ts-helpers";
@@ -6,6 +8,9 @@ import { Nullable } from "primereact/ts-helpers";
 import { FAKE_LAYOUT_INFO, FAKE_FACILITY_INFO, FAKE_AMENITY_INFO } from "@constants";
 import { RoomBasicInfo } from "@components";
 import { RoomFacilityInfo } from "@components";
+import banner001 from '@assets/images/banner-001.jpg';
+
+const roomIMG = [banner001, banner001, banner001, banner001, banner001];
 
 
 const RoomDetail = () => {
@@ -22,6 +27,58 @@ const RoomDetail = () => {
 
   return(<>
   {/* swiper */}
+  <div>
+    <div className="hidden lg:block">
+      <ul className="m-20 grid grid-cols-4 gap-2 max-h-[600px]">
+        <li className="col-span-2 row-span-2">
+          <figure>
+            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          </figure>
+        </li>
+        <li>
+          <figure>
+            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          </figure>
+        </li>
+      </ul>
+    </div>
+    <Swiper
+      autoplay={{ // 自動輪播 swiper
+        delay: 999 *1000, // 每兩秒切換下一張
+      }}
+      loop={roomIMG.length > 4} // 輪播結束後回到第一張繼續輪播
+      effect={'fade'}
+      pagination={{
+        clickable: true,
+      }}
+      slidesPerView={4}
+      modules={[Autoplay, EffectFade, Pagination]}
+      className="w-full h-[240px] mt-[72px] lg:hidden"
+    >
+      {roomIMG.map((image, imageIndex) => (
+        <SwiperSlide key={imageIndex} className="w-full h-full">
+          <figure key={`id-${imageIndex}`} className="w-full h-full" >
+            <img className="w-full h-full object-cover" src={image} alt=""/>
+          </figure>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  </div>
   <section className="container py-10 lg:py-[120px] text-neutral-80 bg-primary-10 flex justify-between items-start">
     {/* room info */}
     <div className="max-w-[746px] space-y-6 lg:space-y-20 basis-2/3">
@@ -67,7 +124,7 @@ const RoomDetail = () => {
     {/* room booking */}
     <div className="basis-1/3 relative">
       {/* hidden lg:block */}
-      <div className=" bg-neutral-0 text-neutral-80 rounded-[20px] p-10 w-[478px] space-y-10 fixed">
+      <div className="hidden lg:block bg-neutral-0 text-neutral-80 rounded-[20px] p-10 w-[478px] space-y-10 fixed">
         <h3 className="h5 pb-4 border-b border-neutral-40 text-neutral-100">預訂房型</h3>
         <div>
           <h2 className="h2 align-middle mb-2">尊爵雙人房</h2>

@@ -5,9 +5,6 @@ import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { Room } from '@types';
 import { Banner } from '@components';
 import { RoomBasicInfo } from "@components";
-import iconBed from "@assets/icons/icon-bed.svg";
-import iconProfile from "@assets/icons/icon-profile.svg";
-import iconSize from "@assets/icons/icon-size.svg";
 
 const RoomMain = () => {
   const roomData = useLoaderData() as Room[];
