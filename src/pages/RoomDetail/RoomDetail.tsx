@@ -22,9 +22,9 @@ const RoomDetail = () => {
 
   return(<>
   {/* swiper */}
-  <section className="container py-10 lg:py-[120px] text-neutral-80 bg-primary-10">
+  <section className="container py-10 lg:py-[120px] text-neutral-80 bg-primary-10 flex justify-between items-start">
     {/* room info */}
-    <div className="max-w-[746px] space-y-6 lg:space-y-20">
+    <div className="max-w-[746px] space-y-6 lg:space-y-20 basis-2/3">
       <div>
         <h2 className="h3 lg:h1 align-middle text-neutral-100 mb-4">尊爵雙人房</h2>
         <p className="text-body2 lg:text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
@@ -65,79 +65,77 @@ const RoomDetail = () => {
       </div>
     </div>
     {/* room booking */}
-    {/* hidden lg:block */}
-    <div className=" bg-neutral-0 text-neutral-80 rounded-[20px] p-10 w-[478px] space-y-10 ">
-      <h3 className="h5 pb-4 border-b border-neutral-40 text-neutral-100">預訂房型</h3>
-      <div>
-        <h2 className="h2 align-middle mb-2">尊爵雙人房</h2>
-        <p className="text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
-      </div>
-      <div>
-        <div className="flex gap-4 mb-4">
-          <div className="border border-neutral-100 rounded-lg p-4">
-            <label htmlFor="startDateCalendar" className="text-tiny block mb-1">
-              入住（不可超過退房日）
-            </label>
-            <Calendar
-              id="startDateCalendar"
-              value={startDate}
-              onChange={(e) => setStartDate(e.value)} dateFormat="yy/mm/dd"
-              minDate={minStartDate}
-              maxDate={maxStartDate}
-              placeholder="請選擇入住日期"
-              inputClassName="text-body"
-              locale="zh-TW"
-              showButtonBar
-              todayButtonClassName="hidden"
-              clearButtonClassName="btn-secondary"
-              panelClassName="p-8 text-title text-neutral-100"
-              touchUI
+    <div className="basis-1/3 relative">
+      {/* hidden lg:block */}
+      <div className=" bg-neutral-0 text-neutral-80 rounded-[20px] p-10 w-[478px] space-y-10 fixed">
+        <h3 className="h5 pb-4 border-b border-neutral-40 text-neutral-100">預訂房型</h3>
+        <div>
+          <h2 className="h2 align-middle mb-2">尊爵雙人房</h2>
+          <p className="text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
+        </div>
+        <div>
+          <div className="flex gap-4 mb-4">
+            <div className="border border-neutral-100 rounded-lg p-4">
+              <label htmlFor="startDateCalendar" className="text-tiny block mb-1">
+                入住（不可超過退房日）
+              </label>
+              <Calendar
+                id="startDateCalendar"
+                value={startDate}
+                onChange={(e) => setStartDate(e.value)} dateFormat="yy/mm/dd"
+                minDate={minStartDate}
+                maxDate={maxStartDate}
+                placeholder="請選擇入住日期"
+                inputClassName="text-body"
+                locale="zh-TW"
+                showButtonBar
+                todayButtonClassName="hidden"
+                clearButtonClassName="btn-secondary"
+                panelClassName="p-8 text-title text-neutral-100"
+                touchUI
+              />
+            </div>
+            <div className="border border-neutral-100 rounded-lg p-4">
+              <label htmlFor="endDateCalendar" className="text-tiny block mb-1">
+                退房（不可早於入住日）
+              </label>
+              <Calendar
+                id="endDateCalendar"
+                value={endDate}
+                onChange={(e) => setEndDate(e.value)}
+                dateFormat="yy/mm/dd"
+                minDate={minEndDate}
+                placeholder="請選擇退房日期"
+                inputClassName="text-body"
+                locale="zh-TW"
+                showButtonBar
+                todayButtonClassName="hidden"
+                clearButtonClassName="btn-secondary"
+                panelClassName="p-8 text-title text-neutral-100"
+                touchUI
+              />
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-title text-neutral-100">人數</span>
+            <InputNumber
+              value={bookingPeople}
+              onValueChange={(e: InputNumberValueChangeEvent) => setBookingPeople(e.value)}
+              showButtons
+              buttonLayout="horizontal"
+              min={1}
+              max={maxBookingPeople}
+              decrementButtonClassName="p-4 border rounded-full border-primary-40 w-14 h-14"
+              incrementButtonClassName="p-4 border rounded-full border-primary-40 w-14 h-14"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus"
+              inputClassName="focus:shadow-none focus:ring-2 focus:ring-primary-100 h6 mx-4 w-4 text-center"
             />
           </div>
-          <div className="border border-neutral-100 rounded-lg p-4">
-            <label htmlFor="endDateCalendar" className="text-tiny block mb-1">
-              退房（不可早於入住日）
-            </label>
-            <Calendar
-              id="endDateCalendar"
-              value={endDate}
-              onChange={(e) => setEndDate(e.value)}
-              dateFormat="yy/mm/dd"
-              minDate={minEndDate}
-              // maxDate={maxEndDate}
-              placeholder="請選擇退房日期"
-              inputClassName="text-body"
-              locale="zh-TW"
-              showButtonBar
-              todayButtonClassName="hidden"
-              clearButtonClassName="btn-secondary"
-              panelClassName="p-8 text-title text-neutral-100"
-              touchUI
-             />
-          </div>
         </div>
-        <div className="flex justify-between items-center">
-          <span className="text-title text-neutral-100">人數</span>
-          <InputNumber
-            value={bookingPeople}
-            onValueChange={(e: InputNumberValueChangeEvent) => setBookingPeople(e.value)}
-            showButtons
-            buttonLayout="horizontal"
-            min={1}
-            max={maxBookingPeople}
-            decrementButtonClassName="p-4 border rounded-full border-primary-40 w-14 h-14"
-            incrementButtonClassName="p-4 border rounded-full border-primary-40 w-14 h-14"
-            incrementButtonIcon="pi pi-plus"
-            decrementButtonIcon="pi pi-minus"
-            inputClassName="focus:shadow-none focus:ring-2 focus:ring-primary-100 h6 mx-4 w-4 text-center"
-            />
-        </div>
-
+        <span className="block h5 text-primary-100">NT$ 10,000</span>
+        <div className="w-full text-title text-center btn-primary">立即預訂</div>
       </div>
-
-
-      <span className="block h5 text-primary-100">NT$ 10,000</span>
-      <div className="w-full text-title text-center btn-primary">立即預訂</div>
     </div>
   </section>
   </>);
