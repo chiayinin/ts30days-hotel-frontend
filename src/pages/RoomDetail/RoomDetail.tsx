@@ -9,8 +9,12 @@ import { FAKE_LAYOUT_INFO, FAKE_FACILITY_INFO, FAKE_AMENITY_INFO } from "@consta
 import { RoomBasicInfo } from "@components";
 import { RoomFacilityInfo } from "@components";
 import banner001 from '@assets/images/banner-001.jpg';
+import banner002 from '@assets/images/banner-002.jpg';
+import banner003 from '@assets/images/banner-003.jpg';
+import banner004 from '@assets/images/banner-004.jpg';
+import banner005 from '@assets/images/banner-005.jpg';
 
-const roomIMG = [banner001, banner001, banner001, banner001, banner001];
+const roomIMG = [banner001, banner002, banner003, banner004, banner005];
 
 
 const RoomDetail = () => {
@@ -26,40 +30,40 @@ const RoomDetail = () => {
   const minEndDate = !startDate ? undefined : new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
 
   return(<>
-  {/* swiper */}
+  {/* banner image */}
   <div>
     <div className="hidden lg:block">
-      <ul className="m-20 grid grid-cols-4 gap-2 max-h-[600px]">
+      <ul className="p-20 grid grid-cols-4 grid-rows-2 gap-2 box-content h-72 xl:h-[600px]">
         <li className="col-span-2 row-span-2">
-          <figure>
+          <figure className="w-full h-full">
             <img src={banner001} alt="" className="w-full h-full object-cover"/>
           </figure>
         </li>
         <li>
-          <figure>
-            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          <figure className="w-full h-full">
+            <img src={banner002} alt="" className="w-full h-full object-cover"/>
           </figure>
         </li>
         <li>
-          <figure>
-            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          <figure className="w-full h-full">
+            <img src={banner003} alt="" className="w-full h-full object-cover"/>
           </figure>
         </li>
         <li>
-          <figure>
-            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          <figure className="w-full h-full">
+            <img src={banner004} alt="" className="w-full h-full object-cover"/>
           </figure>
         </li>
         <li>
-          <figure>
-            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+          <figure className="w-full h-full">
+            <img src={banner005} alt="" className="w-full h-full object-cover"/>
           </figure>
         </li>
       </ul>
     </div>
     <Swiper
       autoplay={{ // 自動輪播 swiper
-        delay: 999 *1000, // 每兩秒切換下一張
+        delay: 4 *1000, // 每兩秒切換下一張
       }}
       loop={roomIMG.length > 4} // 輪播結束後回到第一張繼續輪播
       effect={'fade'}
@@ -68,7 +72,7 @@ const RoomDetail = () => {
       }}
       slidesPerView={4}
       modules={[Autoplay, EffectFade, Pagination]}
-      className="w-full h-[240px] mt-[72px] lg:hidden"
+      className="w-full h-[240px] lg:hidden"
     >
       {roomIMG.map((image, imageIndex) => (
         <SwiperSlide key={imageIndex} className="w-full h-full">
@@ -79,9 +83,9 @@ const RoomDetail = () => {
       ))}
     </Swiper>
   </div>
-  <section className="container py-10 lg:py-[120px] text-neutral-80 bg-primary-10 flex justify-between items-start">
+  <section className="container py-10 lg:py-[120px] text-neutral-80 bg-primary-10 flex justify-between items-start gap-3">
     {/* room info */}
-    <div className="max-w-[746px] space-y-6 lg:space-y-20 basis-2/3">
+    <div className="max-w-[746px] space-y-6 lg:space-y-20 md:basis-2/3">
       <div>
         <h2 className="h3 lg:h1 align-middle text-neutral-100 mb-4">尊爵雙人房</h2>
         <p className="text-body2 lg:text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
@@ -122,9 +126,8 @@ const RoomDetail = () => {
       </div>
     </div>
     {/* room booking */}
-    <div className="basis-1/3 relative">
-      {/* hidden lg:block */}
-      <div className="hidden lg:block bg-neutral-0 text-neutral-80 rounded-[20px] p-10 w-[478px] space-y-10 fixed">
+    <div className="basis-1/3 sticky top-[120px] right-0">
+      <div className="hidden md:block bg-neutral-0 text-neutral-80 rounded-[20px] p-5 xl:p-10 w-96 xl:w-[478px] space-y-10">
         <h3 className="h5 pb-4 border-b border-neutral-40 text-neutral-100">預訂房型</h3>
         <div>
           <h2 className="h2 align-middle mb-2">尊爵雙人房</h2>
