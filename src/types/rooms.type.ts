@@ -8,7 +8,7 @@ export type Facility = {
 export type Room = Partial<BaseObj> & {
   name: string;
   description: string;
-  imageUrl: string;
+  imageUrl: string | undefined;
   imageUrlList: string[];
   areaInfo: string;
   bedInfo: string;

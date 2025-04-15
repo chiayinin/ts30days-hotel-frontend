@@ -1,74 +1,75 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { Calendar } from 'primereact/calendar';
 import { Nullable } from "primereact/ts-helpers";
 
-import { FAKE_LAYOUT_INFO, FAKE_FACILITY_INFO, FAKE_AMENITY_INFO } from "@constants";
 import { RoomBasicInfo } from "@components";
 import { RoomFacilityInfo } from "@components";
-import banner001 from '@assets/images/banner-001.jpg';
-import banner002 from '@assets/images/banner-002.jpg';
-import banner003 from '@assets/images/banner-003.jpg';
-import banner004 from '@assets/images/banner-004.jpg';
-import banner005 from '@assets/images/banner-005.jpg';
-
-const roomIMG = [banner001, banner002, banner003, banner004, banner005];
-
+import { Room } from "@types";
 
 const RoomDetail = () => {
+  // room data
+  const roomData = useLoaderData() as Room | null;
+
   // Booking People inupt number
   const [bookingPeople, setBookingPeople] = useState<number>(2);
-  const maxBookingPeople = 4;
+  const maxBookingPeople = roomData?.maxPeople;
 
   // Calendar
   const [startDate, setStartDate] = useState<Nullable<Date>>(null);
   const [endDate, setEndDate] = useState<Nullable<Date>>(null);
+  const [diffDays, setDiffDays] = useState<number | null>(null);
   const minStartDate = new Date();
   const maxStartDate = !endDate ? undefined : new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
   const minEndDate = !startDate ? undefined : new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
-  const [rangeDates, setRangeDates] = useState<Nullable<(Date | null)[]>>(null);
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const diffTime = endDate.getTime() - startDate.getTime();
+
+      setDiffDays(Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    } else {
+      setDiffDays(null);
+    }
+  }, [startDate, endDate]);
+
+  if(!roomData) {
+    return(
+      <div className='container py-10 lg:py-[120px] lg:px-10 text-neutral-80'>
+        <h2 className="text-subtitle lg:h6">查無此房型</h2>
+      </div>
+    )
+  }
 
   return(<>
   {/* banner image */}
   <div>
     {/* banner Desktop */}
     <div className="hidden lg:block">
-      <ul className="p-20 grid grid-cols-4 grid-rows-2 gap-2 box-content h-72 xl:h-[600px]">
+      <ul className="p-10 xl:p-20 grid grid-cols-4 grid-rows-2 gap-2 box-content h-72 xl:h-[600px]">
         <li className="col-span-2 row-span-2">
           <figure className="w-full h-full">
-            <img src={banner001} alt="" className="w-full h-full object-cover"/>
+            <img src={roomData.imageUrl} alt={roomData.name} className="w-full h-full object-cover"/>
           </figure>
         </li>
-        <li>
-          <figure className="w-full h-full">
-            <img src={banner002} alt="" className="w-full h-full object-cover"/>
-          </figure>
-        </li>
-        <li>
-          <figure className="w-full h-full">
-            <img src={banner003} alt="" className="w-full h-full object-cover"/>
-          </figure>
-        </li>
-        <li>
-          <figure className="w-full h-full">
-            <img src={banner004} alt="" className="w-full h-full object-cover"/>
-          </figure>
-        </li>
-        <li>
-          <figure className="w-full h-full">
-            <img src={banner005} alt="" className="w-full h-full object-cover"/>
-          </figure>
-        </li>
+        {
+          roomData.imageUrlList.map((image, index) => (<li key={`${roomData._id}_${index}`}>
+            <figure className="w-full h-full">
+              <img src={image} alt={roomData.name} className="w-full h-full object-cover"/>
+            </figure>
+          </li>))
+        }
       </ul>
     </div>
     {/* banner mobile */}
     <Swiper
       autoplay={{ // 自動輪播 swiper
-        delay: 4 *1000, // 每兩秒切換下一張
+        delay: 9999 *1000, // 每兩秒切換下一張
       }}
-      loop={roomIMG.length > 4} // 輪播結束後回到第一張繼續輪播
+      loop={roomData.imageUrlList.length > 4} // 輪播結束後回到第一張繼續輪播
       effect={'fade'}
       pagination={{
         clickable: true,
@@ -77,9 +78,9 @@ const RoomDetail = () => {
       modules={[Autoplay, EffectFade, Pagination]}
       className="w-full h-[240px] lg:hidden"
     >
-      {roomIMG.map((image, imageIndex) => (
+      {roomData.imageUrlList.map((image, imageIndex) => (
         <SwiperSlide key={imageIndex} className="w-full h-full">
-          <figure key={`id-${imageIndex}`} className="w-full h-full" >
+          <figure key={`${roomData._id}-${imageIndex}`} className="w-full h-full" >
             <img className="w-full h-full object-cover" src={image} alt=""/>
           </figure>
         </SwiperSlide>
@@ -90,27 +91,27 @@ const RoomDetail = () => {
     {/* room info */}
     <div className="max-w-[746px] space-y-6 lg:space-y-20 md:basis-2/3">
       <div>
-        <h2 className="h3 lg:h1 align-middle text-neutral-100 mb-4">尊爵雙人房</h2>
-        <p className="text-body2 lg:text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
+        <h2 className="h3 lg:h1 align-middle text-neutral-100 mb-4">{roomData.name}</h2>
+        <p className="text-body2 lg:text-body">{roomData.description}</p>
       </div>
       <div>
         <h3 className="text-title lg:h5 text-style-primary text-neutral-100 mb-4">房型基本資訊</h3>
         <RoomBasicInfo
-          area="24坪"
-          bed="一張大床"
-          people={2} />
+          area={roomData.areaInfo}
+          bed={roomData.bedInfo}
+          people={roomData.maxPeople} />
       </div>
       <div>
         <h3 className="text-title lg:h5 text-style-primary text-neutral-100 mb-4">房間格局</h3>
-        <RoomFacilityInfo list={FAKE_LAYOUT_INFO} />
+        <RoomFacilityInfo list={roomData.layoutInfo} />
       </div>
       <div>
         <h3 className="text-title lg:h5 text-style-primary text-neutral-100 mb-4">房內設備</h3>
-        <RoomFacilityInfo list={FAKE_FACILITY_INFO} />
+        <RoomFacilityInfo list={roomData.facilityInfo} />
       </div>
       <div>
         <h3 className="text-title lg:h5 text-style-primary text-neutral-100 mb-4">備品提供</h3>
-        <RoomFacilityInfo list={FAKE_AMENITY_INFO} />
+        <RoomFacilityInfo list={roomData.amenityInfo} />
       </div>
       <div>
         <h3 className="text-title lg:h5 text-style-primary text-neutral-100 mb-4">訂房須知</h3>
@@ -129,7 +130,6 @@ const RoomDetail = () => {
       </div>
     </div>
     {/* room booking  */}
-    {/* hidden md:block basis-1/3 sticky top-[120px] right-0 */}
     <div className="md:basis-1/3 md:sticky md:top-[120px] fixed bottom-0 right-0 w-full">
       {/* room booking Mobile */}
       <div className="md:hidden w-full p-3 bg-neutral-0 border border-neutral-40">
@@ -192,16 +192,16 @@ const RoomDetail = () => {
           />
         </div>
         <div className="flex justify-between items-center">
-          <span className="block w-1/2 text-neutral-80 text-body">ＮＴ$ 10,000 / 2 晚 / 2人</span>
-          <div className="w-1/2 text-title text-center btn-primary !p-3">立即預訂</div>
+          <span className="block w-1/2 text-neutral-80 text-body">NT$ {roomData.price} / {diffDays}晚 / {bookingPeople}人</span>
+          <Link to="booking" className="w-1/2 text-title text-center btn-primary !p-3 cursor-pointer">立即預訂</Link>
         </div>
       </div>
       {/* room booking Desktop */}
       <div className="hidden md:block bg-neutral-0 text-neutral-80 rounded-[20px] p-5 xl:p-10 w-96 xl:w-[478px] space-y-10">
         <h3 className="h5 pb-4 border-b border-neutral-40 text-neutral-100">預訂房型</h3>
         <div>
-          <h2 className="h2 align-middle mb-2">尊爵雙人房</h2>
-          <p className="text-body">享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。</p>
+          <h2 className="h2 align-middle mb-2">{roomData.name}</h2>
+          <p className="text-body">{roomData.description}</p>
         </div>
         <div>
           <div className="flex gap-4 mb-4">
@@ -263,8 +263,8 @@ const RoomDetail = () => {
             />
           </div>
         </div>
-        <span className="block h5 text-primary-100">NT$ 10,000</span>
-        <div className="w-full text-title text-center btn-primary">立即預訂</div>
+        <span className="block h5 text-primary-100">NT$ {roomData.price}</span>
+        <Link to="booking" className="w-full text-title text-center btn-primary cursor-pointer">立即預訂</Link>
       </div>
     </div>
   </section>
