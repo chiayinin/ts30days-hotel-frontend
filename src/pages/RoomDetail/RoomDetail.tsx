@@ -28,10 +28,12 @@ const RoomDetail = () => {
   const minStartDate = new Date();
   const maxStartDate = !endDate ? undefined : new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
   const minEndDate = !startDate ? undefined : new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+  const [rangeDates, setRangeDates] = useState<Nullable<(Date | null)[]>>(null);
 
   return(<>
   {/* banner image */}
   <div>
+    {/* banner Desktop */}
     <div className="hidden lg:block">
       <ul className="p-20 grid grid-cols-4 grid-rows-2 gap-2 box-content h-72 xl:h-[600px]">
         <li className="col-span-2 row-span-2">
@@ -61,6 +63,7 @@ const RoomDetail = () => {
         </li>
       </ul>
     </div>
+    {/* banner mobile */}
     <Swiper
       autoplay={{ // 自動輪播 swiper
         delay: 4 *1000, // 每兩秒切換下一張
@@ -125,8 +128,75 @@ const RoomDetail = () => {
         </ol>
       </div>
     </div>
-    {/* room booking */}
-    <div className="basis-1/3 sticky top-[120px] right-0">
+    {/* room booking  */}
+    {/* hidden md:block basis-1/3 sticky top-[120px] right-0 */}
+    <div className="md:basis-1/3 md:sticky md:top-[120px] fixed bottom-0 right-0 w-full">
+      {/* room booking Mobile */}
+      <div className="md:hidden w-full p-3 bg-neutral-0 border border-neutral-40">
+        <div className="flex gap-2 mb-2">
+          <div className="border border-neutral-100 rounded-lg p-2 w-1/2">
+            <label htmlFor="startDateCalendar" className="text-tiny block mb-1">
+              入住
+            </label>
+            <Calendar
+              id="startDateCalendar"
+              value={startDate}
+              onChange={(e) => setStartDate(e.value)} dateFormat="yy/mm/dd"
+              minDate={minStartDate}
+              maxDate={maxStartDate}
+              placeholder="請選擇入住日期"
+              inputClassName="text-body2"
+              locale="zh-TW"
+              showButtonBar
+              todayButtonClassName="hidden"
+              clearButtonClassName="btn-secondary"
+              panelClassName="p-8 text-title text-neutral-100"
+              touchUI
+            />
+          </div>
+          <div className="border border-neutral-100 rounded-lg p-2 w-1/2">
+            <label htmlFor="endDateCalendar" className="text-tiny block mb-1">
+              退房
+            </label>
+            <Calendar
+              id="endDateCalendar"
+              value={endDate}
+              onChange={(e) => setEndDate(e.value)}
+              dateFormat="yy/mm/dd"
+              minDate={minEndDate}
+              placeholder="請選擇退房日期"
+              inputClassName="text-body2"
+              locale="zh-TW"
+              showButtonBar
+              todayButtonClassName="hidden"
+              clearButtonClassName="btn-secondary"
+              panelClassName="p-8 text-title text-neutral-100"
+              touchUI
+            />
+          </div>
+        </div>
+        <div className="mb-2 flex justify-between items-center pb-2 border-b border-neutral-40">
+          <span className="text-body text-neutral-100">人數</span>
+          <InputNumber
+            value={bookingPeople}
+            onValueChange={(e: InputNumberValueChangeEvent) => setBookingPeople(e.value)}
+            showButtons
+            buttonLayout="horizontal"
+            min={1}
+            max={maxBookingPeople}
+            decrementButtonClassName="p-2 border rounded-full border-primary-40 w-8 h-8"
+            incrementButtonClassName="p-2 border rounded-full border-primary-40 w-8 h-8"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus"
+            inputClassName="focus:shadow-none focus:ring-2 focus:ring-primary-100 text-title mx-4 w-4 text-center"
+          />
+        </div>
+        <div className="flex justify-between items-center">
+          <span className="block w-1/2 text-neutral-80 text-body">ＮＴ$ 10,000 / 2 晚 / 2人</span>
+          <div className="w-1/2 text-title text-center btn-primary !p-3">立即預訂</div>
+        </div>
+      </div>
+      {/* room booking Desktop */}
       <div className="hidden md:block bg-neutral-0 text-neutral-80 rounded-[20px] p-5 xl:p-10 w-96 xl:w-[478px] space-y-10">
         <h3 className="h5 pb-4 border-b border-neutral-40 text-neutral-100">預訂房型</h3>
         <div>
