@@ -80,7 +80,7 @@ export const Header = () => {
   }, [pathname, beTransparent]);
 
   return(<>
-    <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] fixed top-0 left-0 z-20 w-full ease-in-out duration-300 ${ !beTransparent ? 'bg-neutral-bg' : isScrolled ? 'bg-black' : 'bg-transparent' }`}>
+    <header className={`flex justify-between items-center px-3 py-4 md:px-20 md:py-6 h-[72px] md:h-[120px] sticky top-0 left-0 z-20 w-full ease-in-out duration-300 ${ !beTransparent ? 'bg-neutral-bg' : isScrolled ? 'bg-black' : 'bg-transparent' } `}>
     <Link to={'/'} className="w-[110px] md:w-[196px]"><img src={Logo} alt="享樂酒店" /></Link>
     { showLinks && (<>
     <nav>

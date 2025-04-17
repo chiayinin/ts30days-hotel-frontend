@@ -1,6 +1,6 @@
 import { BaseObj } from "./base.type";
 
-export type facility = {
+export type Facility = {
   title: string;
   isProvide: boolean;
 };
@@ -8,14 +8,14 @@ export type facility = {
 export type Room = Partial<BaseObj> & {
   name: string;
   description: string;
-  imageUrl: string;
+  imageUrl: string | undefined;
   imageUrlList: string[];
   areaInfo: string;
   bedInfo: string;
   maxPeople: number;
   price: number;
   status: number;
-  layoutInfo: facility[];
-  facilityInfo: facility[];
-  amenityInfo: facility[];
+  layoutInfo: Facility[];
+  facilityInfo: Facility[];
+  amenityInfo: Facility[];
 };

@@ -4,9 +4,7 @@ import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 
 import { Room } from '@types';
 import { Banner } from '@components';
-import iconBed from "@assets/icons/icon-bed.svg";
-import iconProfile from "@assets/icons/icon-profile.svg";
-import iconSize from "@assets/icons/icon-size.svg";
+import { RoomBasicInfo } from "@components";
 
 const RoomMain = () => {
   const roomData = useLoaderData() as Room[];
@@ -59,20 +57,10 @@ const RoomMain = () => {
               <h3 className="h4 lg:h2 text-neutral-100">{room.name}</h3>
               <p className="text-body2 lg:text-body">{room.description}</p>
             </div>
-            <ul className="flex justify-start items-center gap-4">
-              <li className="border border-primary-40 rounded-lg px-4 py-5 space-y-2 w-24 h-24">
-                <img src={iconSize} alt="房間坪數" />
-                <span className="text-subtitle lg:text-title block">{room.areaInfo}</span>
-              </li>
-              <li className="border border-primary-40 rounded-lg p-4 py-5 space-y-2 w-24 h-24">
-                <img src={iconBed} alt="房間床型" />
-                <span className="text-subtitle lg:text-title block">{room.bedInfo}</span>
-              </li>
-              <li className="border border-primary-40 rounded-lg p-4 py-5 space-y-2 w-24 h-24">
-                <img src={iconProfile} alt="房間人數" />
-                <span className="text-subtitle lg:text-title block">{room.maxPeople} 人</span>
-              </li>
-            </ul>
+            <RoomBasicInfo
+              area={room.areaInfo}
+              bed={room.bedInfo}
+              people={room.maxPeople} />
             <div className="divider rounded-full w-full h-[2px] bg-gradient-to-r from-primary-100 to-neutral-0"></div>
             <div className="py-4 flex justify-between items-center">
               <span className="block text-title lg:h5 text-primary-100">NT$ {room.price}</span>

@@ -1,7 +1,10 @@
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app-routing';
-import { PrimeReactProvider } from 'primereact/api';
 import { useEffect, useReducer } from 'react';
+
+import { PrimeReactProvider, addLocale, locale } from 'primereact/api';
+import { all as locales } from 'primelocale';
+
 import { getFromStorage, GlobalContext, KEY_TOKEN, reducer } from '@core';
 import { getUser } from '@apis';
 import { MyToast } from '@components';
@@ -9,10 +12,13 @@ import { Loader } from '@components';
 
 // style
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import 'primeicons/primeicons.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
+
+
 
 const App = () => {
   const [{ user, toastPayload, isLoading }, dispatch ] = useReducer(reducer, {
@@ -20,6 +26,11 @@ const App = () => {
     toastPayload: { display: false },
     isLoading: false,
   });
+
+  // PrimeReact i18n
+  const newLocale = locales['zh-TW'];
+  addLocale('zh-TW', newLocale);
+  locale('zh-TW');
 
   useEffect(() => {
     const token = getFromStorage(KEY_TOKEN, 'COOKIE');
