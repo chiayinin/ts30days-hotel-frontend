@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import RoomMain from "./pages/RoomMain/RoomMain";
 import RoomDetail from "./pages/RoomDetail/RoomDetail";
+import Booking from "./pages/Booking/Booking";
 
 export const router =  createBrowserRouter([
   {
@@ -31,6 +32,12 @@ export const router =  createBrowserRouter([
         loader: async ({ params }) => getRoomDetail(params.id ?? ''),
         element: <RoomDetail />,
       },
+      {
+        // path: '/booking/:id/:startDate/:people',
+        path: '/booking/:id',
+        loader: async ({ params }) => getRoomDetail(params.id ?? ''),
+        element: <Booking />,
+      }
     ]
   },
   {
