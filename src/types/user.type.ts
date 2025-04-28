@@ -1,7 +1,7 @@
 import { BaseObj } from "./base.type";
 
 export type Address = {
-  zipcode: number;
+  zipcode: string;
   detail: string;
   city: string;
   county: string;

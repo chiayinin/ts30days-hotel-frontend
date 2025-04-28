@@ -1,52 +1,42 @@
 //id: 676e7cf5de85a9ded62f5b2e
-import { useEffect, useMemo, useState } from "react";
-import { useLoaderData, Link } from "react-router-dom";
-import { useForm } from 'react-hook-form';
+import { useEffect, useContext } from "react";
+import { useLoaderData, Link, useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { Room } from "@types";
+import { GlobalContext } from '@core';
+import { Room, BookingForm, NewBooking, BookingType } from '@types';
 import { RoomBasicInfo } from "@components";
 import { RoomFacilityInfo } from "@components";
+import { createOrder } from "@apis";
 import {
-  USER_SIGN_UP_SCHEMA,
+  BOOKING_SCHEMA,
   CITY_OPTIONS,
-  AREA_OPTIONS,
-  getYearOptions,
-  getMonthOptions,
-  getDayOptions
+  AREA_OPTIONS
  } from '@constants';
-import { UserSignUpForm } from '@types';
-import { SignUpForm } from '@types';
-
-type UserSignUpFormProps = {
-  userSignUpSubmit: (data: UserSignUpForm) => void;
-  defaultValues?: UserSignUpForm;
-};
 
 const Booking = () => {
-  const roomId = '676e7cf5de85a9ded62f5b2e';
+  const roomDataId = '676e7cf5de85a9ded62f5b2e';
+  const startDate = '2023/06/18';
+  const endDate = '2023/06/19';
+  const bookingPeople = 2;
+
+  const { dispatch } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
   // get room data
   const roomData = useLoaderData() as Room | null;
 
   const defaultValues  = {
-    email: '',
-    password: '',
-    confirmPassword: '',
     name: '',
     phone: '',
-    birthday: {
-      year: '2000',
-      month: '1',
-      day: '1'
-    },
+    email: '',
     address: {
       city: '臺北市',
       county: '中正區',
       zipcode: '100',
       detail: ''
-    },
-    agreement: false
+    }
   };
   // const [formData, setFormData] = useState<SignUpForm>(defaultForm);
   // 資料驗證設定
@@ -56,20 +46,14 @@ const Booking = () => {
     watch,
     setValue,
     formState: { errors, isValid },
-  } = useForm<UserSignUpForm>({
-    resolver: yupResolver(USER_SIGN_UP_SCHEMA),
+  } = useForm<BookingForm>({
+    resolver: yupResolver(BOOKING_SCHEMA),
     mode: 'onChange',
     defaultValues
   });
 
   // 監聽表單值變化
   const {city, county} = watch('address');
-  const {year, month, day} = watch('birthday');
-  const [dayOptions, setDayOptions] = useState<string[]>([]);
-
-  // 預計不會變更的選項
-  const yearOptions = useMemo(getYearOptions, []);
-  const monthOptions = useMemo(getMonthOptions, []);
 
   // 當 city 變更時，預設 county
   useEffect(() => {
@@ -83,18 +67,51 @@ const Booking = () => {
     if(areaOption) setValue('address.zipcode', areaOption.zipcode);
   }, [city, county, setValue]);
 
-  // 當年份或月份變更時，更新可選的日期
-  useEffect(() => {
-    const options = getDayOptions(year, month);
+  // 送出表單
+  const onSubmit: SubmitHandler<BookingForm> = async (data: BookingForm) => {
+    const params: NewBooking = {
+      roomId: roomDataId,
+      checkInDate: startDate,
+      checkOutDate: endDate,
+      peopleNum: bookingPeople,
+      userInfo: {
+        ...data,
+        address: {
+          zipcode: data.address.zipcode,
+          detail: data.address.county + data.address.city + data.address.detail,
+        }
+      }
+    };
 
-    setDayOptions(options);
-    if(!options.includes(day)) setValue('birthday.day', options[options.length - 1]);
-  }, [year, month, day, setValue]);
+    dispatch({ type: 'SET_LOADER', payload: true });
 
-  const onSubmit = (data: UserSignUpForm) => {
-    console.log('form:', data);
+    try {
+      const response: BookingType = await createOrder(params);
 
-    // userSignUpSubmit(data);
+      await dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'success',
+          summary: '房間預定',
+          detail: '您已預訂成功。',
+          display: true,
+        }
+      });
+      console.log('submit:', response)
+      // navigate(`/bookingsuccess/${response._id}`);
+    } catch(error) {
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '房間預定失敗',
+          detail: `${error}`,
+          display: true
+        }
+      });
+    } finally {
+      dispatch({type: 'SET_LOADER', payload: false});
+    }
   };
 
   if(!roomData) {
@@ -109,7 +126,7 @@ const Booking = () => {
   <section className="container text-neutral-100 py-10 md:py-[120px]">
     {/* Menu */}
     <div className="flex justify-start items-center mb-10">
-      <Link to={`/room/${roomId}`} className="leading-none mr-2 hover:text-primary-120 hover:outline">
+      <Link to={`/room/${roomDataId}`} className="leading-none mr-2 hover:text-primary-120 hover:outline">
         <span className="material-symbols-outlined">
           chevron_left
         </span>
@@ -153,6 +170,11 @@ const Booking = () => {
                 <label className="block">手機號碼</label>
                 <input type="phone" placeholder="請輸入手機號碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-primary-40 text-neutral-100 text-" {...register("phone")}/>
                 <p className="text-tiny md:text-subtitle text-danger-100">{errors.phone?.message}</p>
+              </div>
+              <div className="space-y-2">
+                <label className="block">電子信箱</label>
+                <input type="email" placeholder="請輸入電子信箱" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-primary-40 text-neutral-100 text-" {...register("email")}/>
+                <p className="text-tiny md:text-subtitle text-danger-100">{errors.email?.message}</p>
               </div>
               <div className="space-y-2">
                 <label className="block">地址</label>

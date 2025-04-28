@@ -45,3 +45,25 @@ export const USER_SIGN_UP_SCHEMA = yup.object({
     .oneOf([true], "請同意條款")
     .default(false)
 });
+
+// 預訂房間
+export const BOOKING_SCHEMA = yup.object({
+  name: yup
+    .string()
+    .required("請輸入姓名")
+    .default(""),
+  phone: yup
+    .string()
+    .required("請輸入手機號碼")
+    .matches(/^09[0-9]{8}$/, "請輸入正確的電話號碼")
+    .default(""),
+  email: yup.string()
+    .email("電子信箱的格式有誤")
+    .required("欄位不得為空"),
+  address: yup.object({
+    city: yup.string().required("請選擇縣市").default(""),
+    county: yup.string().required("請選擇區域").default(""),
+    detail: yup.string().required("請輸入詳細地址").default(""),
+    zipcode: yup.string().default(""),
+  })
+});
