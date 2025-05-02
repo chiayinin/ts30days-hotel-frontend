@@ -1,6 +1,5 @@
-//id: 676e7cf5de85a9ded62f5b2e
 import { useEffect, useContext } from "react";
-import { useLoaderData, Link, useNavigate } from "react-router-dom";
+import { useLoaderData, Link, useNavigate, useLocation, useParams } from "react-router-dom";
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -16,17 +15,10 @@ import {
  } from '@constants';
 
 const Booking = () => {
-  const roomDataId = '676e7cf5de85a9ded62f5b2e';
-  const startDate = '2023/06/18';
-  const endDate = '2023/06/19';
-  const bookingPeople = 2;
-
   const { dispatch } = useContext(GlobalContext);
   const navigate = useNavigate();
-
-  // get room data
-  const roomData = useLoaderData() as Room | null;
-
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
   const defaultValues  = {
     name: '',
     phone: '',
@@ -38,7 +30,19 @@ const Booking = () => {
       detail: ''
     }
   };
-  // const [formData, setFormData] = useState<SignUpForm>(defaultForm);
+
+  const { id: roomDataId } = useParams() ;
+  const getQueryParam = (queryParams: URLSearchParams, key: string): string =>
+    queryParams.get(key) ?? '';
+  const startDate = getQueryParam(query, 'startDate');
+  const endDate = getQueryParam(query, 'endDate');
+  const bookingPeople = Number(getQueryParam(query, 'bookingPeople'));
+
+  console.log(roomDataId, startDate, endDate, bookingPeople)
+
+  // get room data
+  const roomData = useLoaderData() as Room | null;
+
   // 資料驗證設定
   const {
     register,
@@ -69,6 +73,15 @@ const Booking = () => {
 
   // 送出表單
   const onSubmit: SubmitHandler<BookingForm> = async (data: BookingForm) => {
+    // const startDate = getQueryParam(query, 'startDate');
+    // const endDate = getQueryParam(query, 'endDate');
+    // const bookingPeople = Number(getQueryParam(query, 'bookingPeople'));
+
+    if (!roomDataId) {
+      alert('缺少房間 ID');
+      return;
+    }
+
     const params: NewBooking = {
       roomId: roomDataId,
       checkInDate: startDate,
@@ -97,8 +110,7 @@ const Booking = () => {
           display: true,
         }
       });
-      console.log('submit:', response)
-      // navigate(`/bookingsuccess/${response._id}`);
+      navigate(`/bookingsuccess/${response._id}`);
     } catch(error) {
       dispatch({
         type: 'SET_TOAST',

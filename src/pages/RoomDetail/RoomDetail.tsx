@@ -25,6 +25,8 @@ const RoomDetail = () => {
   const minStartDate = new Date();
   const maxStartDate = !endDate ? undefined : new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
   const minEndDate = !startDate ? undefined : new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+  const queryStartDate = !startDate ? undefined : startDate.getTime();
+  const queryEndDate = !endDate ? undefined : endDate.getTime();
 
   useEffect(() => {
     if (startDate && endDate) {
@@ -264,7 +266,11 @@ const RoomDetail = () => {
           </div>
         </div>
         <span className="block h5 text-primary-100">NT$ {roomData.price}</span>
-        <Link to="booking" className="w-full text-title text-center btn-primary cursor-pointer">立即預訂</Link>
+        <Link to={{
+          pathname: `/booking/${roomData._id}`,
+          search: `?startDate=${queryStartDate}&endDate=${queryEndDate}&bookingPeople=${bookingPeople}`
+        }}
+        className="w-full text-title text-center btn-primary cursor-pointer">立即預訂</Link>
       </div>
     </div>
   </section>
