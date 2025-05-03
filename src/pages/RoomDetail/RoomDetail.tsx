@@ -268,7 +268,7 @@ const RoomDetail = () => {
         <span className="block h5 text-primary-100">NT$ {roomData.price}</span>
         <Link to={{
           pathname: `/booking/${roomData._id}`,
-          search: `?startDate=${queryStartDate}&endDate=${queryEndDate}&bookingPeople=${bookingPeople}`
+          search: `?startDate=${queryStartDate}&endDate=${queryEndDate}&bookingPeople=${bookingPeople}&diffDays=${diffDays}`
         }}
         className="w-full text-title text-center btn-primary cursor-pointer">立即預訂</Link>
       </div>

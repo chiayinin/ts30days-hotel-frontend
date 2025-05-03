@@ -9,10 +9,12 @@ import { RoomBasicInfo } from "@components";
 import { RoomFacilityInfo } from "@components";
 import { createOrder } from "@apis";
 import {
+  formatTimestamp,
   BOOKING_SCHEMA,
   CITY_OPTIONS,
   AREA_OPTIONS
  } from '@constants';
+import { en } from "primelocale/js/en.js";
 
 const Booking = () => {
   const { dispatch } = useContext(GlobalContext);
@@ -34,14 +36,17 @@ const Booking = () => {
   const { id: roomDataId } = useParams() ;
   const getQueryParam = (queryParams: URLSearchParams, key: string): string =>
     queryParams.get(key) ?? '';
-  const startDate = getQueryParam(query, 'startDate');
-  const endDate = getQueryParam(query, 'endDate');
   const bookingPeople = Number(getQueryParam(query, 'bookingPeople'));
+  const diffDays = Number(getQueryParam(query, 'diffDays'));
+  let startDate = getQueryParam(query, 'startDate');
+  let endDate = getQueryParam(query, 'endDate');
 
-  console.log(roomDataId, startDate, endDate, bookingPeople)
+  startDate = formatTimestamp(startDate);
+  endDate = formatTimestamp(endDate);
 
   // get room data
   const roomData = useLoaderData() as Room | null;
+
 
   // 資料驗證設定
   const {
@@ -73,10 +78,6 @@ const Booking = () => {
 
   // 送出表單
   const onSubmit: SubmitHandler<BookingForm> = async (data: BookingForm) => {
-    // const startDate = getQueryParam(query, 'startDate');
-    // const endDate = getQueryParam(query, 'endDate');
-    // const bookingPeople = Number(getQueryParam(query, 'bookingPeople'));
-
     if (!roomDataId) {
       alert('缺少房間 ID');
       return;
@@ -155,16 +156,16 @@ const Booking = () => {
           <ul className="space-y-6">
             <li>
               <p className="text-title lg:h5 text-style-primary mb-2">選擇房型</p>
-              <p className="text-body">尊爵雙人房</p>
+              <p className="text-body">{roomData.name}</p>
             </li>
             <li>
               <p className="text-title lg:h5 text-style-primary mb-2">訂房日期</p>
-              <p className="text-body mb-2">入住: 6 月 10 日星期二</p>
-              <p className="text-body">退房: 6 月 11 日星期三</p>
+              <p className="text-body mb-2">入住: {startDate}</p>
+              <p className="text-body">退房: {endDate}</p>
             </li>
             <li>
               <p className="text-title lg:h5 text-style-primary mb-2">房客人數</p>
-              <p className="text-body">2 人</p>
+              <p className="text-body">{bookingPeople} 人</p>
             </li>
           </ul>
         </div>
@@ -240,26 +241,25 @@ const Booking = () => {
             <h3 className="h6 md:h4">價格詳情</h3>
             <div className="pb-6 border-b border-primary-40 text-body space-y-3">
               <div>
-                <span>NT$ 10000</span>
+                <span>NT$ {roomData.price}</span>
                 <span className="material-symbols-outlined mx-2 text-[16px] align-middle">close</span>
-                <span>2 晚</span>
-                <span className="float-right">NT$ 20000</span>
+                <span>{diffDays} 晚</span>
+                <span className="float-right">NT$ {roomData.price * diffDays}</span>
               </div>
               <div>
                 <span>住宿折扣</span>
-                <span className="float-right text-primary-100">-NT$ 1,000</span>
+                <span className="float-right text-primary-100">- NT$ 1000</span>
               </div>
             </div>
             <div className="text-title">
               <span>總價</span>
-              <span className="float-right">NT$ 19000</span>
+              <span className="float-right">NT$ {roomData.price * diffDays - 1000}</span>
             </div>
           </div>
           <button type="submit" form="bookingForm" className={`w-full text-title ${!isValid ? 'btn-primary-disable' : 'btn-primary'}`} disabled={!isValid}>確定訂房</button>
         </div>
       </div>
     </div>
-
   </section>
   </>);
 };
