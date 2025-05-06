@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import axios from "axios";
 
-import { getNewsData, getRoomsData, getRoomDetail, getFoodsData, loginGuard } from './apis/index';
+import { getNewsData, getRoomsData, getRoomDetail, getFoodsData, loginGuard, getOrderDetail } from './apis/index';
 
 // 頁面元件
 import Layout from "./pages/Layout/Layout";
@@ -11,6 +11,7 @@ import Signup from "./pages/Signup/Signup";
 import RoomMain from "./pages/RoomMain/RoomMain";
 import RoomDetail from "./pages/RoomDetail/RoomDetail";
 import Booking from "./pages/Booking/Booking";
+import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 
 export const router =  createBrowserRouter([
   {
@@ -33,11 +34,16 @@ export const router =  createBrowserRouter([
         element: <RoomDetail />,
       },
       {
-        // path: '/booking/:id/:startDate/:people',
         path: '/booking/:id',
         loader: async ({ params }) => getRoomDetail(params.id ?? ''),
         element: <Booking />,
-      }
+        // search: `?startDate=${queryStartDate}&endDate=${queryEndDate}&bookingPeople=${bookingPeople}&diffDays=${diffDays}
+      },
+      {
+        path: '/bookingsuccess/:id',
+        // loader: async ({ params }) => getOrderDetail(params.id ?? ''),
+        element: <BookingSuccess />,
+      },
     ]
   },
   {
