@@ -80,24 +80,24 @@ const orderDetailData = {
 
 const MainContent = ({name, phone, email}: {name: string, phone: string, email: string}) => {
   return (<>
-    <section className="space-y-10 text-neutral-0 text-body">
-      <div className="border-b border-primary-40 pb-8">
-        <div className="mb-8">
-          <span className="material-symbols-outlined bg-success-100 text-neutral-0 p-2  rounded-full mb-4">
+    <section className="space-y-10 md:space-y-20 text-neutral-0 text-body">
+      <div className="border-b border-primary-40 pb-8 md:pb-20">
+        <div className="mb-8 md:mb-10 flex flex-col md:flex-row gap-y-4 md:gap-x-10 justify-start md:items-center">
+          <span className="material-symbols-outlined bg-success-100 text-neutral-0 p-2  rounded-full w-10 h-10 md:w-14 md:h-14 md:text-[40px]">
             check
           </span>
-          <h3 className="h3 leading-normal">恭喜，{name}！<br />您已預訂成功</h3>
+          <h3 className="h3 md:h1 leading-normal">恭喜，{name}！<br />您已預訂成功</h3>
         </div>
         <p className="text-neutral-40">我們已發送訂房資訊及詳細內容至你的電子信箱，入住時需向櫃檯人員出示訂房人證件。</p>
       </div>
-      <div className="border-b border-primary-40 pb-8">
+      <div className="border-b border-primary-40 pb-8 md:pb-20">
         <div>
-          <h5 className="mb-6">立即查看你的訂單紀錄</h5>
-          <Link to={'/member'} className="btn-primary w-full text-center">前往我的訂單</Link>
+          <h5 className="mb-6 text-title md:h5">立即查看你的訂單紀錄</h5>
+          <Link to={'/member'} className="btn-primary w-full text-center text-title">前往我的訂單</Link>
         </div>
       </div>
       <div>
-        <h5 className="h5 mb-8">訂房人資訊</h5>
+        <h5 className="h5 mb-8 md:mb-10">訂房人資訊</h5>
         <ul className="space-y-6">
           <li>
             <p className="mb-2 text-neutral-40">姓名</p>
@@ -117,20 +117,20 @@ const MainContent = ({name, phone, email}: {name: string, phone: string, email: 
   </>)
 };
 
-const CardContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDate, endDate, price, facilityInfo, amenityInfo}: {orderUserId:string, imageUrl:string, roomName:string, days:number, peopleNum:number, startDate:string, endDate:string, price:number, facilityInfo:Facility[], amenityInfo:Facility[]}) => {
+const CardContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDate, endDate, price, facilityInfo, amenityInfo, className}: {orderUserId:string, imageUrl:string, roomName:string, days:number, peopleNum:number, startDate:string, endDate:string, price:number, facilityInfo:Facility[], amenityInfo:Facility[], className?:string}) => {
   const roomFacilityInfoStyle = 'border border-neutral-40 rounded-lg';
 
   return(<>
-    <div className="rounded-[20px] p-4 space-y-6 bg-neutral-0 text-neutral-80 text-subtitle">
+    <div className={`rounded-[20px] p-4 md:p-10 space-y-6 md:space-y-10 bg-neutral-0 text-neutral-80 text-subtitle md:text-title ${className}`}>
       <div>
-        <p className="text-body2 mb-2">預訂參考編號： {orderUserId}</p>
-        <h5 className="text-title text-neutral-100">即將來的行程</h5>
+        <p className="text-body2 md:text-body mb-2">預訂參考編號： {orderUserId}</p>
+        <h5 className="text-title md:h5 text-neutral-100">即將來的行程</h5>
       </div>
-      <figure className="w-80 h-40">
+      <figure className="w-full h-40 md:h-60">
         {/* 320*150 */}
         <img src={imageUrl} alt={roomName} className="h-full w-full rounded-lg object-cover object-center"/>
       </figure>
-      <div className="space-y-6 pb-6 border-b border-neutral-40">
+      <div className="space-y-6 pb-6 md:pb-10 border-b border-neutral-40">
         <h6>{roomName}，{days} 晚<span className="border border-neutral-60 rounded-lg  inline-block mx-4 h-[18px] align-sub"></span>住宿人數：{peopleNum}位</h6>
         <div>
           <p className="text-style-primary mb-2">入住：{startDate}，15:00 可入住</p>
@@ -138,13 +138,13 @@ const CardContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDat
         </div>
         <p>NT$ {price * days}</p>
       </div>
-      <div className="pb-6 border-b border-neutral-40">
+      <div className="pb-6 mb:pb-10 border-b border-neutral-40">
         <h3 className="text-style-primary text-neutral-100 mb-6">房內設備</h3>
-        <RoomFacilityInfo list={facilityInfo} style={roomFacilityInfoStyle} />
+        <RoomFacilityInfo list={facilityInfo} className={roomFacilityInfoStyle} />
       </div>
       <div>
         <h3 className="text-style-primary text-neutral-100 mb-6">備品提供</h3>
-        <RoomFacilityInfo list={amenityInfo} style={roomFacilityInfoStyle} />
+        <RoomFacilityInfo list={amenityInfo} className={roomFacilityInfoStyle} />
       </div>
     </div>
   </>)
@@ -164,7 +164,7 @@ const BookingSuccess = () => {
 
   return (<>
   <div className="bg-neutral-bg">
-    <div className="container py-10 flex flex-col gap-[60px]">
+    <div className="container py-10 flex flex-col md:flex-row gap-[60px] md:justify-between">
       <MainContent
         name={orderDetailData.userInfo.name}
         phone={orderDetailData.userInfo.phone}
@@ -181,6 +181,7 @@ const BookingSuccess = () => {
         price={orderDetailData.roomId.price}
         facilityInfo={orderDetailData.roomId.facilityInfo}
         amenityInfo={orderDetailData.roomId.amenityInfo}
+        className="md:max-w-[478px]"
       />
     </div>
     <img className="bottom-0 left-0 min-h-[84px]" src={line2IMG} alt="" />

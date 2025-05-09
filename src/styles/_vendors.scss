@@ -4,6 +4,24 @@
 /* import Google font icon */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
+// Google font ison
+.icon-lg {
+  font-variation-settings:
+'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 40
+}
+// <style>
+// .material-symbols-outlined {
+//   font-variation-settings:
+//   'FILL' 0,
+//   'wght' 400,
+//   'GRAD' 0,
+//   'opsz' 24
+// }
+// </style>
+
 // Swiper
 .swiper-pagination-bullet {
   @apply bg-primary-40 w-8 h-1 rounded-[100px]
