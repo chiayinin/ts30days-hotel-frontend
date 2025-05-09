@@ -1,7 +1,7 @@
 import { Facility } from "@types";
 
-export const RoomFacilityInfo = ({list}: {list: Facility[]}) => {
-  return(<ul className="bg-neutral-0 p-6 rounded-lg flex justify-start items-cente flex-wrap gap-6">
+export const RoomFacilityInfo = ({list, style}: {list: Facility[], style?:string}) => {
+  return(<ul className={`bg-neutral-0 p-6 rounded-lg flex justify-start items-cente flex-wrap gap-6 ${style}`}>
     {
       list.map((item, index) => (
         <li key={index} className="w-28">

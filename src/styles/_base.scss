@@ -15,6 +15,10 @@
   @apply leading-[150%] tracking-[2%];
 }
 
+@mixin text-style {
+  @apply pl-4 relative before:absolute before:content-[''] before:w-1 before:h-6 before:rounded-[10px] before:top-[calc(50%_-_12px)] before:left-0;
+}
+
 
 // 全域字型
 @layer base {
@@ -78,6 +82,12 @@
   }
 
   .text-style-primary {
-    @apply pl-4 relative before:absolute before:content-[''] before:w-1 before:h-6 before:rounded-[10px] before:bg-primary-100 before:top-[calc(50%_-_12px)] before:left-0;
+    @apply before:bg-primary-100;
+    @include text-style;
+  }
+
+  .text-style-secondary {
+    @apply before:bg-neutral-60;
+    @include text-style;
   }
 }

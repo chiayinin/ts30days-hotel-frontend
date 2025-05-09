@@ -14,7 +14,6 @@ import {
   CITY_OPTIONS,
   AREA_OPTIONS
  } from '@constants';
-import { en } from "primelocale/js/en.js";
 
 const Booking = () => {
   const { dispatch } = useContext(GlobalContext);
