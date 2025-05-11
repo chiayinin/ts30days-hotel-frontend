@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import axios from "axios";
 
-import { getNewsData, getRoomsData, getRoomDetail, getFoodsData, loginGuard, getOrderDetail } from './apis/index';
+import { getNewsData, getRoomsData, getRoomDetail, getFoodsData, loginGuard } from './apis/index';
 
 // 頁面元件
 import Layout from "./pages/Layout/Layout";
@@ -41,7 +41,6 @@ export const router =  createBrowserRouter([
       },
       {
         path: '/bookingsuccess/:id',
-        // loader: async ({ params }) => getOrderDetail(params.id ?? ''),
         element: <BookingSuccess />,
       },
     ]

@@ -1,82 +1,11 @@
-// orderId: 680f73535e33593cbe855df5
-// 要登入 token，未登入要轉跳 login
-// import { useLoaderData } from "react-router-dom";
-// import { BookingType } from "@types";
+import { useContext, useEffect, useState } from 'react';
+import { useParams, Link } from "react-router-dom";
 
-import { Link } from "react-router-dom";
+import { getUser, getOrderDetail } from '@apis';
 import { RoomFacilityInfo } from '@components'
-import { Facility } from '@types';
+import { Facility, BookingType } from '@types';
+import { KEY_TOKEN, getFromStorage, GlobalContext } from '@core';
 import line2IMG from '@assets/images/home-line2.png';
-
-// const orderDetailData = {
-//   "address": {
-//       "zipcode": 802,
-//       "detail": "文山路23號"
-//   },
-//   "_id": "6729b83b5653aebb60f00c20",
-//   "name": "Lisa",
-//   "email": "lisa@test.com",
-//   "phone": "(663) 742-3828",
-//   "birthday": "1982-02-04T00:00:00.000Z",
-//   "createdAt": "2024-11-05T06:16:27.107Z",
-//   "updatedAt": "2024-11-05T06:16:27.107Z"
-// };
-
-const orderDetailData = {
-  "userInfo": {
-    "address": {
-      "zipcode": 802,
-      "detail": "文山路23號"
-    },
-    "name": "Joanne Chen",
-    "phone": "0912345678",
-    "email": "example@gmail.com"
-  },
-  "_id": "653e335a13831c2ac8c389bb",
-  "roomId": {
-    "name": "尊爵雙人房",
-    "description": "享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。",
-    "imageUrl": "https://fakeimg.pl/300/",
-    "imageUrlList": [
-      "https://fakeimg.pl/300/",
-      "https://fakeimg.pl/300/",
-      "https://fakeimg.pl/300/"
-    ],
-    "areaInfo": "24坪",
-    "bedInfo": "一張大床",
-    "maxPeople": 4,
-    "price": 10000,
-    "status": 1,
-    "layoutInfo": [
-      {
-        "title": "市景",
-        "isProvide": true
-      }
-    ],
-    "facilityInfo": [
-      {
-        "title": "平面電視",
-        "isProvide": true
-      }
-    ],
-    "amenityInfo": [
-      {
-        "title": "衛生紙",
-        "isProvide": true
-      }
-    ],
-    "_id": "653e4661336cdccc752127a0",
-    "createdAt": "2023-10-29T11:47:45.641Z",
-    "updatedAt": "2023-10-29T11:47:45.641Z"
-  },
-  "checkInDate": "2023-06-17T16:00:00.000Z",
-  "checkOutDate": "2023-06-18T16:00:00.000Z",
-  "peopleNum": 2,
-  "orderUserId": "6533f0ef4cdf5b7f762747b0",
-  "status": 0,
-  "createdAt": "2023-10-29T10:26:34.498Z",
-  "updatedAt": "2023-10-29T10:26:34.498Z"
-}
 
 const MainContent = ({name, phone, email}: {name: string, phone: string, email: string}) => {
   return (<>
@@ -151,8 +80,42 @@ const CardContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDat
 }
 
 const BookingSuccess = () => {
-  // order data
-  // const orderDetailData = useLoaderData() as BookingType | null;
+  const { dispatch } = useContext(GlobalContext);
+  const token = getFromStorage(KEY_TOKEN, 'COOKIE');
+  const {id} = useParams();
+  const [orderDetailData, setOrderDetailData] = useState<BookingType>({} as BookingType);
+
+  useEffect(() => {
+    // 要登入 token，未登入要轉跳 login
+    // 要加 loading
+    if (token) {
+      const fetchUser = async () => {
+        try {
+          // 驗證是否有 token
+          const user = await getUser(token);
+          await dispatch({ type: 'SET_USER', payload: user });
+
+          // 取得訂單資訊
+          const orderData = await getOrderDetail(id ?? '');
+          await setOrderDetailData(orderData);
+
+          await dispatch({
+            type: 'SET_TOAST',
+            payload: {
+              severity: 'success',
+              summary: '已登入',
+              detail: '已登入',
+              display: true,
+            },
+          });
+        } catch (error) {
+          console.error('獲取資訊失敗:', error);
+        }
+      };
+
+      fetchUser();
+    }
+  }, [dispatch, token, id]);
 
   if(!orderDetailData) {
     return(
@@ -165,22 +128,24 @@ const BookingSuccess = () => {
   return (<>
   <div className="bg-neutral-bg">
     <div className="container py-10 flex flex-col md:flex-row gap-[60px] md:justify-between">
-      <MainContent
-        name={orderDetailData.userInfo.name}
-        phone={orderDetailData.userInfo.phone}
-        email={orderDetailData.userInfo.email}
-      />
+      {orderDetailData && orderDetailData.userInfo && (
+        <MainContent
+          name={orderDetailData.userInfo.name}
+          phone={orderDetailData.userInfo.phone}
+          email={orderDetailData.userInfo.email}
+        />
+      )}
       <CardContent
         orderUserId={orderDetailData.orderUserId}
-        imageUrl={orderDetailData.roomId.imageUrl}
-        roomName={orderDetailData.roomId.name}
-        days={orderDetailData.roomId.status}
-        peopleNum={orderDetailData.peopleNum}
-        startDate={orderDetailData.checkInDate}
-        endDate={orderDetailData.checkOutDate}
-        price={orderDetailData.roomId.price}
-        facilityInfo={orderDetailData.roomId.facilityInfo}
-        amenityInfo={orderDetailData.roomId.amenityInfo}
+        imageUrl={orderDetailData?.roomId?.imageUrl ?? ''}
+        roomName={orderDetailData?.roomId?.name ?? ''}
+        days={orderDetailData?.roomId?.status ?? 0}
+        peopleNum={orderDetailData?.peopleNum ?? 0}
+        startDate={orderDetailData?.checkInDate ?? ''}
+        endDate={orderDetailData?.checkOutDate ?? ''}
+        price={orderDetailData?.roomId?.price ?? 0}
+        facilityInfo={orderDetailData?.roomId?.facilityInfo ?? []}
+        amenityInfo={orderDetailData?.roomId?.amenityInfo ?? []}
         className="md:max-w-[478px]"
       />
     </div>
