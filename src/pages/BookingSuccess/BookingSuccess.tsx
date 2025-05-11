@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { useParams, Link } from "react-router-dom";
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import { getUser, getOrderDetail } from '@apis';
 import { RoomFacilityInfo } from '@components'
@@ -83,39 +83,68 @@ const BookingSuccess = () => {
   const { dispatch } = useContext(GlobalContext);
   const token = getFromStorage(KEY_TOKEN, 'COOKIE');
   const {id} = useParams();
+  const navigate = useNavigate();
   const [orderDetailData, setOrderDetailData] = useState<BookingType>({} as BookingType);
 
-  useEffect(() => {
-    // 要登入 token，未登入要轉跳 login
-    // 要加 loading
-    if (token) {
-      const fetchUser = async () => {
-        try {
-          // 驗證是否有 token
-          const user = await getUser(token);
-          await dispatch({ type: 'SET_USER', payload: user });
+  const fetchUser = useCallback(async () => {
+    // 驗證是否有 token，未登入要轉跳 login
+    if(!token) {
+      await dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '未登入',
+          detail: '未登入，轉登入頁。',
+          display: true,
+        },
+      });
+      return navigate('/login');
+    };
 
-          // 取得訂單資訊
-          const orderData = await getOrderDetail(id ?? '');
-          await setOrderDetailData(orderData);
+    try {
+      // 加入 loading
+      dispatch({ type: 'SET_LOADER', payload: true });
 
-          await dispatch({
-            type: 'SET_TOAST',
-            payload: {
-              severity: 'success',
-              summary: '已登入',
-              detail: '已登入',
-              display: true,
-            },
-          });
-        } catch (error) {
-          console.error('獲取資訊失敗:', error);
-        }
-      };
+      // 加入 token
+      const user = await getUser(token);
 
-      fetchUser();
+      await dispatch({ type: 'SET_USER', payload: user });
+
+       // 取得訂單資訊（確保 id 存在）
+       if (id) {
+        const orderData = await getOrderDetail(id);
+
+        setOrderDetailData(orderData);
+        await dispatch({
+          type: 'SET_TOAST',
+          payload: {
+            severity: 'success',
+            summary: '已登入',
+            detail: '已登入，並取得訂單資訊。',
+            display: true,
+          },
+        });
+      }
+    } catch (error) {
+      console.error('獲取資訊失敗:', error);
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '此訂單不存在',
+          detail: '此訂單不存在，回房型頁。',
+          display: true,
+        },
+      });
+      navigate('/room');
+    } finally {
+      dispatch({ type: 'SET_LOADER', payload: false });
     }
-  }, [dispatch, token, id]);
+  }, [navigate, dispatch, token, id]); // 使用 `useCallback` 來記憶函式
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   if(!orderDetailData) {
     return(
