@@ -4,6 +4,7 @@ import { Footer } from '@components';
 
 import headshot005 from '@assets/headshots/headshot005.png';
 import accountBg from '@assets/images/account-bg.jpg';
+import line2IMG from '@assets/images/home-line2.png';
 
 const AccountLayout = () => {
   return (<>
@@ -22,6 +23,7 @@ const AccountLayout = () => {
     {/* Main */}
     <main className="bg-neutral-bg text-neutral-0">
       <Outlet />
+      <img className="bottom-0 left-0 min-h-[84px]" src={line2IMG} alt="" />
     </main>
     {/* Footer */}
     <Footer></Footer>
