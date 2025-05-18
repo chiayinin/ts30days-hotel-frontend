@@ -1,9 +1,8 @@
-// import { Divider } from 'primereact/divider';
 import { TabView, TabPanel, TabPanelHeaderTemplateOptions } from 'primereact/tabview';
+import EditPassword from './EditPassword';
 
 const Member = () => {
   const underscoreClass: string = 'after:content-[""] after:absolute after:mx-auto after:inset-x-0 after:bottom-0 after:w-1/4 after:h-1 after:bg-primary-100 after:rounded-[10px] text-primary-100';
-
 
   const tab1HeaderTemplate = (options: TabPanelHeaderTemplateOptions) => {
     return (
@@ -20,24 +19,16 @@ const Member = () => {
         </div>
     );
   };
+
   const ptStyle = {
     nav: { className: 'bg-neutral-bg'},
   }
 
   return (<>
-  <section className="container py-10">
-    <TabView pt={ptStyle} panelContainerClassName="bg-neutral-bg">
+  <section className="container py-10 md:pt-20 md:pb-[120px]">
+    <TabView pt={ptStyle} panelContainerClassName="bg-neutral-bg text-neutral-100">
         <TabPanel header="個人資料" headerTemplate={tab1HeaderTemplate} >
-          <div className="rounded-[20px] bg-neutral-0 mt-10 p-6">
-            <p >
-            修改密碼
-            </p>
-          </div>
-          <div className="rounded-[20px] bg-neutral-0 mt-6 p-6">
-            <p >
-            基本資料
-            </p>
-          </div>
+          <EditPassword></EditPassword>
         </TabPanel>
         <TabPanel header="我的訂單" headerTemplate={tab2HeaderTemplate}>
             <p className="">
