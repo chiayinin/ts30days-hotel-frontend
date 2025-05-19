@@ -1,5 +1,5 @@
 import { TabView, TabPanel, TabPanelHeaderTemplateOptions } from 'primereact/tabview';
-import EditPassword from './EditPassword';
+import UserInformation from './UserInformation';
 
 const Member = () => {
   const underscoreClass: string = 'after:content-[""] after:absolute after:mx-auto after:inset-x-0 after:bottom-0 after:w-1/4 after:h-1 after:bg-primary-100 after:rounded-[10px] text-primary-100';
@@ -28,7 +28,7 @@ const Member = () => {
   <section className="container py-10 md:pt-20 md:pb-[120px]">
     <TabView pt={ptStyle} panelContainerClassName="bg-neutral-bg text-neutral-100">
         <TabPanel header="個人資料" headerTemplate={tab1HeaderTemplate} >
-          <EditPassword></EditPassword>
+          <UserInformation />
         </TabPanel>
         <TabPanel header="我的訂單" headerTemplate={tab2HeaderTemplate}>
             <p className="">
