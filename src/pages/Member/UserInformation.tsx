@@ -1,15 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Dialog } from 'primereact/dialog';
 
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { ValiPasswordType, ValiAccountInfoType, PutUserType } from '@types';
+import { ValiPasswordType, ValiAccountInfoType, PutUserType, UserSignUpForm } from '@types';
 import { EDIT_PASSWORD_SCHEMA } from '@constants';
+import {
+  USER_SIGN_UP_SCHEMA,
+  CITY_OPTIONS,
+  AREA_OPTIONS,
+  getYearOptions,
+  getMonthOptions,
+  getDayOptions
+ } from '@constants';
 
 const UserInformation = () => {
   const [visibleEditPassword, setVisibleEditPassword] = useState<boolean>(false);
+  const [visibleAccountInfo, setVisibleAccountInfo] = useState<boolean>(false);
 
   const defaultEditPasswordFrom: ValiPasswordType = {
     oldPassword: '',
@@ -56,30 +65,94 @@ const UserInformation = () => {
   const [formData, setFormData] = useState<PutUserType>(defaultForm);
 
 
+  // // Modal: 重設密碼資料驗證
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   reset,
+  //   formState: { errors, isValid },
+  // } = useForm<ValiPasswordType>({
+  //   resolver: yupResolver(EDIT_PASSWORD_SCHEMA),
+  //   mode: 'onChange',
+  //   defaultValues: defaultEditPasswordFrom
+  // });
+
+  // // 重設密碼 submit
+  // const valiPasswordSubmit: SubmitHandler<ValiPasswordType> = async (data) => {
+  //   console.log(data)
+  //   console.log(isValid);
+
+  //   setVisibleEditPassword(false)
+
+  //   // // 取得 getUser
+  //   // const
+
+  //   // // 清空密碼欄位
+  //   // reset(defaultEditPasswordFrom);
+  // };
+
+  // Modal: 修改資本資料資料驗證
   const {
     register,
     handleSubmit,
-    reset,
+    watch,
+    setValue,
     formState: { errors, isValid },
-  } = useForm<ValiPasswordType>({
-    resolver: yupResolver(EDIT_PASSWORD_SCHEMA),
+  } = useForm<UserSignUpForm>({
+    resolver: yupResolver(USER_SIGN_UP_SCHEMA),
     mode: 'onChange',
-    defaultValues: defaultEditPasswordFrom
+    defaultValues: {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    phone: '',
+    birthday: {
+      year: '2000',
+      month: '1',
+      day: '1'
+    },
+    address: {
+      city: '臺北市',
+      county: '中正區',
+      zipcode: '100',
+      detail: ''
+    },
+    agreement: false
+  }
   });
+  // 監聽表單值變化
+  const {city, county} = watch('address');
+  const {year, month, day} = watch('birthday');
+  const [dayOptions, setDayOptions] = useState<string[]>([]);
 
-  // 重設密碼 submit
-  const valiPasswordSubmit: SubmitHandler<ValiPasswordType> = async (data) => {
-    console.log(data)
-    console.log(isValid);
+  // 預計不會變更的選項
+  const yearOptions = useMemo(getYearOptions, []);
+  const monthOptions = useMemo(getMonthOptions, []);
+  // 當 city 變更時，預設 county
+  useEffect(() => {
+    if(AREA_OPTIONS[city]) setValue('address.county', AREA_OPTIONS[city][0].value);
+  }, [city, setValue]);
 
-    setVisibleEditPassword(false)
+  // 當 county 變更時，設定 zipcode
+  useEffect(() => {
+    const areaOption = AREA_OPTIONS[city].find((Option) => Option.value === county);
 
-    // // 取得 getUser
-    // const
+    if(areaOption) setValue('address.zipcode', areaOption.zipcode);
+  }, [city, county, setValue]);
 
-    // // 清空密碼欄位
-    // reset(defaultEditPasswordFrom);
+  // 當年份或月份變更時，更新可選的日期
+  useEffect(() => {
+    const options = getDayOptions(year, month);
 
+    setDayOptions(options);
+    if(!options.includes(day)) setValue('birthday.day', options[options.length - 1]);
+  }, [year, month, day, setValue]);
+
+  const onSubmit = (data: UserSignUpForm) => {
+    console.log('data:', data);
+
+    // userSignUpSubmit(data);
   };
 
   return(
@@ -120,16 +193,18 @@ const UserInformation = () => {
           <span className="block text-subtitle md:text-title">高雄市新興區六角路 123 號</span>
         </li>
       </ul>
-      <button className="btn-secondary">編輯基本資料</button>
+      <button className="btn-secondary" onClick={() => setVisibleAccountInfo(true)}>編輯基本資料</button>
     </div>
-    {/* Modal */}
-    <Dialog
+    {/* Modal: 修改密碼 */}
+    {/* <Dialog
       visible={visibleEditPassword}
       modal
       onHide={() => {
         if (!visibleEditPassword) return; setVisibleEditPassword(false);
       }}
       header="修改密碼"
+      className="w-[80vw] md:w-[50vw]"
+      headerClassName="h6 md:h5"
     >
       <div>
         <form onSubmit={handleSubmit(valiPasswordSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
@@ -155,6 +230,68 @@ const UserInformation = () => {
             disabled={!isValid}
             onClick={() => {setVisibleEditPassword(false); console.log(isValid);}}
           >儲存設定</button>
+        </form>
+      </div>
+    </Dialog> */}
+    {/* Modal: 修改基本資料 */}
+    <Dialog
+      visible={visibleAccountInfo}
+      modal
+      onHide={() => {
+        if (!visibleAccountInfo) return; setVisibleAccountInfo(false);
+      }}
+      header="修改基本資料"
+      className="w-[80vw] md:w-[50vw]"
+      headerClassName="h6 md:h5"
+    >
+      <div>
+        <form onSubmit={handleSubmit(onSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="" className="block">姓名</label>
+              <input type="text" placeholder="請輸入命名" className="text-body2 md:text-body block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("name")}/>
+              <p className="text-tiny md:text-subtitle text-danger-100">{errors.name?.message}</p>
+            </div>
+            <div className="space-y-2">
+              <label className="block">手機號碼</label>
+              <input type="phone" placeholder="請輸入手機號碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100 text-" {...register("phone")}/>
+              <p className="text-tiny md:text-subtitle text-danger-100">{errors.phone?.message}</p>
+            </div>
+            <div className="space-y-2">
+              <label className="block">生日</label>
+              <div className="flex gap-2">
+                <select {...register("birthday.year")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                  {yearOptions.map((option, index) => (<option key={index} value={option}>{option} 年</option>))}
+                </select>
+                <select {...register("birthday.month")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                  {monthOptions.map((option, index) => (<option key={index} value={option}>{option} 月</option>))}
+                </select>
+                <select {...register("birthday.day")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                  {dayOptions.map((option, index) => (<option key={index} value={option}>{option} 日</option>))}
+                </select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="block">地址</label>
+              <div className="flex gap-2">
+                <select {...register("address.city")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                  {CITY_OPTIONS.map((option, index) => (<option key={index} value={option.value}>{option.label}</option>))}
+                </select>
+                <select {...register("address.county")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                  {AREA_OPTIONS[city].map((option, index) => (<option key={index} value={option.value}>{option.label}</option>))
+                  }
+                </select>
+                <input type="hidden" {...register("address.zipcode")} />
+              </div>
+                <input type="text" placeholder="請輸入詳細地址" className="text-body2 md:text-body block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("address.detail")}/>
+                <p className="text-tiny md:text-subtitle text-danger-100">{errors.address?.detail?.message}</p>
+            </div>
+          </div>
+          <button
+          className={`w-full text-title ${!isValid ? 'btn-primary-disable' : 'btn-primary'}`}
+          disabled={!isValid}
+          onClick={() => {setVisibleAccountInfo(false); console.log(isValid);}}
+          >完成註冊</button>
         </form>
       </div>
     </Dialog>
