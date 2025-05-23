@@ -86,6 +86,7 @@ const BookingSuccess = () => {
   const navigate = useNavigate();
   const [orderDetailData, setOrderDetailData] = useState<BookingType>({} as BookingType);
 
+  // 使用 `useCallback` 來記憶函式
   const fetchUser = useCallback(async () => {
     // 驗證是否有 token，未登入要轉跳 login
     if(!token) {
@@ -140,7 +141,7 @@ const BookingSuccess = () => {
     } finally {
       dispatch({ type: 'SET_LOADER', payload: false });
     }
-  }, [navigate, dispatch, token, id]); // 使用 `useCallback` 來記憶函式
+  }, [navigate, dispatch, token, id]);
 
   useEffect(() => {
     fetchUser();

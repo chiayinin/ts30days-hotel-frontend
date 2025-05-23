@@ -1,8 +1,78 @@
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+
 import { TabView, TabPanel, TabPanelHeaderTemplateOptions } from 'primereact/tabview';
+
+import { getUser, getOrdersData } from '@apis';
+import { BookingType } from '@types';
+import { KEY_TOKEN, getFromStorage, GlobalContext } from '@core';
 import UserInformation from './UserInformation';
 import UserOrder from './UserOrder';
 
 const Member = () => {
+  const { user, dispatch } = useContext(GlobalContext);
+  const token = getFromStorage(KEY_TOKEN, 'COOKIE');
+  const navigate = useNavigate();
+  const [ordersData, setOrdersData] = useState<BookingType[]>([] as BookingType[]);
+
+  // 使用 `useCallback` 來記憶函式
+  const fetchUser = useCallback(async () => {
+    // 驗證是否有 token，未登入要轉跳 login
+    if(!token) {
+      await dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '未登入',
+          detail: '未登入，轉登入頁。',
+          display: true,
+        },
+      });
+      return navigate('/login');
+    };
+
+    try {
+      // 加入 loading
+      dispatch({ type: 'SET_LOADER', payload: true });
+
+      // 加入 token
+      const user = await getUser(token);
+      await dispatch({ type: 'SET_USER', payload: user });
+
+      // 取得所有訂單資訊
+      const data = await getOrdersData();
+      setOrdersData(data);
+
+      await dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'success',
+          summary: '已登入',
+          detail: '已登入，並取得會員、訂單資訊。',
+          display: true,
+        },
+      });
+    } catch (error) {
+      console.error('獲取資訊失敗:', error);
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '會員、訂單不存在',
+          detail: '會員、訂單不存在，轉登入頁。',
+          display: true,
+        },
+      });
+      return navigate('/login');
+    } finally {
+      dispatch({ type: 'SET_LOADER', payload: false });
+    }
+  }, [navigate, dispatch, token]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
   const underscoreClass: string = 'after:content-[""] after:absolute after:mx-auto after:inset-x-0 after:bottom-0 after:w-1/4 after:h-1 after:bg-primary-100 after:rounded-[10px] text-primary-100';
 
   const tab1HeaderTemplate = (options: TabPanelHeaderTemplateOptions) => {
