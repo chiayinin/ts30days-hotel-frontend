@@ -1,9 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Facility, BookingType } from '@types';
-import { RoomFacilityInfo } from '@components'
+import { RoomFacilityInfo, ConfirmationDialog } from '@components';
 
 const MainContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDate, endDate, price, facilityInfo, amenityInfo, className}: {orderUserId:string, imageUrl:string, roomName:string, days:number, peopleNum:number, startDate:string, endDate:string, price:number, facilityInfo:Facility[], amenityInfo:Facility[], className?:string}) => {
   const roomFacilityInfoStyle = 'border border-neutral-40 rounded-lg';
+
+  const confirmDialogRef = useRef(null);
+  const handleConfirm = () => {
+    if(confirmDialogRef.current) confirmDialogRef.current.showConfirm();
+  }
 
   return(<>
     <div className={`rounded-[20px] p-4 md:p-10 space-y-6 md:space-y-10 bg-neutral-0 text-neutral-80 text-subtitle md:text-title ${className}`}>
@@ -31,7 +36,8 @@ const MainContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDat
         <h3 className="text-style-primary text-neutral-100 mb-6">備品提供</h3>
         <RoomFacilityInfo list={amenityInfo} className={roomFacilityInfoStyle} />
       </div>
-      <button className="btn-secondary w-full">取消預定</button>
+      <button className="btn-secondary w-full" onClick={handleConfirm}>取消預定</button>
+      <ConfirmationDialog ref={confirmDialogRef} />
     </div>
   </>)
 }
