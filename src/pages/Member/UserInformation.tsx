@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { Dialog } from 'primereact/dialog';
+import { User } from "@types";
 
 
 import { SubmitHandler, useForm } from "react-hook-form";

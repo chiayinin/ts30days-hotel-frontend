@@ -26,4 +26,5 @@ export type BookingType = Partial<NewBooking> & Partial<BaseObj> & {
   roomId: Room;
   orderUserId: string;
   status: number;
+  _id: string;
 }

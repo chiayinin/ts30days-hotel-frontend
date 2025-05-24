@@ -102,7 +102,7 @@ const Member = () => {
           <UserInformation />
         </TabPanel>
         <TabPanel header="我的訂單" headerTemplate={tab2HeaderTemplate}>
-          <UserOrder />
+          <UserOrder data={ordersData} />
         </TabPanel>
     </TabView>
 
@@ -111,3 +111,12 @@ const Member = () => {
 }
 
 export default Member;
+
+
+// const formattedData = useMemo(() => {
+//   return ordersData.map(order => ({
+//     ...order,
+//     date: order.date ? order.date.split("T")[0].replace(/-/g, "/") : "", // 轉換日期格式
+//     days: 1, // 增加新的屬性
+//   }));
+// }, [ordersData]); // 依賴 ordersData，每次變更都重新計算

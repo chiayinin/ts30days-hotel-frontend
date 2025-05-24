@@ -1,6 +1,3 @@
-import { da } from "primelocale/js/da.js";
-import { number } from "yup";
-
 /**
  * 取得年份的選項
  */
