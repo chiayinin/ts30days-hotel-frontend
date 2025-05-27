@@ -42,37 +42,14 @@ const MainContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDat
   </>)
 }
 
-const HistoryContent = ({data, days, className}:{data: BookingType[], days:number, className?:string}) => {
-// const HistoryContent = ({data, orderUserId, imageUrl, roomName, days, peopleNum, startDate, endDate, price, className}: {data:BookingType[], orderUserId:string, imageUrl:string, roomName:string, days:number, peopleNum:number, startDate:string, endDate:string, price:number, className?:string}) => {
-
-
+const HistoryContent = ({data, className}:{data: BookingType[], className?:string}) => {
   return(<>
     <div className={`rounded-[20px] p-4 md:p-10 space-y-6 md:space-y-10 bg-neutral-0 text-neutral-80 text-body2 md:text-body ${className}`}>
       <div>
         <h5 className="text-title md:h5 text-neutral-100">歷史訂單</h5>
       </div>
       <div className="space-y-6 md:space-y-10">
-        {/* 迴圈 card */}
-        {/* <div className="pb-6 md:pb-10 border-b border-neutral-40 flex flex-col md:flex-row gap-6">
-          <figure className="w-[120px] h-20"> */}
-            {/* 320*150 */}
-            {/* <img src={imageUrl} alt={roomName} className="h-full w-full rounded-lg object-cover object-center"/>
-          </figure>
-          <div className="space-y-4">
-            <p>預訂參考編號： {orderUserId}</p>
-            <h6 className="text-subtitle md:text-title">{roomName}</h6>
-            <div>
-              <p className="mb-2">住宿天數：{days}晚</p>
-              <p>住宿人數：{peopleNum}位</p>
-            </div>
-            <div>
-              <p className="text-style-primary mb-2">入住：{startDate}，15:00 可入住</p>
-              <p className="text-style-secondary">退房：{endDate}，12:00 前退房</p>
-            </div>
-            <p className="text-subtitle md:text-title">NT$ {price * days}</p>
-          </div>
-        </div> */}
-        {/* 測試迴圈 */}
+        {/* 迴圈 */}
         {data.map((order, index) => (
           <div key={`${order._id}-${index}`} className="pb-6 md:pb-10 border-b border-neutral-40 flex flex-col md:flex-row gap-6">
             <figure className="w-[120px] h-20">
@@ -82,14 +59,14 @@ const HistoryContent = ({data, days, className}:{data: BookingType[], days:numbe
               <p>預訂參考編號： {order.orderUserId}</p>
               <h6 className="text-subtitle md:text-title">{order.roomId.name}</h6>
               <div>
-                <p className="mb-2">住宿天數：{days}晚</p>
+                <p className="mb-2">住宿天數：{order.diffDays}晚</p>
                 <p>住宿人數：{order.peopleNum}位</p>
               </div>
               <div>
                 <p className="text-style-primary mb-2">入住：{order.checkInDate}，15:00 可入住</p>
                 <p className="text-style-secondary">退房：{order.checkOutDate}，12:00 前退房</p>
               </div>
-              <p className="text-subtitle md:text-title">NT$ {order.roomId.price * days}</p>
+              <p className="text-subtitle md:text-title">NT$ {order.roomId.price * (order.diffDays ?? 1)}</p>
             </div>
           </div>
         ))}
@@ -191,14 +168,6 @@ const UserOrder = ({data}: {data:BookingType[]}) => {
       />
       <HistoryContent
         data={data}
-        orderUserId={orderDetailData.orderUserId}
-        imageUrl={orderDetailData?.roomId?.imageUrl ?? ''}
-        roomName={orderDetailData?.roomId?.name ?? ''}
-        days={orderDetailData?.roomId?.status ?? 0}
-        peopleNum={orderDetailData?.peopleNum ?? 0}
-        startDate={orderDetailData?.checkInDate ?? ''}
-        endDate={orderDetailData?.checkOutDate ?? ''}
-        price={orderDetailData?.roomId?.price ?? 0}
         className="lg:max-w-[527px]"
       />
     </div>

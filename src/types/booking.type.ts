@@ -27,4 +27,5 @@ export type BookingType = Partial<NewBooking> & Partial<BaseObj> & {
   orderUserId: string;
   status: number;
   _id: string;
+  diffDays?: number;
 }
