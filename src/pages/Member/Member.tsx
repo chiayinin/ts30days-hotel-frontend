@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from "react-router-dom";
 
 import { TabView, TabPanel, TabPanelHeaderTemplateOptions } from 'primereact/tabview';
@@ -8,6 +8,7 @@ import { BookingType } from '@types';
 import { KEY_TOKEN, getFromStorage, GlobalContext } from '@core';
 import UserInformation from './UserInformation';
 import UserOrder from './UserOrder';
+import { formatTimestamp, getDiffDays } from '@constants';
 
 const Member = () => {
   const { user, dispatch } = useContext(GlobalContext);
@@ -73,6 +74,17 @@ const Member = () => {
     fetchUser();
   }, [fetchUser]);
 
+  // 轉換成需要的資料格式
+  const formattedData = useMemo(() => {
+  return ordersData.map(order => ({
+    ...order,
+    checkInDate: formatTimestamp(order.checkInDate ?? ''),
+    checkOutDate: formatTimestamp(order.checkOutDate ?? ''),
+    diffDays: getDiffDays(order.checkInDate ?? '', order.checkOutDate ?? ''), // 增加新的屬性
+  }));
+}, [ordersData]); // 依賴 ordersData，每次變更都重新計算
+
+
   const underscoreClass: string = 'after:content-[""] after:absolute after:mx-auto after:inset-x-0 after:bottom-0 after:w-1/4 after:h-1 after:bg-primary-100 after:rounded-[10px] text-primary-100';
 
   const tab1HeaderTemplate = (options: TabPanelHeaderTemplateOptions) => {
@@ -102,21 +114,11 @@ const Member = () => {
           <UserInformation />
         </TabPanel>
         <TabPanel header="我的訂單" headerTemplate={tab2HeaderTemplate}>
-          <UserOrder data={ordersData} />
+          <UserOrder data={formattedData} />
         </TabPanel>
     </TabView>
-
   </section>
   </>)
 }
 
 export default Member;
-
-
-// const formattedData = useMemo(() => {
-//   return ordersData.map(order => ({
-//     ...order,
-//     date: order.date ? order.date.split("T")[0].replace(/-/g, "/") : "", // 轉換日期格式
-//     days: 1, // 增加新的屬性
-//   }));
-// }, [ordersData]); // 依賴 ordersData，每次變更都重新計算
