@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState, useMemo } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import { TabView, TabPanel, TabPanelHeaderTemplateOptions } from 'primereact/tabview';
+import { TabView, TabPanel, TabPanelHeaderTemplateOptions, TabViewTabChangeEvent } from 'primereact/tabview';
 
 import { getUser, getOrdersData } from '@apis';
 import { BookingType } from '@types';
@@ -14,7 +14,9 @@ const Member = () => {
   const { user, dispatch } = useContext(GlobalContext);
   const token = getFromStorage(KEY_TOKEN, 'COOKIE');
   const navigate = useNavigate();
+  const location = useLocation();
   const [ordersData, setOrdersData] = useState<BookingType[]>([] as BookingType[]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   // 使用 `useCallback` 來記憶函式
   const fetchUser = useCallback(async () => {
@@ -107,15 +109,36 @@ const Member = () => {
     nav: { className: 'bg-neutral-bg'},
   }
 
+  // setting loction.hash from switch step.
+  const handleChangeStep = (event: TabViewTabChangeEvent) => {
+    let step = '';
+    setActiveIndex(event.index);
+
+    switch (event.index) {
+      case 0:
+        step = 'userInformation';
+        break;
+      case 1:
+        step = 'userOrder';
+        break;
+    };
+    location.hash = step;
+    navigate(`/account#${step}`);
+    return;
+  };
+
   return (<>
   <section className="container py-10 md:pt-20 md:pb-[120px]">
-    <TabView pt={ptStyle} panelContainerClassName="bg-neutral-bg text-neutral-100">
-        <TabPanel header="個人資料" headerTemplate={tab1HeaderTemplate} >
-          <UserInformation />
-        </TabPanel>
-        <TabPanel header="我的訂單" headerTemplate={tab2HeaderTemplate}>
-          <UserOrder data={formattedData} />
-        </TabPanel>
+    <TabView pt={ptStyle} panelContainerClassName="bg-neutral-bg text-neutral-100"
+    onTabChange={handleChangeStep}
+    activeIndex={activeIndex}
+    >
+      <TabPanel header="個人資料" headerTemplate={tab1HeaderTemplate} >
+        <UserInformation />
+      </TabPanel>
+      <TabPanel header="我的訂單" headerTemplate={tab2HeaderTemplate}>
+        <UserOrder data={formattedData} />
+      </TabPanel>
     </TabView>
   </section>
   </>)
