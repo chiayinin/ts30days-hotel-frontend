@@ -7,7 +7,7 @@ const MainContent = ({className, data}: {className?:string, data: BookingType}) 
 
   const confirmDialogRef = useRef(null);
   const handleConfirm = () => {
-    if(confirmDialogRef.current) confirmDialogRef.current.showConfirm();
+    if(confirmDialogRef.current) confirmDialogRef.current.showConfirm(data._id);
   }
 
   return(<>
@@ -88,7 +88,7 @@ const UserOrder = ({data}: {data:BookingType[]}) => {
   if(!orderDetailData) {
     return(
       <div className='container py-10 lg:py-[120px] lg:px-10 text-neutral-80'>
-        <h2 className="text-subtitle lg:h6">查無此房間訂單</h2>
+        <h2 className="text-subtitle lg:h6">查無訂單資料</h2>
       </div>
     )
   }

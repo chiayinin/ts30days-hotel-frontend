@@ -5,6 +5,7 @@ import { getUser, getOrderDetail } from '@apis';
 import { RoomFacilityInfo } from '@components'
 import { Facility, BookingType } from '@types';
 import { KEY_TOKEN, getFromStorage, GlobalContext } from '@core';
+import { formatTimestamp } from '@constants';
 import line2IMG from '@assets/images/home-line2.png';
 
 const MainContent = ({name, phone, email}: {name: string, phone: string, email: string}) => {
@@ -22,7 +23,7 @@ const MainContent = ({name, phone, email}: {name: string, phone: string, email: 
       <div className="border-b border-primary-40 pb-8 md:pb-20">
         <div>
           <h5 className="mb-6 text-title md:h5">立即查看你的訂單紀錄</h5>
-          <Link to={'/member'} className="btn-primary w-full text-center text-title">前往我的訂單</Link>
+          <Link to={'/account'} className="btn-primary w-full text-center text-title">前往我的訂單</Link>
         </div>
       </div>
       <div>
@@ -62,8 +63,8 @@ const CardContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDat
       <div className="space-y-6 pb-6 md:pb-10 border-b border-neutral-40">
         <h6>{roomName}，{days} 晚<span className="border border-neutral-60 rounded-lg  inline-block mx-4 h-[18px] align-sub"></span>住宿人數：{peopleNum}位</h6>
         <div>
-          <p className="text-style-primary mb-2">入住：{startDate}，15:00 可入住</p>
-          <p className="text-style-secondary">退房：{endDate}，12:00 前退房</p>
+          <p className="text-style-primary mb-2">入住：{formatTimestamp(startDate)}，15:00 可入住</p>
+          <p className="text-style-secondary">退房：{formatTimestamp(endDate)}，12:00 前退房</p>
         </div>
         <p>NT$ {price * days}</p>
       </div>

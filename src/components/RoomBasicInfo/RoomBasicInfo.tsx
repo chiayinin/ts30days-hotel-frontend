@@ -14,7 +14,7 @@ export const RoomBasicInfo = ({area, bed, people}: ContentType) => {
       <img src={iconSize} alt="房間坪數" />
       <span className="text-subtitle lg:text-title block">{area}</span>
     </li>
-    <li className="border border-primary-40 rounded-lg bg-neutral-0 p-4 py-5 space-y-2 min-w-24 h-24">
+    <li className="border border-primary-40 rounded-lg bg-neutral-0 p-4 py-5 space-y-2 min-w-[100px] h-24">
       <img src={iconBed} alt="房間床型" />
       <span className="text-subtitle lg:text-title block">{bed}</span>
     </li>
