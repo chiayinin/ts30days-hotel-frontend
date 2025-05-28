@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from 'react';
-import { Facility, BookingType } from '@types';
+import { useState, useRef } from 'react';
+import { BookingType } from '@types';
 import { RoomFacilityInfo, ConfirmationDialog } from '@components';
 
-const MainContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDate, endDate, price, facilityInfo, amenityInfo, className}: {orderUserId:string, imageUrl:string, roomName:string, days:number, peopleNum:number, startDate:string, endDate:string, price:number, facilityInfo:Facility[], amenityInfo:Facility[], className?:string}) => {
+const MainContent = ({className, data}: {className?:string, data: BookingType}) => {
   const roomFacilityInfoStyle = 'border border-neutral-40 rounded-lg';
 
   const confirmDialogRef = useRef(null);
@@ -13,28 +13,28 @@ const MainContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDat
   return(<>
     <div className={`rounded-[20px] p-4 md:p-10 space-y-6 md:space-y-10 bg-neutral-0 text-neutral-80 text-subtitle md:text-title ${className}`}>
       <div>
-        <p className="text-body2 md:text-body mb-2">預訂參考編號： {orderUserId}</p>
+        <p className="text-body2 md:text-body mb-2">預訂參考編號： {data._id}</p>
         <h5 className="text-title md:h5 text-neutral-100">即將來的行程</h5>
       </div>
       <figure className="w-full h-40 md:h-60">
         {/* 320*150 */}
-        <img src={imageUrl} alt={roomName} className="h-full w-full rounded-lg object-cover object-center"/>
+        <img src={data.roomId.imageUrl} alt={data.roomId.name} className="h-full w-full rounded-lg object-cover object-center"/>
       </figure>
       <div className="space-y-6 pb-6 md:pb-10 border-b border-neutral-40">
-        <h6>{roomName}，{days} 晚<span className="border border-neutral-60 rounded-lg  inline-block mx-4 h-[18px] align-sub"></span>住宿人數：{peopleNum}位</h6>
+        <h6>{data.roomId.name}，{data.diffDays} 晚<span className="border border-neutral-60 rounded-lg  inline-block mx-4 h-[18px] align-sub"></span>住宿人數：{data.peopleNum}位</h6>
         <div>
-          <p className="text-style-primary mb-2">入住：{startDate}，15:00 可入住</p>
-          <p className="text-style-secondary">退房：{endDate}，12:00 前退房</p>
+          <p className="text-style-primary mb-2">入住：{data.checkInDate}，15:00 可入住</p>
+          <p className="text-style-secondary">退房：{data.checkOutDate}，12:00 前退房</p>
         </div>
-        <p>NT$ {price * days}</p>
+        <p>NT$ {data.roomId.price * (data.diffDays ?? 1)}</p>
       </div>
       <div className="pb-6 mb:pb-10 border-b border-neutral-40">
         <h3 className="text-style-primary text-neutral-100 mb-6">房內設備</h3>
-        <RoomFacilityInfo list={facilityInfo} className={roomFacilityInfoStyle} />
+        <RoomFacilityInfo list={data.roomId.facilityInfo} className={roomFacilityInfoStyle} />
       </div>
       <div>
         <h3 className="text-style-primary text-neutral-100 mb-6">備品提供</h3>
-        <RoomFacilityInfo list={amenityInfo} className={roomFacilityInfoStyle} />
+        <RoomFacilityInfo list={data.roomId.amenityInfo} className={roomFacilityInfoStyle} />
       </div>
       <button className="btn-secondary w-full" onClick={handleConfirm}>取消預定</button>
       <ConfirmationDialog ref={confirmDialogRef} />
@@ -42,7 +42,8 @@ const MainContent = ({orderUserId, imageUrl, roomName, days, peopleNum, startDat
   </>)
 }
 
-const HistoryContent = ({data, className}:{data: BookingType[], className?:string}) => {
+const HistoryContent = ({data, className, onSelectOrder, selectId}:{data: BookingType[], className?:string; onSelectOrder: (order: BookingType) => void; selectId:string}) => {
+  const selectIdStyle = 'outline outline-neutral-60/30 shadow-lg bg-primary-10/50';
   return(<>
     <div className={`rounded-[20px] p-4 md:p-10 space-y-6 md:space-y-10 bg-neutral-0 text-neutral-80 text-body2 md:text-body ${className}`}>
       <div>
@@ -51,12 +52,14 @@ const HistoryContent = ({data, className}:{data: BookingType[], className?:strin
       <div className="space-y-6 md:space-y-10">
         {/* 迴圈 */}
         {data.map((order, index) => (
-          <div key={`${order._id}-${index}`} className="pb-6 md:pb-10 border-b border-neutral-40 flex flex-col md:flex-row gap-6">
+          <div key={`${order._id}-${index}`} className={`p-1 pb-6 md:pb-10 border-b border-neutral-40 flex flex-col md:flex-row gap-6 cursor-pointer hover:shadow-lg hover:bg-primary-10/50 rounded active:bg-primary-40 ${selectId === order._id ? selectIdStyle : ''}`}
+          onClick={() => onSelectOrder(order)}
+          >
             <figure className="w-[120px] h-20">
               <img src={order.roomId.imageUrl} alt={order.roomId.name} className="h-full w-full rounded-lg object-cover object-center"/>
             </figure>
             <div className="space-y-4">
-              <p>預訂參考編號： {order.orderUserId}</p>
+              <p>預訂參考編號： {order._id}</p>
               <h6 className="text-subtitle md:text-title">{order.roomId.name}</h6>
               <div>
                 <p className="mb-2">住宿天數：{order.diffDays}晚</p>
@@ -80,68 +83,7 @@ const HistoryContent = ({data, className}:{data: BookingType[], className?:strin
 }
 
 const UserOrder = ({data}: {data:BookingType[]}) => {
-  const [orderDetailData, setOrderDetailData] = useState<BookingType>({} as BookingType);
-
-  useEffect(() => {
-    const demoData =
-      {
-        "userInfo": {
-          "address": {
-            "zipcode": 802,
-            "detail": "文山路23號"
-          },
-          "name": "Joanne Chen",
-          "phone": "0912345678",
-          "email": "example@gmail.com"
-        },
-        "_id": "653e335a13831c2ac8c389bb",
-        "roomId": {
-          "name": "尊爵雙人房",
-          "description": "享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。",
-          "imageUrl": "https://fakeimg.pl/300/",
-          "imageUrlList": [
-            "https://fakeimg.pl/300/",
-            "https://fakeimg.pl/300/",
-            "https://fakeimg.pl/300/"
-          ],
-          "areaInfo": "24坪",
-          "bedInfo": "一張大床",
-          "maxPeople": 4,
-          "price": 10000,
-          "status": 1,
-          "layoutInfo": [
-            {
-              "title": "市景",
-              "isProvide": true
-            }
-          ],
-          "facilityInfo": [
-            {
-              "title": "平面電視",
-              "isProvide": true
-            }
-          ],
-          "amenityInfo": [
-            {
-              "title": "衛生紙",
-              "isProvide": true
-            }
-          ],
-          "_id": "653e4661336cdccc752127a0",
-          "createdAt": "2023-10-29T11:47:45.641Z",
-          "updatedAt": "2023-10-29T11:47:45.641Z"
-        },
-        "checkInDate": "2023-06-17T16:00:00.000Z",
-        "checkOutDate": "2023-06-18T16:00:00.000Z",
-        "peopleNum": 2,
-        "orderUserId": "6533f0ef4cdf5b7f762747b0",
-        "status": 0,
-        "createdAt": "2023-10-29T10:26:34.498Z",
-        "updatedAt": "2023-10-29T10:26:34.498Z"
-      };
-    setOrderDetailData(demoData);
-
-  }, [])
+  const [orderDetailData, setOrderDetailData] = useState<BookingType>(data[0] as BookingType);
 
   if(!orderDetailData) {
     return(
@@ -154,21 +96,14 @@ const UserOrder = ({data}: {data:BookingType[]}) => {
   return(
     <div className="flex flex-col gap-6 lg:flex-row mt-10 md:mt-20">
       <MainContent
-        orderUserId={orderDetailData.orderUserId}
-        imageUrl={orderDetailData?.roomId?.imageUrl ?? ''}
-        roomName={orderDetailData?.roomId?.name ?? ''}
-        days={orderDetailData?.roomId?.status ?? 0}
-        peopleNum={orderDetailData?.peopleNum ?? 0}
-        startDate={orderDetailData?.checkInDate ?? ''}
-        endDate={orderDetailData?.checkOutDate ?? ''}
-        price={orderDetailData?.roomId?.price ?? 0}
-        facilityInfo={orderDetailData?.roomId?.facilityInfo ?? []}
-        amenityInfo={orderDetailData?.roomId?.amenityInfo ?? []}
+        data={orderDetailData}
         className="w-full"
       />
       <HistoryContent
         data={data}
         className="lg:max-w-[527px]"
+        onSelectOrder={setOrderDetailData}
+        selectId={orderDetailData._id}
       />
     </div>
   )

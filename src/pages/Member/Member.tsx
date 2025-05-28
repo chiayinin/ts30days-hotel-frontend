@@ -76,14 +76,14 @@ const Member = () => {
     fetchUser();
   }, [fetchUser]);
 
-  // 轉換成需要的資料格式
+  // 轉換成需要的資料格式，新訂單在最上面
   const formattedData = useMemo(() => {
   return ordersData.map(order => ({
     ...order,
     checkInDate: formatTimestamp(order.checkInDate ?? ''),
     checkOutDate: formatTimestamp(order.checkOutDate ?? ''),
     diffDays: getDiffDays(order.checkInDate ?? '', order.checkOutDate ?? ''), // 增加新的屬性
-  }));
+  })).reverse();
 }, [ordersData]); // 依賴 ordersData，每次變更都重新計算
 
 
