@@ -48,6 +48,20 @@ const MainContent = ({className, data, onDeleted}: {
 
 const HistoryContent = ({data, className, onSelectOrder, selectId}:{data: BookingType[], className?:string; onSelectOrder: (order: BookingType) => void; selectId:string}) => {
   const selectIdStyle = 'outline outline-neutral-60/30 shadow-lg bg-primary-10/50';
+
+  // Pagination
+  const itemsPerPage = 3; // 每次載入的數量
+  const [visibleData, setVisibleData] = useState(data.slice(0, itemsPerPage));
+  const [nextIndex, setNextIndex] = useState(itemsPerPage);
+
+  const loadMore = () => {
+    if(nextIndex >= data.length) return;
+
+    const newData = data.slice(nextIndex, nextIndex + itemsPerPage);
+    setVisibleData((prev) => [...prev, ...newData]);
+    setNextIndex(nextIndex + itemsPerPage);
+  };
+
   return(<>
     <div className={`rounded-[20px] p-4 md:p-10 space-y-6 md:space-y-10 bg-neutral-0 text-neutral-80 text-body2 md:text-body ${className}`}>
       <div>
@@ -55,7 +69,7 @@ const HistoryContent = ({data, className, onSelectOrder, selectId}:{data: Bookin
       </div>
       <div className="space-y-6 md:space-y-10">
         {/* 迴圈 */}
-        {data.map((order, index) => (
+        {visibleData.map((order, index) => (
           <div key={`${order._id}-${index}`} className={`p-1 pb-6 md:pb-10 border-b border-neutral-40 flex flex-col md:flex-row gap-6 cursor-pointer hover:shadow-lg hover:bg-primary-10/50 rounded active:bg-primary-40 ${selectId === order._id ? selectIdStyle : ''}`}
           onClick={() => onSelectOrder(order)}
           >
@@ -78,7 +92,11 @@ const HistoryContent = ({data, className, onSelectOrder, selectId}:{data: Bookin
           </div>
         ))}
         {/* button */}
-        <button className="btn-secondary w-full">查看更多
+        <button
+        onClick={loadMore}
+        disabled={nextIndex >= data.length}
+        className={`btn-secondary w-full
+        ${nextIndex >= data.length ? 'btn-secondary-disable' : ''}`}>查看更多
           <span className="material-symbols-outlined align-bottom">keyboard_arrow_down</span>
         </button>
       </div>
