@@ -2,7 +2,11 @@ import { useState, useRef } from 'react';
 import { BookingType } from '@types';
 import { RoomFacilityInfo, ConfirmationDialog } from '@components';
 
-const MainContent = ({className, data}: {className?:string, data: BookingType}) => {
+const MainContent = ({className, data, onDeleted}: {
+  className?:string,
+  data: BookingType,
+  onDeleted: () => void
+}) => {
   const roomFacilityInfoStyle = 'border border-neutral-40 rounded-lg';
 
   const confirmDialogRef = useRef(null);
@@ -37,7 +41,7 @@ const MainContent = ({className, data}: {className?:string, data: BookingType}) 
         <RoomFacilityInfo list={data.roomId.amenityInfo} className={roomFacilityInfoStyle} />
       </div>
       <button className="btn-secondary w-full" onClick={handleConfirm}>取消預定</button>
-      <ConfirmationDialog ref={confirmDialogRef} />
+      <ConfirmationDialog ref={confirmDialogRef} onDeleted={onDeleted} />
     </div>
   </>)
 }
@@ -83,7 +87,15 @@ const HistoryContent = ({data, className, onSelectOrder, selectId}:{data: Bookin
 }
 
 const UserOrder = ({data}: {data:BookingType[]}) => {
+  const [orderList, setOrderList] = useState<BookingType[]>(data);
   const [orderDetailData, setOrderDetailData] = useState<BookingType>(data[0] as BookingType);
+
+  const handleDeleted = () => {
+    const updatedList = orderList.filter(order => order._id !== orderDetailData._id);
+    setOrderList(updatedList);
+
+    if(updatedList.length > 0) setOrderDetailData(updatedList[0]);
+  }
 
   if(!orderDetailData) {
     return(
@@ -98,9 +110,10 @@ const UserOrder = ({data}: {data:BookingType[]}) => {
       <MainContent
         data={orderDetailData}
         className="w-full"
+        onDeleted={handleDeleted}
       />
       <HistoryContent
-        data={data}
+        data={orderList}
         className="lg:max-w-[527px]"
         onSelectOrder={setOrderDetailData}
         selectId={orderDetailData._id}

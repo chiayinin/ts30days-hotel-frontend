@@ -30,31 +30,31 @@ const App = () => {
   addLocale('zh-TW', newLocale);
   locale('zh-TW');
 
-  // useEffect(() => {
-  //   const token = getFromStorage(KEY_TOKEN, 'COOKIE');
+  useEffect(() => {
+    const token = getFromStorage(KEY_TOKEN, 'COOKIE');
 
-  //   if(token) {
-  //     const fetchUSer = async () => {
-  //       try {
-  //         const user = await getUser(token);
-  //         dispatch({type: 'SET_USER', payload: user});
-  //         dispatch({
-  //           type: 'SET_TOAST',
-  //           payload: {
-  //             severity: 'success',
-  //             summary: '已登入',
-  //             detail: '已登入',
-  //             display: true,
-  //           },
-  //         });
-  //       } catch(err) {
-  //         console.log('get iser err', err);
-  //       }
-  //     };
+    if(token) {
+      const fetchUSer = async () => {
+        try {
+          const user = await getUser(token);
+          dispatch({type: 'SET_USER', payload: user});
+          // dispatch({
+          //   type: 'SET_TOAST',
+          //   payload: {
+          //     severity: 'success',
+          //     summary: '已登入',
+          //     detail: '已登入',
+          //     display: true,
+          //   },
+          // });
+        } catch(err) {
+          console.log('get iser err', err);
+        }
+      };
 
-  //     fetchUSer();
-  //   }
-  // }, []);
+      fetchUSer();
+    }
+  }, []);
 
   return (
     <GlobalContext.Provider value={{user, toastPayload, isLoading, dispatch}}>

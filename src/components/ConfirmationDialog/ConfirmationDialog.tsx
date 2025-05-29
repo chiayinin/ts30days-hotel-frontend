@@ -4,7 +4,7 @@ import { Toast } from 'primereact/toast';
 import { GlobalContext } from '@core';
 import { deleteOrder } from '@apis';
 
-export const ConfirmationDialog = forwardRef((_, ref) => {
+export const ConfirmationDialog = forwardRef(({ onDeleted }: { onDeleted: () => void }, ref) => {
   const { dispatch } = useContext(GlobalContext)
   const toast = useRef<Toast>(null);
 
@@ -24,6 +24,9 @@ export const ConfirmationDialog = forwardRef((_, ref) => {
           display: true,
         },
       });
+      // 通知父元件刷新畫面
+      await onDeleted();
+
     } catch (error) {
       console.error(error);
     } finally {
