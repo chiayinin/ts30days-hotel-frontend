@@ -70,7 +70,7 @@ export const BOOKING_SCHEMA = yup.object({
 
 // 重設密碼
 export const EDIT_PASSWORD_SCHEMA = yup.object({
-  oldPassord: yup
+  oldPassword: yup
     .string()
     .transform((value) => value.toLowerCase().replace(/\s+/g, "")) // 將大寫轉換為小寫，並移除所有空白
     .required("欄位不得為空"), // 密碼需至少 8 碼以上，並英數混合,

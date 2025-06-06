@@ -69,105 +69,36 @@ const UserInformation = ({user}) => {
     setUserData(user);
   }, [user]);
 
-
-
-
   // Modal: 重設密碼資料驗證
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   reset,
-  //   formState: { errors, isValid },
-  // } = useForm<ValiPasswordType>({
-  //   resolver: yupResolver(EDIT_PASSWORD_SCHEMA),
-  //   mode: 'onChange',
-  //   defaultValues: defaultEditPasswordFrom
-  // });
-
-  // // 重設密碼 submit
-  // const valiPasswordSubmit: SubmitHandler<ValiPasswordType> = async (data) => {
-  //   console.log(data)
-  //   console.log(isValid);
-
-  //   setVisibleEditPassword(false)
-
-  //   // // 取得 getUser
-  //   // const
-
-  //   // // 清空密碼欄位
-  //   // reset(defaultEditPasswordFrom);
-  // };
-
-  // const onSubmit = (data: UserSignUpForm) => {
-  //   console.log('data:', data);
-
-    // userSignUpSubmit(data);
-  // };
-
-  // Modal: 修改資本資料資料驗證
   const {
-    register: registerAccount,
-    handleSubmit: handleAccountSubmit,
-    watch,
-    setValue,
-    formState: { errors: accountErrors, isValid: isAccountValid },
-  } = useForm<ValiAccountInfoType>({
-    resolver: yupResolver(EDIT_USERINFO_SCHEMA),
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    reset,
+    formState: { errors: passwordErrors, isValid: isPasswordValid },
+  } = useForm<ValiPasswordType>({
+    resolver: yupResolver(EDIT_PASSWORD_SCHEMA),
     mode: 'onChange',
-    defaultValues: defaultAccountInfoFrom,
+    defaultValues: defaultEditPasswordFrom
   });
-  // 監聽表單值變化
-  const {city, county} = watch('address');
-  const {year, month, day} = watch('birthday');
-  const [dayOptions, setDayOptions] = useState<string[]>([]);
 
-  // 預計不會變更的選項
-  const yearOptions = useMemo(getYearOptions, []);
-  const monthOptions = useMemo(getMonthOptions, []);
-  // 當 city 變更時，預設 county
-  useEffect(() => {
-    if(AREA_OPTIONS[city]) setValue('address.county', AREA_OPTIONS[city][0].value);
-  }, [city, setValue]);
-
-  // 當 county 變更時，設定 zipcode
-  useEffect(() => {
-    const areaOption = AREA_OPTIONS[city].find((Option) => Option.value === county);
-
-    if(areaOption) setValue('address.zipcode', areaOption.zipcode);
-  }, [city, county, setValue]);
-
-  // 當年份或月份變更時，更新可選的日期
-  useEffect(() => {
-    const options = getDayOptions(year, month);
-
-    setDayOptions(options);
-    if(!options.includes(day)) setValue('birthday.day', options[options.length - 1]);
-  }, [year, month, day, setValue]);
-
-  const onAccountInfoSubmit: SubmitHandler<ValiAccountInfoType> = async (data:ValiAccountInfoType) => {
+  // 重設密碼 submit
+  const valiPasswordSubmit: SubmitHandler<ValiPasswordType> = async (data: ValiPasswordType) => {
     const params: PutUserType = {
       userId: userData?._id ?? '',
-      name: data.name,
-      phone: data.phone,
-      birthday: `${data.birthday.year}/${data.birthday.month}/${data.birthday.day}`,
-      address: {
-        zipcode: data.address.zipcode,
-        detail: data.address.city + data.address.county + data.address.detail
-      },
-    };
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword
+    }
 
-    dispatch({ type: 'SET_LOADER', payload: true });
+    dispatch({ type: 'SET_LOADER', payload: true});
     try {
-      const response = await putUser(params);
+      await putUser(params);
 
-      await setUserData(response)
-      await dispatch({type: 'SET_USER', payload: response});
       await dispatch({
         type: 'SET_TOAST',
         payload: {
           severity: 'success',
-          summary: '成功修改',
-          detail: '已成功修改個人資料。',
+          summary: '設定成功',
+          detail: '已成功設定新密碼。',
           display: true,
         },
       });
@@ -177,15 +108,99 @@ const UserInformation = ({user}) => {
         type: 'SET_TOAST',
         payload: {
           severity: 'error',
-          summary: '修改失敗',
+          summary: '設定密碼失敗',
           detail: `${error}`,
           display: true
         }
       });
     } finally {
+      reset(defaultEditPasswordFrom);
       dispatch({type: 'SET_LOADER', payload: false});
     };
   };
+
+  // Modal: 修改資本資料資料驗證
+  // const {
+  //   register: registerAccount,
+  //   handleSubmit: handleAccountSubmit,
+  //   watch,
+  //   setValue,
+  //   formState: { errors: accountErrors, isValid: isAccountValid },
+  // } = useForm<ValiAccountInfoType>({
+  //   resolver: yupResolver(EDIT_USERINFO_SCHEMA),
+  //   mode: 'onChange',
+  //   defaultValues: defaultAccountInfoFrom,
+  // });
+  // // 監聽表單值變化
+  // const {city, county} = watch('address');
+  // const {year, month, day} = watch('birthday');
+  // const [dayOptions, setDayOptions] = useState<string[]>([]);
+
+  // // 預計不會變更的選項
+  // const yearOptions = useMemo(getYearOptions, []);
+  // const monthOptions = useMemo(getMonthOptions, []);
+  // // 當 city 變更時，預設 county
+  // useEffect(() => {
+  //   if(AREA_OPTIONS[city]) setValue('address.county', AREA_OPTIONS[city][0].value);
+  // }, [city, setValue]);
+
+  // // 當 county 變更時，設定 zipcode
+  // useEffect(() => {
+  //   const areaOption = AREA_OPTIONS[city].find((Option) => Option.value === county);
+
+  //   if(areaOption) setValue('address.zipcode', areaOption.zipcode);
+  // }, [city, county, setValue]);
+
+  // // 當年份或月份變更時，更新可選的日期
+  // useEffect(() => {
+  //   const options = getDayOptions(year, month);
+
+  //   setDayOptions(options);
+  //   if(!options.includes(day)) setValue('birthday.day', options[options.length - 1]);
+  // }, [year, month, day, setValue]);
+
+  // const onAccountInfoSubmit: SubmitHandler<ValiAccountInfoType> = async (data:ValiAccountInfoType) => {
+  //   const params: PutUserType = {
+  //     userId: userData?._id ?? '',
+  //     name: data.name,
+  //     phone: data.phone,
+  //     birthday: `${data.birthday.year}/${data.birthday.month}/${data.birthday.day}`,
+  //     address: {
+  //       zipcode: data.address.zipcode,
+  //       detail: data.address.city + data.address.county + data.address.detail
+  //     },
+  //   };
+
+  //   dispatch({ type: 'SET_LOADER', payload: true });
+  //   try {
+  //     const response = await putUser(params);
+
+  //     await setUserData(response)
+  //     await dispatch({type: 'SET_USER', payload: response});
+  //     await dispatch({
+  //       type: 'SET_TOAST',
+  //       payload: {
+  //         severity: 'success',
+  //         summary: '成功修改',
+  //         detail: '已成功修改個人資料。',
+  //         display: true,
+  //       },
+  //     });
+  //   } catch(error) {
+  //     console.dir(error);
+  //     dispatch({
+  //       type: 'SET_TOAST',
+  //       payload: {
+  //         severity: 'error',
+  //         summary: '修改失敗',
+  //         detail: `${error}`,
+  //         display: true
+  //       }
+  //     });
+  //   } finally {
+  //     dispatch({type: 'SET_LOADER', payload: false});
+  //   };
+  // };
 
   if(!userData) {
     return(
@@ -207,7 +222,7 @@ const UserInformation = ({user}) => {
         </li>
         <li>
           <span className="block mb-2 text-body2 md:text-body text-neutral-80">密碼</span>
-          <input type="password" name="" id="" value="●●●●●●" className="block text-subtitle bg-neutral-0" disabled />
+          <input type="password" name="" id="" value="●●●●●●●●" className="block text-subtitle bg-neutral-0" disabled />
         </li>
       </ul>
       <button className="btn-secondary" onClick={() => setVisibleEditPassword(true)}>重設密碼</button>
@@ -236,45 +251,47 @@ const UserInformation = ({user}) => {
       <button className="btn-secondary" onClick={() => setVisibleAccountInfo(true)}>編輯基本資料</button>
     </div>
     {/* Modal: 修改密碼 */}
-    {/* <Dialog
+    <Dialog
       visible={visibleEditPassword}
       modal
       onHide={() => {
-        if (!visibleEditPassword) return; setVisibleEditPassword(false);
+        if (!visibleEditPassword) return;
+        else reset(defaultEditPasswordFrom);
+        setVisibleEditPassword(false);
       }}
       header="修改密碼"
       className="w-[80vw] md:w-[50vw]"
       headerClassName="h6 md:h5"
     >
       <div>
-        <form onSubmit={handleSubmit(valiPasswordSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
+        <form onSubmit={handlePasswordSubmit(valiPasswordSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="block">舊密碼</label>
-              <input type="password" placeholder="請輸入舊密碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("oldPassword")}/>
-              <p className="text-tiny md:text-subtitle text-danger-100">{errors.oldPassword?.message}</p>
+              <input type="password" placeholder="請輸入舊密碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...registerPassword("oldPassword")}/>
+              <p className="text-tiny md:text-subtitle text-danger-100">{passwordErrors.oldPassword?.message}</p>
             </div>
             <div className="space-y-2">
               <label className="block">新密碼</label>
-              <input type="password" placeholder="新密碼需至少 8 碼以上，並英數混合，不分大小寫" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("newPassword")}/>
-              <p className="text-tiny md:text-subtitle text-danger-100">{errors.newPassword?.message}</p>
+              <input type="password" placeholder="新密碼需至少 8 碼以上，並英數混合，不分大小寫" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...registerPassword("newPassword")}/>
+              <p className="text-tiny md:text-subtitle text-danger-100">{passwordErrors.newPassword?.message}</p>
             </div>
             <div className="space-y-2">
               <label className="block">確認密碼</label>
-              <input type="password" placeholder="請再輸入一次密碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("confirmPassword")}/>
-              <p className="text-tiny md:text-subtitle text-danger-100">{errors.confirmPassword?.message}</p>
+              <input type="password" placeholder="請再輸入一次密碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...registerPassword("confirmPassword")}/>
+              <p className="text-tiny md:text-subtitle text-danger-100">{passwordErrors.confirmPassword?.message}</p>
             </div>
           </div>
           <button
-            className={`w-full text-title ${!isValid ? 'btn-secondary-disable' : 'btn-secondary'}`}
-            disabled={!isValid}
-            onClick={() => {setVisibleEditPassword(false); console.log(isValid);}}
+            className={`w-full text-title ${!isPasswordValid ? 'btn-primary-disable' : 'btn-primary'}`}
+            disabled={!isPasswordValid}
+            onClick={() => {setVisibleEditPassword(false)}}
           >儲存設定</button>
         </form>
       </div>
-    </Dialog> */}
+    </Dialog>
     {/* Modal: 修改基本資料 */}
-    <Dialog
+    {/* <Dialog
       visible={visibleAccountInfo}
       modal
       onHide={() => {
@@ -334,7 +351,7 @@ const UserInformation = ({user}) => {
           >儲存設定</button>
         </form>
       </div>
-    </Dialog>
+    </Dialog> */}
   </div>
   )
 };
