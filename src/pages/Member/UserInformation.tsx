@@ -1,69 +1,49 @@
 import { useEffect, useState, useMemo, useContext } from "react";
-import { Dialog } from 'primereact/dialog';
-import { User } from "@types";
-
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Dialog } from 'primereact/dialog';
 
-import { ValiPasswordType, ValiAccountInfoType, PutUserType, UserSignUpForm } from '@types';
-import { EDIT_PASSWORD_SCHEMA, EDIT_USERINFO_SCHEMA, formatTimestamp } from '@constants';
+import { ValiPasswordType, ValiAccountInfoType, PutUserType, User } from '@types';
+import { GlobalContext } from "@core";
+import { putUser } from '@apis';
 import {
-  USER_SIGN_UP_SCHEMA,
   CITY_OPTIONS,
+  EDIT_PASSWORD_SCHEMA,
+  EDIT_USERINFO_SCHEMA,
+  formatTimestamp,
   AREA_OPTIONS,
   getYearOptions,
   getMonthOptions,
   getDayOptions
  } from '@constants';
-import { GlobalContext } from "@core";
-import { putUser } from '@apis';
 
-const UserInformation = ({user}) => {
+const defaultEditPasswordFrom: ValiPasswordType = {
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+};
+
+const defaultAccountInfoFrom: ValiAccountInfoType = {
+  name: '',
+  phone: '',
+  birthday: {
+    year: '2000',
+    month: '1',
+    day: '1'
+  },
+  address: {
+    city: '臺北市',
+    county: '中正區',
+    zipcode: '100',
+    detail: ''
+  },
+};
+
+const UserInformation = ({user}: {user: User}) => {
+  const { dispatch } = useContext(GlobalContext);
   const [visibleEditPassword, setVisibleEditPassword] = useState<boolean>(false);
   const [visibleAccountInfo, setVisibleAccountInfo] = useState<boolean>(false);
-  const { dispatch } = useContext(GlobalContext);
-
-  const defaultEditPasswordFrom: ValiPasswordType = {
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  };
-  const defaultAccountInfoFrom: ValiAccountInfoType = {
-    name: '',
-    phone: '',
-    birthday: {
-      year: '2000',
-      month: '1',
-      day: '1'
-    },
-    address: {
-      city: '臺北市',
-      county: '中正區',
-      zipcode: '100',
-      detail: ''
-    },
-  };
-  const defaultForm = {
-    userId: '',
-    name: '',
-    phone: '',
-    birthday: {
-      year: '2000',
-      month: '1',
-      day: '1'
-    },
-    address: {
-      city: '臺北市',
-      county: '中正區',
-      zipcode: '100',
-      detail: ''
-    },
-    oldPassword: undefined,
-    newPassword: undefined,
-  };
-  const [userData, setUserData] = useState(user);
-  // const [formData, setFormData] = useState<PutUserType>(defaultForm);
+  const [userData, setUserData] = useState<User | null>(user);
 
   useEffect(() => {
     setUserData(user);
@@ -120,87 +100,89 @@ const UserInformation = ({user}) => {
   };
 
   // Modal: 修改資本資料資料驗證
-  // const {
-  //   register: registerAccount,
-  //   handleSubmit: handleAccountSubmit,
-  //   watch,
-  //   setValue,
-  //   formState: { errors: accountErrors, isValid: isAccountValid },
-  // } = useForm<ValiAccountInfoType>({
-  //   resolver: yupResolver(EDIT_USERINFO_SCHEMA),
-  //   mode: 'onChange',
-  //   defaultValues: defaultAccountInfoFrom,
-  // });
-  // // 監聽表單值變化
-  // const {city, county} = watch('address');
-  // const {year, month, day} = watch('birthday');
-  // const [dayOptions, setDayOptions] = useState<string[]>([]);
+  const {
+    register: registerAccount,
+    handleSubmit: handleAccountSubmit,
+    watch,
+    setValue,
+    formState: { errors: accountErrors, isValid: isAccountValid },
+  } = useForm<ValiAccountInfoType>({
+    resolver: yupResolver(EDIT_USERINFO_SCHEMA),
+    mode: 'onChange',
+    defaultValues: defaultAccountInfoFrom,
+  });
 
-  // // 預計不會變更的選項
-  // const yearOptions = useMemo(getYearOptions, []);
-  // const monthOptions = useMemo(getMonthOptions, []);
-  // // 當 city 變更時，預設 county
-  // useEffect(() => {
-  //   if(AREA_OPTIONS[city]) setValue('address.county', AREA_OPTIONS[city][0].value);
-  // }, [city, setValue]);
+  // 監聽表單值變化
+  const {city, county} = watch('address');
+  const {year, month, day} = watch('birthday');
+  const [dayOptions, setDayOptions] = useState<string[]>([]);
 
-  // // 當 county 變更時，設定 zipcode
-  // useEffect(() => {
-  //   const areaOption = AREA_OPTIONS[city].find((Option) => Option.value === county);
+  // 預計不會變更的選項
+  const yearOptions = useMemo(getYearOptions, []);
+  const monthOptions = useMemo(getMonthOptions, []);
 
-  //   if(areaOption) setValue('address.zipcode', areaOption.zipcode);
-  // }, [city, county, setValue]);
+  // 當 city 變更時，預設 county
+  useEffect(() => {
+    if(AREA_OPTIONS[city]) setValue('address.county', AREA_OPTIONS[city][0].value);
+  }, [city, setValue]);
 
-  // // 當年份或月份變更時，更新可選的日期
-  // useEffect(() => {
-  //   const options = getDayOptions(year, month);
+  // 當 county 變更時，設定 zipcode
+  useEffect(() => {
+    const areaOption = AREA_OPTIONS[city].find((Option) => Option.value === county);
 
-  //   setDayOptions(options);
-  //   if(!options.includes(day)) setValue('birthday.day', options[options.length - 1]);
-  // }, [year, month, day, setValue]);
+    if(areaOption) setValue('address.zipcode', areaOption.zipcode);
+  }, [city, county, setValue]);
 
-  // const onAccountInfoSubmit: SubmitHandler<ValiAccountInfoType> = async (data:ValiAccountInfoType) => {
-  //   const params: PutUserType = {
-  //     userId: userData?._id ?? '',
-  //     name: data.name,
-  //     phone: data.phone,
-  //     birthday: `${data.birthday.year}/${data.birthday.month}/${data.birthday.day}`,
-  //     address: {
-  //       zipcode: data.address.zipcode,
-  //       detail: data.address.city + data.address.county + data.address.detail
-  //     },
-  //   };
+  // 當年份或月份變更時，更新可選的日期
+  useEffect(() => {
+    const options = getDayOptions(year, month);
 
-  //   dispatch({ type: 'SET_LOADER', payload: true });
-  //   try {
-  //     const response = await putUser(params);
+    setDayOptions(options);
+    if(!options.includes(day)) setValue('birthday.day', options[options.length - 1]);
+  }, [year, month, day, setValue]);
 
-  //     await setUserData(response)
-  //     await dispatch({type: 'SET_USER', payload: response});
-  //     await dispatch({
-  //       type: 'SET_TOAST',
-  //       payload: {
-  //         severity: 'success',
-  //         summary: '成功修改',
-  //         detail: '已成功修改個人資料。',
-  //         display: true,
-  //       },
-  //     });
-  //   } catch(error) {
-  //     console.dir(error);
-  //     dispatch({
-  //       type: 'SET_TOAST',
-  //       payload: {
-  //         severity: 'error',
-  //         summary: '修改失敗',
-  //         detail: `${error}`,
-  //         display: true
-  //       }
-  //     });
-  //   } finally {
-  //     dispatch({type: 'SET_LOADER', payload: false});
-  //   };
-  // };
+  const onAccountInfoSubmit: SubmitHandler<ValiAccountInfoType> = async (data:ValiAccountInfoType) => {
+    const params: PutUserType = {
+      userId: userData?._id ?? '',
+      name: data.name,
+      phone: data.phone,
+      birthday: `${data.birthday.year}/${data.birthday.month}/${data.birthday.day}`,
+      address: {
+        zipcode: data.address.zipcode,
+        detail: data.address.city + data.address.county + data.address.detail
+      },
+    };
+
+    dispatch({ type: 'SET_LOADER', payload: true });
+    try {
+      const response = await putUser(params);
+
+      await setUserData(response)
+      await dispatch({type: 'SET_USER', payload: response});
+      await dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'success',
+          summary: '成功修改',
+          detail: '已成功修改個人資料。',
+          display: true,
+        },
+      });
+    } catch(error) {
+      console.dir(error);
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '修改失敗',
+          detail: `${error}`,
+          display: true
+        }
+      });
+    } finally {
+      dispatch({type: 'SET_LOADER', payload: false});
+    };
+  };
 
   if(!userData) {
     return(
@@ -262,6 +244,7 @@ const UserInformation = ({user}) => {
       header="修改密碼"
       className="w-[80vw] md:w-[50vw]"
       headerClassName="h6 md:h5"
+      dismissableMask={true}
     >
       <div>
         <form onSubmit={handlePasswordSubmit(valiPasswordSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
@@ -291,7 +274,7 @@ const UserInformation = ({user}) => {
       </div>
     </Dialog>
     {/* Modal: 修改基本資料 */}
-    {/* <Dialog
+    <Dialog
       visible={visibleAccountInfo}
       modal
       onHide={() => {
@@ -300,6 +283,7 @@ const UserInformation = ({user}) => {
       header="修改基本資料"
       className="w-[80vw] md:w-[50vw]"
       headerClassName="h6 md:h5"
+      dismissableMask={true}
     >
       <div>
         <form onSubmit={handleAccountSubmit(onAccountInfoSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
@@ -351,7 +335,7 @@ const UserInformation = ({user}) => {
           >儲存設定</button>
         </form>
       </div>
-    </Dialog> */}
+    </Dialog>
   </div>
   )
 };

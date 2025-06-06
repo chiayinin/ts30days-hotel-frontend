@@ -9,7 +9,7 @@ const MainContent = ({className, data, onDeleted}: {
 }) => {
   const roomFacilityInfoStyle = 'border border-neutral-40 rounded-lg';
 
-  const confirmDialogRef = useRef(null);
+  const confirmDialogRef = useRef<{ showConfirm: (id: string) => void } | null>(null);
   const handleConfirm = () => {
     if(confirmDialogRef.current) confirmDialogRef.current.showConfirm(data._id);
   }
@@ -131,8 +131,9 @@ const UserOrder = ({data}: {data:BookingType[]}) => {
   return(
     <div className="flex flex-col gap-6 lg:flex-row mt-10 md:mt-20">
       <MainContent
+        key={orderDetailData._id}
         data={orderDetailData}
-        className="w-full"
+        className="w-full animate-fadein"
         onDeleted={handleDeleted}
       />
       <HistoryContent

@@ -40,10 +40,6 @@ const Member = () => {
       // 加入 loading
       dispatch({ type: 'SET_LOADER', payload: true });
 
-      // // 加入 token
-      // const userData = await getUser(token);
-      // await dispatch({ type: 'SET_USER', payload: userData });
-
       // 取得所有訂單資訊
       const data = await getOrdersData();
       setOrdersData(data);
