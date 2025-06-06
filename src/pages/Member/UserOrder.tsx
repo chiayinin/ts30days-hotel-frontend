@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { BookingType } from '@types';
 import { RoomFacilityInfo, ConfirmationDialog } from '@components';
 
@@ -108,6 +108,11 @@ const UserOrder = ({data}: {data:BookingType[]}) => {
   const [orderList, setOrderList] = useState<BookingType[]>(data);
   const [orderDetailData, setOrderDetailData] = useState<BookingType>(data[0] as BookingType);
 
+  useEffect(() => {
+    setOrderList(data);
+    setOrderDetailData(data[0]);
+  }, [data]);
+
   const handleDeleted = () => {
     const updatedList = orderList.filter(order => order._id !== orderDetailData._id);
     setOrderList(updatedList);
@@ -115,7 +120,7 @@ const UserOrder = ({data}: {data:BookingType[]}) => {
     if(updatedList.length > 0) setOrderDetailData(updatedList[0]);
   }
 
-  if(!orderDetailData) {
+  if(!orderList || !orderDetailData) {
     return(
       <div className='container py-10 lg:py-[120px] lg:px-10 text-neutral-80'>
         <h2 className="text-subtitle lg:h6">查無訂單資料</h2>

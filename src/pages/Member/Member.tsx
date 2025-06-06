@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { TabView, TabPanel, TabPanelHeaderTemplateOptions, TabViewTabChangeEvent } from 'primereact/tabview';
 
-import { getUser, getOrdersData } from '@apis';
-import { BookingType } from '@types';
+import {getUser, getOrdersData } from '@apis';
+import { BookingType, User } from '@types';
 import { KEY_TOKEN, getFromStorage, GlobalContext } from '@core';
 import UserInformation from './UserInformation';
 import UserOrder from './UserOrder';
@@ -17,6 +17,8 @@ const Member = () => {
   const location = useLocation();
   const [ordersData, setOrdersData] = useState<BookingType[]>([] as BookingType[]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [userData, setUserData] = useState<User | null>({} as User);
+
 
   // 使用 `useCallback` 來記憶函式
   const fetchUser = useCallback(async () => {
@@ -38,9 +40,9 @@ const Member = () => {
       // 加入 loading
       dispatch({ type: 'SET_LOADER', payload: true });
 
-      // 加入 token
-      const user = await getUser(token);
-      await dispatch({ type: 'SET_USER', payload: user });
+      // // 加入 token
+      // const userData = await getUser(token);
+      // await dispatch({ type: 'SET_USER', payload: userData });
 
       // 取得所有訂單資訊
       const data = await getOrdersData();
@@ -72,6 +74,9 @@ const Member = () => {
     }
   }, [navigate, dispatch, token]);
 
+  useEffect(() => {
+    setUserData(user);
+  }, [setUserData, user])
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
@@ -133,8 +138,8 @@ const Member = () => {
     onTabChange={handleChangeStep}
     activeIndex={activeIndex}
     >
-      <TabPanel header="個人資料" headerTemplate={tab1HeaderTemplate} >
-        <UserInformation />
+      <TabPanel header="個人資料" headerTemplate={tab1HeaderTemplate}>
+        <UserInformation user={userData} />
       </TabPanel>
       <TabPanel header="我的訂單" headerTemplate={tab2HeaderTemplate}>
         <UserOrder data={formattedData} />

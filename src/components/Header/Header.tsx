@@ -89,7 +89,7 @@ export const Header = () => {
         { user
         ? (<>
           <li className={`${isOpen ? 'w-full' : ''}`}>
-            <Link to={'/my-account'} className="btn-ghost"><IconProfile className="fill-transparent stroke-neutral-0 mr-2 inline"/>{user?.name}</Link>
+            <Link to={'/account'} className="btn-ghost"><IconProfile className="fill-transparent stroke-neutral-0 mr-2 inline"/>{user?.name}</Link>
           </li>
           <li className={`btn-ghost cursor-pointer ${isOpen ? 'w-full' : ''}`} onClick={handleLogout}>登出</li>
         </>)

@@ -1,3 +1,5 @@
+import { Address } from './user.type';
+
 export type Verify = {
   email: string;
   isEmailExists?: boolean
@@ -11,7 +13,7 @@ export type ValiEmailForm = LoginForm & {
   confirmPassword: string;
 };
 
-export type UserSignUpForm = {
+export type UserSignUpForm = Partial<Address> & {
   name: string;
   phone: string;
   birthday: {
@@ -19,12 +21,7 @@ export type UserSignUpForm = {
     month: string;
     day: string;
   };
-  address: {
-    city: string;
-    county: string;
-    detail: string;
-    zipcode: string;
-  };
+  address: Address;
   agreement: boolean;
 };
 

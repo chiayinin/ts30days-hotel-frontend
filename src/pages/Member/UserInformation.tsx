@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useContext } from "react";
 import { Dialog } from 'primereact/dialog';
 import { User } from "@types";
 
@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { ValiPasswordType, ValiAccountInfoType, PutUserType, UserSignUpForm } from '@types';
-import { EDIT_PASSWORD_SCHEMA } from '@constants';
+import { EDIT_PASSWORD_SCHEMA, EDIT_USERINFO_SCHEMA, formatTimestamp } from '@constants';
 import {
   USER_SIGN_UP_SCHEMA,
   CITY_OPTIONS,
@@ -16,10 +16,13 @@ import {
   getMonthOptions,
   getDayOptions
  } from '@constants';
+import { GlobalContext } from "@core";
+import { putUser } from '@apis';
 
-const UserInformation = () => {
+const UserInformation = ({user}) => {
   const [visibleEditPassword, setVisibleEditPassword] = useState<boolean>(false);
   const [visibleAccountInfo, setVisibleAccountInfo] = useState<boolean>(false);
+  const { dispatch } = useContext(GlobalContext);
 
   const defaultEditPasswordFrom: ValiPasswordType = {
     oldPassword: '',
@@ -29,44 +32,47 @@ const UserInformation = () => {
   const defaultAccountInfoFrom: ValiAccountInfoType = {
     name: '',
     phone: '',
-    birthday: '',
+    birthday: {
+      year: '2000',
+      month: '1',
+      day: '1'
+    },
     address: {
-      zipcode: '',
-      detail: '',
+      city: '臺北市',
+      county: '中正區',
+      zipcode: '100',
+      detail: ''
     },
   };
   const defaultForm = {
     userId: '',
     name: '',
     phone: '',
-    birthday: '',
+    birthday: {
+      year: '2000',
+      month: '1',
+      day: '1'
+    },
     address: {
-      zipcode: '',
-      detail: '',
+      city: '臺北市',
+      county: '中正區',
+      zipcode: '100',
+      detail: ''
     },
-    oldPassword: '',
-    newPassword: '',
+    oldPassword: undefined,
+    newPassword: undefined,
   };
-  const getUserData = {
-    "address": {
-      "zipcode": 802,
-      "detail": "文山路23號",
-      "city": "高雄市",
-      "county": "苓雅區"
-    },
-    "_id": "6533f0ef4cdf5b7f762747b0",
-    "name": "Lori Murphy",
-    "email": "timmothy.ramos@example.com",
-    "phone": "(663) 742-3828",
-    "birthday": "1982-02-03T16:00:00.000Z",
-    "createdAt": "2023-10-21T15:40:31.526Z",
-    "updatedAt": "2023-10-21T15:40:31.526Z",
-    "id": "6533f0ef4cdf5b7f762747b0"
-  };
-  const [formData, setFormData] = useState<PutUserType>(defaultForm);
+  const [userData, setUserData] = useState(user);
+  // const [formData, setFormData] = useState<PutUserType>(defaultForm);
+
+  useEffect(() => {
+    setUserData(user);
+  }, [user]);
 
 
-  // // Modal: 重設密碼資料驗證
+
+
+  // Modal: 重設密碼資料驗證
   // const {
   //   register,
   //   handleSubmit,
@@ -92,35 +98,23 @@ const UserInformation = () => {
   //   // reset(defaultEditPasswordFrom);
   // };
 
+  // const onSubmit = (data: UserSignUpForm) => {
+  //   console.log('data:', data);
+
+    // userSignUpSubmit(data);
+  // };
+
   // Modal: 修改資本資料資料驗證
   const {
-    register,
-    handleSubmit,
+    register: registerAccount,
+    handleSubmit: handleAccountSubmit,
     watch,
     setValue,
-    formState: { errors, isValid },
-  } = useForm<UserSignUpForm>({
-    resolver: yupResolver(USER_SIGN_UP_SCHEMA),
+    formState: { errors: accountErrors, isValid: isAccountValid },
+  } = useForm<ValiAccountInfoType>({
+    resolver: yupResolver(EDIT_USERINFO_SCHEMA),
     mode: 'onChange',
-    defaultValues: {
-    email: '',
-    password: '',
-    confirmPassword: '',
-    name: '',
-    phone: '',
-    birthday: {
-      year: '2000',
-      month: '1',
-      day: '1'
-    },
-    address: {
-      city: '臺北市',
-      county: '中正區',
-      zipcode: '100',
-      detail: ''
-    },
-    agreement: false
-  }
+    defaultValues: defaultAccountInfoFrom,
   });
   // 監聽表單值變化
   const {city, county} = watch('address');
@@ -150,11 +144,56 @@ const UserInformation = () => {
     if(!options.includes(day)) setValue('birthday.day', options[options.length - 1]);
   }, [year, month, day, setValue]);
 
-  const onSubmit = (data: UserSignUpForm) => {
-    console.log('data:', data);
+  const onAccountInfoSubmit: SubmitHandler<ValiAccountInfoType> = async (data:ValiAccountInfoType) => {
+    const params: PutUserType = {
+      userId: userData?._id ?? '',
+      name: data.name,
+      phone: data.phone,
+      birthday: `${data.birthday.year}/${data.birthday.month}/${data.birthday.day}`,
+      address: {
+        zipcode: data.address.zipcode,
+        detail: data.address.city + data.address.county + data.address.detail
+      },
+    };
 
-    // userSignUpSubmit(data);
+    dispatch({ type: 'SET_LOADER', payload: true });
+    try {
+      const response = await putUser(params);
+
+      await setUserData(response)
+      await dispatch({type: 'SET_USER', payload: response});
+      await dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'success',
+          summary: '成功修改',
+          detail: '已成功修改個人資料。',
+          display: true,
+        },
+      });
+    } catch(error) {
+      console.dir(error);
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '修改失敗',
+          detail: `${error}`,
+          display: true
+        }
+      });
+    } finally {
+      dispatch({type: 'SET_LOADER', payload: false});
+    };
   };
+
+  if(!userData) {
+    return(
+      <div className='container py-10 lg:py-[120px] lg:px-10 text-neutral-80'>
+        <h2 className="text-subtitle lg:h6">查無會員資料</h2>
+      </div>
+    )
+  }
 
   return(
     <div className='flex flex-col md:flex-row md:justify-between gap-6 md:gap-10 mt-10 md:mt-20'>
@@ -164,7 +203,7 @@ const UserInformation = () => {
       <ul className='space-y-4'>
         <li>
           <span className="block mb-2 text-body2 md:text-body text-neutral-80">電子信箱</span>
-          <span className="block text-subtitle md:text-title">Jessica@exsample.com</span>
+          <span className="block text-subtitle md:text-title">{userData.email}</span>
         </li>
         <li>
           <span className="block mb-2 text-body2 md:text-body text-neutral-80">密碼</span>
@@ -179,19 +218,19 @@ const UserInformation = () => {
       <ul className='space-y-4'>
         <li>
           <span className="block mb-2 text-body2 md:text-body text-neutral-80">姓名</span>
-          <span className="block text-subtitle md:text-title">Jessica Ｗang</span>
+          <span className="block text-subtitle md:text-title">{userData.name}</span>
         </li>
         <li>
           <span className="block mb-2 text-body2 md:text-body text-neutral-80">手機號碼</span>
-          <span className="block text-subtitle md:text-title">+886 912 345 678</span>
+          <span className="block text-subtitle md:text-title">{userData.phone}</span>
         </li>
         <li>
           <span className="block mb-2 text-body2 md:text-body text-neutral-80">生日</span>
-          <span className="block text-subtitle md:text-title">1990 年 8 月 15 日</span>
+          <span className="block text-subtitle md:text-title">{formatTimestamp(userData.birthday)}</span>
         </li>
         <li>
           <span className="block mb-2 text-body2 md:text-body text-neutral-80">地址</span>
-          <span className="block text-subtitle md:text-title">高雄市新興區六角路 123 號</span>
+          <span className="block text-subtitle md:text-title">{userData.address?.detail}</span>
         </li>
       </ul>
       <button className="btn-secondary" onClick={() => setVisibleAccountInfo(true)}>編輯基本資料</button>
@@ -246,28 +285,28 @@ const UserInformation = () => {
       headerClassName="h6 md:h5"
     >
       <div>
-        <form onSubmit={handleSubmit(onSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
+        <form onSubmit={handleAccountSubmit(onAccountInfoSubmit)} className="text-subtitle text-neutral-100 md:text-title space-y-10">
           <div className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="" className="block">姓名</label>
-              <input type="text" placeholder="請輸入命名" className="text-body2 md:text-body block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("name")}/>
-              <p className="text-tiny md:text-subtitle text-danger-100">{errors.name?.message}</p>
+              <label className="block">姓名</label>
+              <input type="text" placeholder="請輸入命名" className="text-body2 md:text-body block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...registerAccount("name")}/>
+              <p className="text-tiny md:text-subtitle text-danger-100">{accountErrors.name?.message}</p>
             </div>
             <div className="space-y-2">
               <label className="block">手機號碼</label>
-              <input type="phone" placeholder="請輸入手機號碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100 text-" {...register("phone")}/>
-              <p className="text-tiny md:text-subtitle text-danger-100">{errors.phone?.message}</p>
+              <input type="phone" placeholder="請輸入手機號碼" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100 text-" {...registerAccount("phone")}/>
+              <p className="text-tiny md:text-subtitle text-danger-100">{accountErrors.phone?.message}</p>
             </div>
             <div className="space-y-2">
               <label className="block">生日</label>
               <div className="flex gap-2">
-                <select {...register("birthday.year")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                <select {...registerAccount("birthday.year")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
                   {yearOptions.map((option, index) => (<option key={index} value={option}>{option} 年</option>))}
                 </select>
-                <select {...register("birthday.month")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                <select {...registerAccount("birthday.month")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
                   {monthOptions.map((option, index) => (<option key={index} value={option}>{option} 月</option>))}
                 </select>
-                <select {...register("birthday.day")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                <select {...registerAccount("birthday.day")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
                   {dayOptions.map((option, index) => (<option key={index} value={option}>{option} 日</option>))}
                 </select>
               </div>
@@ -275,24 +314,24 @@ const UserInformation = () => {
             <div className="space-y-2">
               <label className="block">地址</label>
               <div className="flex gap-2">
-                <select {...register("address.city")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                <select {...registerAccount("address.city")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
                   {CITY_OPTIONS.map((option, index) => (<option key={index} value={option.value}>{option.label}</option>))}
                 </select>
-                <select {...register("address.county")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
+                <select {...registerAccount("address.county")} className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100">
                   {AREA_OPTIONS[city].map((option, index) => (<option key={index} value={option.value}>{option.label}</option>))
                   }
                 </select>
-                <input type="hidden" {...register("address.zipcode")} />
+                <input type="hidden" {...registerAccount("address.zipcode")} />
               </div>
-                <input type="text" placeholder="請輸入詳細地址" className="text-body2 md:text-body block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("address.detail")}/>
-                <p className="text-tiny md:text-subtitle text-danger-100">{errors.address?.detail?.message}</p>
+                <input type="text" placeholder="請輸入詳細地址" className="text-body2 md:text-body block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...registerAccount("address.detail")}/>
+                <p className="text-tiny md:text-subtitle text-danger-100">{accountErrors.address?.detail?.message}</p>
             </div>
           </div>
           <button
-          className={`w-full text-title ${!isValid ? 'btn-primary-disable' : 'btn-primary'}`}
-          disabled={!isValid}
-          onClick={() => {setVisibleAccountInfo(false); console.log(isValid);}}
-          >完成註冊</button>
+          className={`w-full text-title ${!isAccountValid ? 'btn-primary-disable' : 'btn-primary'}`}
+          disabled={!isAccountValid}
+          onClick={() => {setVisibleAccountInfo(false)}}
+          >儲存設定</button>
         </form>
       </div>
     </Dialog>

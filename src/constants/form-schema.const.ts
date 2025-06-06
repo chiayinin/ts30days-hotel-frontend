@@ -89,3 +89,27 @@ export const EDIT_PASSWORD_SCHEMA = yup.object({
     .required("欄位不得為空") // 密碼需至少 8 碼以上，並英數混合
     .oneOf([yup.ref('newPassword')], "和密碼不相符")
 });
+
+// 重設個人資料
+export const EDIT_USERINFO_SCHEMA = yup.object({
+  name: yup
+    .string()
+    .required("請輸入姓名")
+    .default(""),
+  phone: yup
+    .string()
+    .required("請輸入手機號碼")
+    .matches(/^09[0-9]{8}$/, "請輸入正確的電話號碼")
+    .default(""),
+  birthday: yup.object({
+    year: yup.string().default(""),
+    month: yup.string().default(""),
+    day: yup.string().default(""),
+  }),
+  address: yup.object({
+    city: yup.string().required("請選擇縣市").default(""),
+    county: yup.string().required("請選擇區域").default(""),
+    detail: yup.string().required("請輸入詳細地址").default(""),
+    zipcode: yup.string().default(""),
+  })
+});
