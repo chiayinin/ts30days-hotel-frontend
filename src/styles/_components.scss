@@ -30,8 +30,11 @@
   @include fadeOut;
 }
 .btn-secondary-disable {
-  @apply bg-neutral-0 border-neutral-60 text-neutral-60;
+  @apply bg-neutral-0 border-neutral-60 text-neutral-60 cursor-not-allowed focus:ring-0;
   @include structure;
+  &:hover {
+    @apply bg-neutral-0 border-neutral-60 text-neutral-60;
+  };
 }
 
 .btn-tertiary {

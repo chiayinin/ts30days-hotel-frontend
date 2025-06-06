@@ -61,6 +61,28 @@ export default {
           10: '#FDECEF'
         }
       },
+      keyframes: {
+        'fadein': {
+          '0%': { opacity: '0' },
+          '50%': { opacity: '0.5' },
+          '100%': { opacity: '1' },
+        },
+        'fadeout': {
+          '0%': { opacity: '1' },
+          '0%': { opacity: '0.5' },
+          '0%': { opacity: '0' },
+        },
+        'edit': {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(9deg)' },
+          '75%': { transform: 'rotate(-9deg)' },
+        },
+      },
+      animation: {
+        'fadein': 'fadein 0.5s ease-in-out',
+        'fadeout': 'fadeout 1s ease-in-out',
+        'edit': 'edit 0.6s ease'
+      },
     },
   },
   plugins: [],

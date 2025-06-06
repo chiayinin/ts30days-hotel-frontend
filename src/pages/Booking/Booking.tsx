@@ -40,8 +40,8 @@ const Booking = () => {
   let startDate = getQueryParam(query, 'startDate');
   let endDate = getQueryParam(query, 'endDate');
 
-  startDate = formatTimestamp(startDate);
-  endDate = formatTimestamp(endDate);
+  startDate = formatTimestamp(Number(startDate));
+  endDate = formatTimestamp(Number(endDate));
 
   // get room data
   const roomData = useLoaderData() as Room | null;

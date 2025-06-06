@@ -12,6 +12,8 @@ import RoomMain from "./pages/RoomMain/RoomMain";
 import RoomDetail from "./pages/RoomDetail/RoomDetail";
 import Booking from "./pages/Booking/Booking";
 import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
+import AccountLayout from "./pages/AccountLayout/AccountLayout";
+import Member from "./pages/Member/Member";
 
 export const router =  createBrowserRouter([
   {
@@ -54,5 +56,16 @@ export const router =  createBrowserRouter([
     path: '/signup',
     element: <Signup />,
     loader: loginGuard
+  },
+  {
+    path: '/account',
+    element: <AccountLayout />,
+    children: [
+      {
+        path: '',
+        // loader: ,
+        element: <Member />,
+      },
+    ]
   }
 ])
