@@ -85,7 +85,7 @@ export const Header = () => {
     { showLinks && (<>
     <nav>
       <ul className={`bg-neutral-bg flex flex-col justify-center items-center fixed w-full text-center h-screen top-0 left-0  gap-4 transition-transform duration-300 ease-in-out md:flex-row md:static md:bg-transparent md:translate-x-0 md:justify-between md:h-auto  ${isOpen ? 'translate-x-0 px-5' : '-translate-x-full'}`}>
-        <li className={isOpen ? 'w-full' : ''}><Link to={'/room'} className="btn-ghost">客房旅宿</Link></li>
+        <li className={isOpen ? 'w-full' : ''} onClick={closeMenu}><Link to={'/room'} className="btn-ghost">客房旅宿</Link></li>
         { user
         ? (<>
           <li className={`${isOpen ? 'w-full' : ''}`}>
@@ -95,7 +95,7 @@ export const Header = () => {
         </>)
         : <li className={isOpen ? 'w-full' : ''}><Link to={'/login'} className="btn-ghost">會員登入</Link></li>
         }
-        <li className={isOpen ? 'w-full' : ''}><Link to={'/room/676e7cf5de85a9ded62f5b2e'} className="btn-primary">立即訂房</Link></li>
+        <li className={isOpen ? 'w-full' : ''} onClick={closeMenu}><Link to={'/room/676e7cf5de85a9ded62f5b2e'} className="btn-primary">立即訂房</Link></li>
       </ul>
     </nav>
     {/* hamburger */}
