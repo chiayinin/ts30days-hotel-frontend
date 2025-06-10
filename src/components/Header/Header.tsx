@@ -95,7 +95,7 @@ export const Header = () => {
         </>)
         : <li className={isOpen ? 'w-full' : ''}><Link to={'/login'} className="btn-ghost">會員登入</Link></li>
         }
-        <li className={isOpen ? 'w-full' : ''}><Link to={'/booking'} className="btn-primary">立即訂房</Link></li>
+        <li className={isOpen ? 'w-full' : ''}><Link to={'/room/676e7cf5de85a9ded62f5b2e'} className="btn-primary">立即訂房</Link></li>
       </ul>
     </nav>
     {/* hamburger */}
