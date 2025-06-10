@@ -18,7 +18,7 @@ export const Banner = () => {
 
   return(<Swiper
     autoplay={{ // 自動輪播 swiper
-      delay: 999 * 1000, // 每兩秒切換下一張
+      delay: 2 * 1000, // 每兩秒切換下一張
     }}
     loop={true} // 輪播結束後回到第一張繼續輪播
     effect={'fade'}
