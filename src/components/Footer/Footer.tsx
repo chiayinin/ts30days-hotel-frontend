@@ -13,10 +13,10 @@ export const Footer = () => {
         <div>
           <Link to={'/'}  className="block mb-10 w-[196px]"><img src={ Logo } alt="享樂酒店" /></Link>
           <ul className="flex justify-start items-center gap-4">
-            <li>
-              <Link to={'#'} ><img src={ iconLine } alt="享樂酒店 Line 官方帳號" /></Link>
+            <li className="rounded-full hover:bg-primary-100 hover:transition-all hover:ease-in-out hover:duration-700">
+              <Link to={'#'}><img src={ iconLine } alt="享樂酒店 Line 官方帳號"/></Link>
             </li>
-            <li>
+            <li className="rounded-full hover:bg-primary-100 hover:transition-all hover:ease-in-out hover:duration-700">
               <Link to={'#'}><img src={ iconIg } alt="享樂酒店 Instagram 官方帳號" /></Link>
             </li>
           </ul>
