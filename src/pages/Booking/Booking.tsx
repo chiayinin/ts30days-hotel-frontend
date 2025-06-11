@@ -137,14 +137,12 @@ const Booking = () => {
   return(<>
   <section className="container text-neutral-100 py-10 md:py-[120px]">
     {/* Menu */}
-    <div className="flex justify-start items-center mb-10">
-      <Link to={`/room/${roomDataId}`} className="leading-none mr-2 hover:text-primary-120 hover:outline">
+    <Link to={`/room/${roomDataId}`} className="flex justify-start items-center mb-10 leading-none mr-2 hover:text-primary-120">
         <span className="material-symbols-outlined">
           chevron_left
         </span>
-      </Link>
-      <h2 className="h5 md:h3">確認訂房資訊</h2>
-    </div>
+        <h2 className="h5 md:h3 underline underline-offset-4">確認訂房資訊</h2>
+    </Link>
     {/* content */}
     <div className="md:flex md:justify-between md:items-start md:gap-3">
       {/* information */}

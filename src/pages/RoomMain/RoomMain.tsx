@@ -68,9 +68,6 @@ const RoomMain = () => {
                 <span className="block text-primary-100 material-symbols-outlined group-hover:text-primary-120 lg:group-hover:h5">
                   arrow_forward
                 </span>
-                {/* <Link to={room._id ?? ''}><span className="block text-primary-100 material-symbols-outlined hover:text-primary-120">
-                  arrow_forward
-                </span></Link> */}
               </div>
             </div>
           </Link>
