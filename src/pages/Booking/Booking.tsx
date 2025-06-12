@@ -33,7 +33,6 @@ const Booking = () => {
     }
   };
 
-
   useEffect(()=>{
     // 驗證是否有 token，未登入要轉跳 login
     if(!token) {

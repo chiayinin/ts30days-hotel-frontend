@@ -39,7 +39,10 @@ export const fetchData = async <T = unknown>(
     const data = response?.data as APIResponseDIO<T>;
 
     if(!data.status) throw new Error(data.message);
-    if(data.token) storeInStorage(KEY_TOKEN, data.token, 'COOKIE');
+    if(data.token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      storeInStorage(KEY_TOKEN, data.token, 'COOKIE');
+    };
 
     return data.result;
   } catch (error: unknown) {
