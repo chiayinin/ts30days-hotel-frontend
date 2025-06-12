@@ -96,7 +96,7 @@ const HistoryContent = ({data, className, onSelectOrder, selectId}:{data: Bookin
         onClick={loadMore}
         disabled={nextIndex >= data.length}
         className={`btn-secondary w-full
-        ${nextIndex >= data.length ? 'btn-secondary-disable' : ''}`}>查看更多
+        ${nextIndex >= data.length ? 'btn-secondary-disable' : ''}`}>{nextIndex ? '已經到最底囉' : '查看更多'}
           <span className="material-symbols-outlined align-bottom">keyboard_arrow_down</span>
         </button>
       </div>

@@ -3,7 +3,7 @@ import { useLoaderData, Link, useNavigate, useLocation, useParams } from "react-
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { GlobalContext } from '@core';
+import { GlobalContext, getFromStorage, KEY_TOKEN } from '@core';
 import { Room, BookingForm, NewBooking, BookingType } from '@types';
 import { RoomBasicInfo } from "@components";
 import { RoomFacilityInfo } from "@components";
@@ -17,6 +17,7 @@ import {
 
 const Booking = () => {
   const { dispatch } = useContext(GlobalContext);
+  const token = getFromStorage(KEY_TOKEN, 'COOKIE');
   const navigate = useNavigate();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -31,6 +32,22 @@ const Booking = () => {
       detail: ''
     }
   };
+
+  useEffect(()=>{
+    // 驗證是否有 token，未登入要轉跳 login
+    if(!token) {
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '未登入',
+          detail: '未登入，請先登入會員。',
+          display: true,
+        },
+      });
+      return navigate('/login');
+    };
+  }, [navigate, dispatch, token])
 
   const { id: roomDataId } = useParams() ;
   const getQueryParam = (queryParams: URLSearchParams, key: string): string =>
@@ -137,14 +154,12 @@ const Booking = () => {
   return(<>
   <section className="container text-neutral-100 py-10 md:py-[120px]">
     {/* Menu */}
-    <div className="flex justify-start items-center mb-10">
-      <Link to={`/room/${roomDataId}`} className="leading-none mr-2 hover:text-primary-120 hover:outline">
+    <Link to={`/room/${roomDataId}`} className="flex justify-start items-center mb-10 leading-none mr-2 hover:text-primary-120">
         <span className="material-symbols-outlined">
           chevron_left
         </span>
-      </Link>
-      <h2 className="h5 md:h3">確認訂房資訊</h2>
-    </div>
+        <h2 className="h5 md:h3 underline underline-offset-4">確認訂房資訊</h2>
+    </Link>
     {/* content */}
     <div className="md:flex md:justify-between md:items-start md:gap-3">
       {/* information */}

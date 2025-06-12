@@ -19,7 +19,6 @@ const Member = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [userData, setUserData] = useState<User | null>({} as User);
 
-
   // 使用 `useCallback` 來記憶函式
   const fetchUser = useCallback(async () => {
     // 驗證是否有 token，未登入要轉跳 login

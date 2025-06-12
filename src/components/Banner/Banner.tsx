@@ -18,7 +18,7 @@ export const Banner = () => {
 
   return(<Swiper
     autoplay={{ // 自動輪播 swiper
-      delay: 999 * 1000, // 每兩秒切換下一張
+      delay: 2 * 1000, // 每兩秒切換下一張
     }}
     loop={true} // 輪播結束後回到第一張繼續輪播
     effect={'fade'}
@@ -49,7 +49,7 @@ export const Banner = () => {
               <div className="relative top-0 end-[10%]">
                 <h1 className="h1 text-neutral-0 mb-5">高雄<br />豪華住宿之選</h1>
                 <p className="text-title text-neutral-0 mb-6">我們致力於為您提供無與倫比的奢華體驗與優質服務</p>
-                <Link to="/booking" className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>立即訂房<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
+                <Link to="/room" className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>立即訂房<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
               </div>
             </div> :
             <p className="h3 md:h1 text-neutral-0 text-center align-middle">客房旅宿</p>
