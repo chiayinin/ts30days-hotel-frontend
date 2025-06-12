@@ -34,7 +34,7 @@ export const fetchData = async <T = unknown>(
 
   try {
     const response = await axios[method](`${url}`, params ? JSON.stringify(params) : undefined);
-    console.log('response:', response);
+    // console.log('response:', response);
 
     const data = response?.data as APIResponseDIO<T>;
 
