@@ -98,13 +98,13 @@ const Login = () => {
             <input type="password" placeholder="密碼需至少 8 碼以上，並英數混合，不分大小寫" className="text-body2 block w-full h-[52px] rounded-lg p-4 border border-b-primary-tint text-neutral-100" {...register("password")}/>
             <p className="text-tiny md:text-subtitle text-danger-100">{errors.password?.message}</p>
           </div>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <label className="peer flex justify-start items-center rounded">
               <input type="checkbox" className="peer size-6 appearance-none rounded border border-primary-10 bg-primary-tint accent-primary-100 checked:appearance-auto cursor-pointer mr-2" />
               <span className="select-none">記住帳號</span>
             </label>
             <Link to="/forget-password" className="text-primary-100 underline md:text-subtitle">忘記密碼</Link>
-          </div>
+          </div> */}
         </div>
         <button className={`w-full text-title ${!isValid ? 'btn-primary-disable' : 'btn-primary'}`} disabled={!isValid}>會員登入</button>
         <p>沒有會員嗎？<Link to="/registration" className="ml-2 text-primary-100 underline md:text-subtitle">前往註冊</Link></p>
