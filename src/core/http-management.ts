@@ -1,12 +1,12 @@
 import { KEY_TOKEN, storeInStorage } from './storage-management.ts';
-import axios from './../../axios.config';
+import axios, { isAxiosError } from '../../axios.config.ts'; // 自定義 axios 實例
 
 /**
  * API 回應的格式
  */
 export type APIResponseDIO<T> = {
   status: boolean;
-  token: string;
+  token?: string;
   message: string;
   result: T;
 };
@@ -29,19 +29,29 @@ export const fetchData = async <T = unknown>(
   url: string,
   params?: unknown,
   token?: string
-) => {
+): Promise<T> => {
   if(token) axios.defaults.headers.common.Authorization = `Bearer ${token}`;
 
   try {
     const response = await axios[method](`${url}`, params ? JSON.stringify(params) : undefined);
-    const data = (await response?.data) as APIResponseDIO<T>;
+    // console.log('response:', response);
+
+    const data = response?.data as APIResponseDIO<T>;
 
     if(!data.status) throw new Error(data.message);
-    if(data.token) storeInStorage(KEY_TOKEN, data.token, 'COOKIE');
+    if(data.token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      storeInStorage(KEY_TOKEN, data.token, 'COOKIE');
+    };
 
     return data.result;
-  } catch (err) {
-    const error =err as Error;
-    throw new Error(`HTTP error: ${error.message}`);
+  } catch (error: unknown) {
+    if (isAxiosError(error)) {
+      // 處理 AxiosError
+      throw new Error(error.response?.data?.message || error.message);
+    } else {
+      // 處理未知錯誤
+      throw new Error((error as Error).message);
+    }
   }
 }

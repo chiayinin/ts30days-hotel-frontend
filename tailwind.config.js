@@ -8,6 +8,18 @@ export default {
   theme: {
     container: {
       center: true,
+      padding: {
+        DEFAULT: '12px', // 左右 padding
+        // lg: '24px',
+        // xl: '36px',
+        // '2xl': '36px'
+      },
+      screens: {
+        DEFAULT: '1296px', // 固定寬度
+        // lg: '1024px',
+        // xl: '1280px',
+        // '2xl': '1296px'
+      }
     },
     extend: {
       colors: {
@@ -48,6 +60,28 @@ export default {
           20: '#F5CCD1',
           10: '#FDECEF'
         }
+      },
+      keyframes: {
+        'fadein': {
+          '0%': { opacity: '0' },
+          '50%': { opacity: '0.5' },
+          '100%': { opacity: '1' },
+        },
+        'fadeout': {
+          '0%': { opacity: '1' },
+          '0%': { opacity: '0.5' },
+          '0%': { opacity: '0' },
+        },
+        'edit': {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '25%': { transform: 'rotate(9deg)' },
+          '75%': { transform: 'rotate(-9deg)' },
+        },
+      },
+      animation: {
+        'fadein': 'fadein 0.5s ease-in-out',
+        'fadeout': 'fadeout 1s ease-in-out',
+        'edit': 'edit 0.6s ease'
       },
     },
   },

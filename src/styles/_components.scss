@@ -2,7 +2,7 @@
 @use 'base' as b;
 
 @mixin structure {
-  @apply px-8 py-4 border rounded-lg block;
+  @apply p-5 md:px-8 md:py-4 border rounded-lg block;
   @include b.bold;
 }
 @mixin focusActiveRing {
@@ -13,29 +13,39 @@
 }
 
 .btn-primary {
-  @apply bg-primary-100 text-neutral-0 border-primary-100 hover:bg-primary-120 hover:border-primary-120;
+  @apply bg-primary-100 text-neutral-0 border-primary-100 hover:bg-primary-120 hover:border-primary-120 cursor-pointer;
   @include structure;
   @include focusActiveRing;
   @include fadeOut;
 }
 .btn-primary-disable {
-  @apply  bg-primary-40 border-primary-40 text-neutral-60;
+  @apply bg-primary-40 border-primary-40 text-neutral-60;
   @include structure;
 }
 
 .btn-secondary {
-  @apply bg-neutral-0 border-primary-100 text-primary-100 hover:bg-primary-10 hover:border-primary-120 hover:text-primary-120;
+  @apply bg-neutral-0 border-primary-100 text-primary-100 hover:bg-primary-10 hover:border-primary-120 hover:text-primary-120 cursor-pointer;
   @include structure;
   @include focusActiveRing;
   @include fadeOut;
 }
 .btn-secondary-disable {
-  @apply bg-neutral-0 border-neutral-60 text-neutral-60;
+  @apply bg-neutral-0 border-neutral-60 text-neutral-60 cursor-not-allowed focus:ring-0;
   @include structure;
+  &:hover {
+    @apply bg-neutral-0 border-neutral-60 text-neutral-60;
+  };
+}
+
+.btn-tertiary {
+  @apply bg-neutral-0 text-neutral-100 border-neutral-0 hover:bg-neutral-50 hover:border-neutral-50  cursor-pointer;
+  @include structure;
+  @include focusActiveRing;
+  @include fadeOut;
 }
 
 .btn-ghost {
-  @apply p-4 text-neutral-0 hover:text-primary-100 block;
+  @apply p-4 text-neutral-0 hover:text-primary-100 block cursor-pointer;
   @include b.bold;
   @include focusActiveRing;
   @include fadeOut;
@@ -46,7 +56,7 @@
 }
 
 .btn-text {
-  @apply underline underline-offset-4 text-primary-100 hover:text-primary-120 block;
+  @apply underline underline-offset-4 text-primary-100 hover:text-primary-120 block cursor-pointer;
   @include b.bold;
   @include focusActiveRing;
   @include fadeOut;
@@ -54,4 +64,64 @@
 .btn-text-disable {
   @apply underline underline-offset-4 text-neutral-60 block;
   @include b.bold;
+}
+
+// Loader
+.loader {
+  width: 96px;
+  height: 96px;
+  display: inline-block;
+  position: relative;
+}
+.loader::before {
+  content: '';
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  left: 0;
+  top: -48px;
+  animation: animloader1 2s linear infinite alternate;
+}
+.loader::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
+  animation: animloader2 2s linear infinite alternate;
+}
+
+@keyframes animloader1 {
+  0%, 32% {
+    box-shadow: 0 48px white, 48px 48px rgba(255, 255, 255, 0), 48px 96px rgba(255, 255, 255, 0), 0px 96px rgba(255, 255, 255, 0);
+  }
+  33%, 65% {
+    box-shadow: 0 48px white, 48px 48px white, 48px 96px rgba(255, 255, 255, 0), 0px 96px rgba(255, 255, 255, 0);
+  }
+  66%, 99% {
+    box-shadow: 0 48px white, 48px 48px white, 48px 96px white, 0px 96px rgba(255, 255, 255, 0);
+  }
+  100% {
+    box-shadow: 0 48px white, 48px 48px white, 48px 96px white, 0px 96px white;
+  }
+}
+
+@keyframes animloader2 {
+  0% {
+    transform: translate(0, 0) rotateX(0) rotateY(0);
+  }
+  33% {
+    transform: translate(100%, 0) rotateX(0) rotateY(180deg);
+  }
+  66% {
+    transform: translate(100%, 100%) rotateX(-180deg) rotateY(180deg);
+  }
+  100% {
+    transform: translate(0, 100%) rotateX(-180deg) rotateY(360deg);
+  }
 }

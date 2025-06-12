@@ -1,18 +1,17 @@
 import { Outlet } from 'react-router-dom';
-import { Header } from '../../components/Header/Header';
-import { Footer } from '../../components/Footer/Footer';
+import { Header } from '@components';
+import { Footer } from '@components';
 
 const Layout = () => {
   return (<>
     {/* Header */}
     <Header></Header>
     {/* Main */}
-    <main>
+    <main className='bg-primary-10'>
       <Outlet />
     </main>
-
     {/* Footer */}
-    {/* <Footer></Footer> */}
+    <Footer></Footer>
   </>)
 }
 
