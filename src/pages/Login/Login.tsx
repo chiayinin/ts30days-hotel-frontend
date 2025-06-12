@@ -107,7 +107,7 @@ const Login = () => {
           </div> */}
         </div>
         <button className={`w-full text-title ${!isValid ? 'btn-primary-disable' : 'btn-primary'}`} disabled={!isValid}>會員登入</button>
-        <p>沒有會員嗎？<Link to="/registration" className="ml-2 text-primary-100 underline md:text-subtitle">前往註冊</Link></p>
+        <p>沒有會員嗎？<Link to="/signup" className="ml-2 text-primary-100 underline md:text-subtitle">前往註冊</Link></p>
       </form>
     </div>
   </div>
