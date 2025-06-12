@@ -3,7 +3,7 @@ import { useLoaderData, Link, useNavigate, useLocation, useParams } from "react-
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { GlobalContext } from '@core';
+import { GlobalContext, getFromStorage, KEY_TOKEN } from '@core';
 import { Room, BookingForm, NewBooking, BookingType } from '@types';
 import { RoomBasicInfo } from "@components";
 import { RoomFacilityInfo } from "@components";
@@ -17,6 +17,7 @@ import {
 
 const Booking = () => {
   const { dispatch } = useContext(GlobalContext);
+  const token = getFromStorage(KEY_TOKEN, 'COOKIE');
   const navigate = useNavigate();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -31,6 +32,23 @@ const Booking = () => {
       detail: ''
     }
   };
+
+
+  useEffect(()=>{
+    // 驗證是否有 token，未登入要轉跳 login
+    if(!token) {
+      dispatch({
+        type: 'SET_TOAST',
+        payload: {
+          severity: 'error',
+          summary: '未登入',
+          detail: '未登入，請先登入會員。',
+          display: true,
+        },
+      });
+      return navigate('/login');
+    };
+  }, [navigate, dispatch, token])
 
   const { id: roomDataId } = useParams() ;
   const getQueryParam = (queryParams: URLSearchParams, key: string): string =>
