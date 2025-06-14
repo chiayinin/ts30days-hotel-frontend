@@ -2,7 +2,7 @@ import { useRef, forwardRef, useContext, useEffect } from 'react';
 import { Toast } from 'primereact/toast';
 import { GlobalContext } from '@core';
 
-export const MyToast = forwardRef((_, ref) => {
+export const MyToast = forwardRef(() => {
   const { toastPayload, dispatch } = useContext(GlobalContext);
   const toastRef = useRef<Toast>(null);
 

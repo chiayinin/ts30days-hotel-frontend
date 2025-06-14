@@ -11,14 +11,14 @@ import registerIMG from '@assets/images/register.png';
 import { GlobalContext } from '@core';
 import { SignUpForm, ValiEmailForm, UserSignUpForm, User } from '@types';
 
-import { Stepper, StepperChangeEvent } from 'primereact/stepper';
+import { Stepper, StepperChangeEvent, StepperRefAttributes } from 'primereact/stepper';
 import { StepperPanel } from 'primereact/stepperpanel';
 
 const Signup = () => {
   const { dispatch } = useContext(GlobalContext)
   const location = useLocation();
   const navigate = useNavigate();
-  const stepperRef = useRef(null);
+  const stepperRef = useRef<StepperRefAttributes>(null);
   const defaultForm  = {
     email: '',
     password: '',
@@ -69,7 +69,7 @@ const Signup = () => {
         // email未註冊，儲存密碼
         // 只要離開 /signup 就刪除密碼
         setFormData({...formData, ...data});
-        stepperRef.current.nextCallback();
+        if(stepperRef.current) stepperRef.current.nextCallback();
       } else {
         // email已註冊，不儲存密碼
         await dispatch({
