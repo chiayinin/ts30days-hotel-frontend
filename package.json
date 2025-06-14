@@ -3,8 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "http://chiayinin.com/ts30days-hotel-frontend",
+  "homepage": "https://chiayinin.github.io/ts30days-hotel-frontend",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -19,6 +21,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "axios": "^1.7.7",
+    "gh-pages": "^6.3.0",
     "primeicons": "^7.0.0",
     "primelocale": "^2.1.2",
     "primereact": "^10.8.4",
