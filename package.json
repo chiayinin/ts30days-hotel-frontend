@@ -6,7 +6,7 @@
   "homepage": "http://chiayinin.com/ts30days-hotel-frontend",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d dist --clean",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
