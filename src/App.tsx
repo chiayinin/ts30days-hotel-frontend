@@ -2,7 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './app-routing';
 import { useEffect, useReducer } from 'react';
 
-import { PrimeReactProvider, addLocale, locale } from 'primereact/api';
+import { addLocale, locale } from 'primereact/api';
 import { all as locales } from 'primelocale';
 
 import { getFromStorage, GlobalContext, KEY_TOKEN, reducer } from '@core';
@@ -58,11 +58,9 @@ const App = () => {
 
   return (
     <GlobalContext.Provider value={{user, toastPayload, isLoading, dispatch}}>
-      {/* <PrimeReactProvider> */}
-        <Loader />
-        <RouterProvider router={router} />
-        <MyToast />
-      {/* </PrimeReactProvider> */}
+      <Loader />
+      <RouterProvider router={router} />
+      <MyToast />
     </GlobalContext.Provider>
   )
 }

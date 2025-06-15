@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import { TabView, TabPanel, TabPanelHeaderTemplateOptions, TabViewTabChangeEvent } from 'primereact/tabview';
 
-import {getUser, getOrdersData } from '@apis';
+import { getOrdersData } from '@apis';
 import { BookingType, User } from '@types';
 import { KEY_TOKEN, getFromStorage, GlobalContext } from '@core';
 import UserInformation from './UserInformation';
@@ -17,7 +17,7 @@ const Member = () => {
   const location = useLocation();
   const [ordersData, setOrdersData] = useState<BookingType[]>([] as BookingType[]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [userData, setUserData] = useState<User | null>({} as User);
+  const [userData, setUserData] = useState<User>({} as User);
 
   // 使用 `useCallback` 來記憶函式
   const fetchUser = useCallback(async () => {
@@ -70,7 +70,7 @@ const Member = () => {
   }, [navigate, dispatch, token]);
 
   useEffect(() => {
-    setUserData(user);
+    if(user) setUserData(user);
   }, [setUserData, user])
   useEffect(() => {
     fetchUser();

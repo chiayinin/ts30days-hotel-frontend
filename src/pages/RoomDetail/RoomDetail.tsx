@@ -181,7 +181,7 @@ const RoomDetail = () => {
           <span className="text-body text-neutral-100">人數</span>
           <InputNumber
             value={bookingPeople}
-            onValueChange={(e: InputNumberValueChangeEvent) => setBookingPeople(e.value)}
+            onValueChange={(e: InputNumberValueChangeEvent) => setBookingPeople(e.value ?? 2)}
             showButtons
             buttonLayout="horizontal"
             min={1}
@@ -252,7 +252,7 @@ const RoomDetail = () => {
             <span className="text-title text-neutral-100">人數</span>
             <InputNumber
               value={bookingPeople}
-              onValueChange={(e: InputNumberValueChangeEvent) => setBookingPeople(e.value)}
+              onValueChange={(e: InputNumberValueChangeEvent) => setBookingPeople(e.value ?? 2)}
               showButtons
               buttonLayout="horizontal"
               min={1}
