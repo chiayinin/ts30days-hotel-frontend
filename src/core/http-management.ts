@@ -31,16 +31,16 @@ export const fetchData = async <T = unknown>(
   token?: string
 ): Promise<T> => {
   if(token) axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+  console.log('1',axios.defaults.headers.common.Authorization);
+
 
   try {
     const response = await axios[method](`${url}`, params ? JSON.stringify(params) : undefined);
-    // console.log('response:', response);
-
     const data = response?.data as APIResponseDIO<T>;
 
     if(!data.status) throw new Error(data.message);
     if(data.token) {
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+      axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
       storeInStorage(KEY_TOKEN, data.token, 'COOKIE');
     };
 
