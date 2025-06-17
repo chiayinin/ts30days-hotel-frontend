@@ -14,7 +14,7 @@ export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { pathname } = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { user, dispatch } = useContext(GlobalContext);
 
   // 漢堡選單切換
