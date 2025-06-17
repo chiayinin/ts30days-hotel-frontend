@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import axios from "axios";
 
 import { getNewsData, getRoomsData, getRoomDetail, getFoodsData, loginGuard } from './apis/index';
@@ -15,7 +15,7 @@ import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import AccountLayout from "./pages/AccountLayout/AccountLayout";
 import Member from "./pages/Member/Member";
 
-export const router =  createBrowserRouter([
+export const router = createHashRouter([
   {
     path: '/',
     element: <Layout />,
