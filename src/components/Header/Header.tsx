@@ -43,7 +43,7 @@ export const Header = () => {
         display: true,
       },
     });
-    navigate('/');
+    // navigate('/');
     closeMenu();
   };
 

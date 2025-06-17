@@ -14,6 +14,7 @@ import Booking from "./pages/Booking/Booking";
 import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
 import AccountLayout from "./pages/AccountLayout/AccountLayout";
 import Member from "./pages/Member/Member";
+import NotFound from './pages/NotFound/NotFound';
 
 export const router = createHashRouter([
   {
@@ -63,9 +64,12 @@ export const router = createHashRouter([
     children: [
       {
         path: '',
-        // loader: ,
         element: <Member />,
       },
     ]
+  },
+  {
+    path: '*',
+    element: <NotFound />
   }
 ])
