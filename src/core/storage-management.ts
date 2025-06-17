@@ -29,7 +29,6 @@ export const storeInStorage = <T = string>(
       // 將 token 儲存在 cookie
       const expired =  new Date(Date.now() + (days * 24 * 60 * 60 * 1000)).toUTCString();
       document.cookie = `hotelToken=${strValue}; expires=${expired};`
-      console.log('成功儲存 token')
       break;
     }
   }
