@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from 'react';
 
 import Logo from "@assets/images/logo_white.svg";
