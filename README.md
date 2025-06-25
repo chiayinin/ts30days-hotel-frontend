@@ -59,6 +59,9 @@ constants：存放不會改變的常量值。
 - _tailwind.scss ：引入 tailwind css 檔案
 - _vendors.scss ：外部套件客製化設定，如 Primereact、Swiper
 
+## 後端服務位置
+本專案使用 Fork 自[六角旅館 API 系統](https://github.com/chiayinin/ts30days-hotel-backend)，並已自行部屬至 [Render](https://ts30days-hotel-backend.onrender.com/swagger/)，作為本地開發與前端串接之後端伺服器。
+
 ## API 呼叫工具函式說明 `fetchData`、Axios
 
 `fetchData` 是一個泛型的通用 API 呼叫函式，支援 `GET`、`POST`、`PUT`、`DELETE` 四種請求方式，搭配自訂的 Axios 實例進行封裝處理，並整合 Token 認證與錯誤處理邏輯。
@@ -141,3 +144,14 @@ try {
   console.error('登入失敗：', (error as Error).message);
 }
 ```
+
+---
+
+## 授權與版權資訊
+本專案為個人學習與展示用途，部分內容取自六角學院所提供之教學資源，原始著作權屬於原作者所有。
+本專案前端程式碼由本人開發，未經授權請勿任意複製或商業使用。
+若有引用或改作，請註明出處。
+
+## 聯絡方式
+可透過以下方式聯繫我：
+Email: chiayinin@gmail.com
