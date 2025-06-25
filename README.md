@@ -62,6 +62,8 @@ constants：存放不會改變的常量值。
 ## 後端服務位置
 本專案使用 Fork 自[六角旅館 API 系統](https://github.com/chiayinin/ts30days-hotel-backend)，並已自行部屬至 [Render](https://ts30days-hotel-backend.onrender.com/swagger/)，作為本地開發與前端串接之後端伺服器。
 
+---
+
 ## API 呼叫工具函式說明 `fetchData`、Axios
 
 `fetchData` 是一個泛型的通用 API 呼叫函式，支援 `GET`、`POST`、`PUT`、`DELETE` 四種請求方式，搭配自訂的 Axios 實例進行封裝處理，並整合 Token 認證與錯誤處理邏輯。
