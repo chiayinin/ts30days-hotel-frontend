@@ -5,9 +5,8 @@
 - 查詢與訂購飯店房型
 - 訂單查詢與個人資料編輯
 - RWD 響應式設計
-<br />
-<img src="https://github.com/user-attachments/assets/5a7f538d-0266-42e4-a857-cc370b1ccc67" width="10%" /> __
-<img src="https://github.com/user-attachments/assets/0535ab94-7351-4257-821c-7fd70f633bb0" style="width: 45%" />
+
+![2025-01-11_7 43 21](https://github.com/user-attachments/assets/6aa8fd4b-16b7-4f5b-8104-b53c7c5b970f)
 
 ## Demo
 [享樂飯店訂房網站](https://chiayinin.com/ts30days-hotel-frontend)
