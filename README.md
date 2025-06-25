@@ -1,5 +1,13 @@
 # 飯店訂房網站(React + TypeScript + Vite)
 
+## 核心功能 Demo 與展示截圖
+- 會員註冊與登入 / JWT 驗證
+- 查詢與訂購飯店房型
+- 訂單查詢與個人資料編輯
+- RWD 響應式設計
+![image](https://github.com/user-attachments/assets/0535ab94-7351-4257-821c-7fd70f633bb0)
+![image](https://github.com/user-attachments/assets/5a7f538d-0266-42e4-a857-cc370b1ccc67)
+
 ## Demo
 [享樂飯店訂房網站](https://chiayinin.com/ts30days-hotel-frontend/)
 ```
@@ -12,6 +20,7 @@ Demo 帳號
 [設計稿](https://www.figma.com/design/23VhjSXFWeZfXYXjcZOceb/%E5%85%AD%E8%A7%92-Project---%E9%85%92%E5%BA%97%E8%A8%82%E6%88%BF%E7%B6%B2%E7%AB%99?node-id=0-1&t=GywMX5Ra07NDFvmL-1)
 
 ## 關於專案
+本專案是一個模擬飯店訂房網站，使用 React 架構，支援用戶註冊、訂房、查看訂單等功能，目的是模擬實際開發團隊要求開發的前端功能整合專案。
 - 使用 Vite 建置 React 搭配 Typescript 開發
 - NodeJS 版本 v20.9.0（建議 18.16.0 以上）
 - 本機運行
@@ -19,16 +28,12 @@ Demo 帳號
 npm run build
 ```
 
-## 使用套件
-- react
-- react-router
-- react-hook-form
-- yup
-- tailwind css
-- primereact
-- swiper
-- axios
-- sass
+## 使用技術 & 套件
+- 前端框架：React（專案主體）
+- 樣式工具：Tailwind CSS + SCSS（樣式處理與版型設計）、Primereact（UI 套件庫）
+- 狀態管理：React Hooks + useContext（使用者登入狀態）
+- 第三方：axios（API 請求）、React Router（頁面切換）、react-hook-form + yup（表單管理）、Swiper（輪播工具）
+- 開發工具：Vite（建構工具）、GitHub Pages（部署）
 
 ## 專案架構
 - assets：圖片檔案，如 JPG、SVG、icon
