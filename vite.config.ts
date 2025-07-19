@@ -8,7 +8,6 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), svgr(), tsconfigPaths()],
-    base: "/ts30days-hotel-frontend/", // 設定為 GitHub Pages 專案路徑
     server: {
       proxy: {
         '/api': {
