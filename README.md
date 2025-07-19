@@ -9,7 +9,7 @@
 ![2025-01-11_7 43 21](https://github.com/user-attachments/assets/6aa8fd4b-16b7-4f5b-8104-b53c7c5b970f)
 
 ## Demo
-[享樂飯店訂房網站](https://chiayinin.com/ts30days-hotel-frontend)
+[享樂飯店訂房網站](https://ts30days-hotel-frontend.vercel.app/)
 ```
 Demo 帳號
 帳號：abc@text.com
@@ -33,7 +33,7 @@ npm run build
 - 樣式工具：Tailwind CSS + SCSS（樣式處理與版型設計）、Primereact（UI 套件庫）
 - 狀態管理：React Hooks + useContext（使用者登入狀態）
 - 第三方：axios（API 請求）、React Router（頁面切換）、react-hook-form + yup（表單管理）、Swiper（輪播工具）
-- 開發工具：Vite（建構工具）、GitHub Pages（部署）
+- 開發工具：Vite（建構工具）、Vercel（部署）
 
 ## 專案架構
 - assets：圖片檔案，如 JPG、SVG、icon
@@ -49,7 +49,7 @@ constants：存放不會改變的常量值。
 - main.tsx：React 的進入點，React.StrictMode 是否要拿掉？
 - app-routing.tsx：
   - router 表
-  - 在 Github Page 部屬使用 HashRouter ex：XXXXXX/#/room
+  - 在 Github Page 部署使用 HashRouter ex：XXXXXX/#/room
   - 若部署環境可以設定的話也可改成 BrowserRouter ex：XXXXX/booking
 
 ## Styles
@@ -60,7 +60,7 @@ constants：存放不會改變的常量值。
 - _vendors.scss ：外部套件客製化設定，如 Primereact、Swiper
 
 ## 後端服務位置
-本專案使用 Fork 自[六角旅館 API 系統](https://github.com/chiayinin/ts30days-hotel-backend)，並已自行部屬至 [Render](https://ts30days-hotel-backend.onrender.com/swagger/)，作為本地開發與前端串接之後端伺服器。
+本專案使用 Fork 自[六角旅館 API 系統](https://github.com/chiayinin/ts30days-hotel-backend)，並已自行部署至 [Render](https://ts30days-hotel-backend.onrender.com/swagger/)，作為本地開發與前端串接之後端伺服器。
 
 ---
 
