@@ -1,4 +1,3 @@
-// import { createHashRouter } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import axios from "axios";
 
@@ -17,7 +16,6 @@ import AccountLayout from "./pages/AccountLayout/AccountLayout";
 import Member from "./pages/Member/Member";
 import NotFound from './pages/NotFound/NotFound';
 
-// export const router = createHashRouter([
 export const router = createBrowserRouter([
   {
     path: '/',
