@@ -46,7 +46,7 @@ constants：存放不會改變的常量值。
 - apis：呼叫 API 功能，使用 axios
 - core：全局狀態管理， Reducer、Context
 - type：定義使用到的 Type
-- main.tsx：React 的進入點，React.StrictMode 是否要拿掉？
+- main.tsx：React 的進入點
 - app-routing.tsx：
   - router 表
   - 在 Github Page 部署使用 HashRouter ex：XXXXXX/#/room
