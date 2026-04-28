@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 
 import { New, Room, Food } from '@types';
-import { Banner } from "@components";
+import { getNewsData, getRoomsData, getFoodsData } from '@apis';
+import { GlobalContext } from "@core";
+import { Banner, Loader } from "@components";
 import dot from '@assets/images/home-dot.png';
 import bgIMG from '@assets/images/home-bg.png';
 import line1IMG from '@assets/images/home-line.png';
 import line2IMG from '@assets/images/home-line2.png';
 import line3IMG from '@assets/images/home-line3.png';
-import aboutIMG from '@assets/images/home-about.png';
+import aboutIMG from '@assets/images/home-about.jpg';
 import mapDeskIMG from '@assets/images/homt-map-desk.png';
 import mapMobileIMG from '@assets/images/homt-map-mobile.png';
 import CarIcon from '@assets/icons/icon-car.svg?react'
@@ -19,13 +21,36 @@ import TrainIcon from '@assets/icons/icon-train.svg?react'
 import LuxurycarIcon from '@assets/icons/icon-luxurycar.svg?react'
 
 const Home = () => {
-  const [ newsData, roomsData, foodsData ]  = useLoaderData() as [New[], Room[], Food[]] ;
+  const { dispatch } = useContext(GlobalContext);
+  const [ newsData, setNewsData] = useState<New[]>([])
+  const [ roomsData, setRoomsData] = useState<Room[]>([])
+  const [ foodsData, setFoodsData] = useState<Food[]>([])
   const [ currentRoomIndex, setCurrentRoomIndex ] = useState(0);
-  const [ currentRoom, setCurrentRoom ] = useState(roomsData[currentRoomIndex]);
+  const [ currentRoom, setCurrentRoom ] = useState<Room | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch({ type: "SET_LOADER", payload: true});
+
+      try {
+        const [ news, rooms, foods ] = await Promise.all([ getNewsData(), getRoomsData(), getFoodsData() ]);
+
+        setNewsData(news);
+        setRoomsData(rooms);
+        setFoodsData(foods);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        dispatch({ type: 'SET_LOADER', payload: false });
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   useEffect(() => {
     setCurrentRoom(roomsData[currentRoomIndex]);
-  }, [currentRoomIndex]);
+  }, [currentRoomIndex, roomsData])
 
   const handlePrevRoom = () => {
     let index = currentRoomIndex - 1;
@@ -40,6 +65,10 @@ const Home = () => {
     if(index >= roomsData.length) index = 0;
     setCurrentRoomIndex(index);
   };
+
+  if (!roomsData.length) {
+  return <Loader />;
+}
 
   return(<>
   {/* banner */}
@@ -100,22 +129,23 @@ const Home = () => {
         }}
         modules={[Autoplay, EffectFade, Pagination]}
         className="w-[351px] h-[300px] xl:w-[630px] xl:h-[600px] 2xl:w-[900px] 2xl:h-[900px] mb-6 md:m-0 2xl:absolute 2xl:top-0 2xl:-left-80 z-0"
+        lazyPreloadPrevNext={1}
       >
-        {currentRoom.imageUrlList.map((image, index) => (
+        {currentRoom?.imageUrlList?.map((image, index) => (
           <SwiperSlide key={index} className="w-full h-full">
-            <figure className="w-full h-full" key={`${currentRoom._id}-${index}`}>
-              <img className="w-full h-full bg-cover rounded-t-lg backdrop-blur-[20px] bg-gradient-to-b from-neutral-0/30 to-neutral-0" src={image} alt={currentRoom.name} />
+            <figure className="w-full h-full" key={`${currentRoom?._id}-${index}`}>
+              <img className="w-full h-full bg-cover rounded-t-lg backdrop-blur-[20px] bg-gradient-to-b from-neutral-0/30 to-neutral-0" src={image} alt={currentRoom?.name} />
             </figure>
           </SwiperSlide> ))}
       </Swiper>
       <div className="space-y-6 relative 2xl:w-[628px]">
         <img className="absolute top-0 right-0"  src={bgIMG} alt="" />
         <div className="space-y-2">
-          <p className="h4 xl:h2">{ currentRoom.name }</p>
-          <p className="text-body2 xl:text-body">{ currentRoom.description }</p>
+          <p className="h4 xl:h2">{ currentRoom?.name }</p>
+          <p className="text-body2 xl:text-body">{ currentRoom?.description }</p>
         </div>
-        <p className="h5 xl:h3">NT$ {currentRoom.price}</p>
-        <Link to={`/room/${currentRoom._id}`} className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>查看更多<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
+        <p className="h5 xl:h3">NT$ {currentRoom?.price}</p>
+        <Link to={`/room/${currentRoom?._id}`} className={`!flex justify-end items-center btn-tertiary hover:bg-primary-100 hover:text-neutral-0 group`}>查看更多<span className={`inline-block border w-20 ml-4 border-neutral-100 bg-neutral-100 group-hover:border-neutral-0 group-hover:bg-neutral-0 transition-all ease-in-out duration-700`} ></span></Link>
         <div className="flex justify-end items-center">
           <div className="text-primary-100 m-4 w-auto h-auto cursor-pointer" onClick={handlePrevRoom}>
             <span className="material-symbols-outlined">arrow_back</span>
@@ -143,11 +173,12 @@ const Home = () => {
         slidesPerView={'auto'}
         spaceBetween={24}
         modules={[Autoplay]}
+        lazyPreloadPrevNext={1}
       >
         {foodsData.map((food, index) => (
           <SwiperSlide key={index} className="w-[300px] h-[480px] xl:w-[416px] xl:h-[600px]">
             <div className="w-full h-full rounded-lg flex items-end overflow-hidden bg-center" style={{ backgroundImage: `url(${food.image})` }}>
-              <div className="text-neutral-0 p-4 xl:p-6 backdrop-blur-[20px] bg-gradient-to-b from-transparent/0 to-[#140F0A]/[77.6%] h-[182px] xl:h-[192px]">
+              <div className="text-neutral-0 p-4 xl:p-6 backdrop-blur-[20px] bg-gradient-to-b from-transparent/0 to-[#140F0A]/[77.6%] h-[190px] xl:h-[204px]">
                 <p className="h5 mb-4 xl:mb-6 flex justify-between items-center">{food.title}<span className="inline-block text-subtitle md:text-title">{food.diningTime}</span></p>
                 <p className="text-body2 xl:text-body">{food.description}</p>
               </div>
@@ -159,12 +190,12 @@ const Home = () => {
   </section>
   {/* map */}
   <section className="bg-neutral-bg text-neutral-0 pt-20 py-[124px] xl:pt-[120px] xl:pb-[268px] relative">
-    <img className="absolute bottom-0 left-0 min-h-[84px] " src={line2IMG} alt="" />
+    <img className="absolute bottom-0 left-0 min-h-[84px]" src={line2IMG} alt="" />
     <div className="container">
       <p className="h3 md:h1 text-primary-100 relative mb-10 md:mb-20 after:block after:w-[200px] after:h-[2px] after:rounded-full after:bg-gradient-to-r after:from-[#BE9C7C] after:to-white after:absolute after:top-1/2 after:left-[106px]">交通<br />方式</p>
       <figure className="w-full min-h-[400px] md:h-[360px] rounded-lg space-y-4 mb-6 md:mb-10">
         <figcaption className="mb-4 text-title">台灣高雄市新興區六角路123號</figcaption>
-        <img className="bg-cover bg-center block md:hidden" src={mapMobileIMG} alt="交通方式" />
+        <img className="bg-cover bg-center block md:hidden" src={mapMobileIMG} alt="交通方式" loading="lazy" />
         <img className="bg-cover bg-center hidden md:block " src={mapDeskIMG} alt="交通方式" />
       </figure>
       <ul className="flex flex-col md:flex-row justify-between items-start gap-6">

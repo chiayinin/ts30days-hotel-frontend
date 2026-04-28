@@ -3,12 +3,14 @@ import { router } from './app-routing';
 import { useEffect, useReducer } from 'react';
 
 import { addLocale, locale } from 'primereact/api';
-import { all as locales } from 'primelocale';
+import { zh_TW } from 'primelocale/js/zh_TW.js';
 
 import { getFromStorage, GlobalContext, KEY_TOKEN, reducer } from '@core';
 import { getUser } from '@apis';
 import { MyToast } from '@components';
 import { Loader } from '@components';
+
+import { Suspense } from 'react';
 
 // style
 import "primereact/resources/themes/lara-light-cyan/theme.css";
@@ -25,9 +27,7 @@ const App = () => {
     isLoading: false,
   });
 
-  // PrimeReact i18n
-  const newLocale = locales['zh-TW'];
-  addLocale('zh-TW', newLocale);
+  addLocale('zh-TW', zh_TW);
   locale('zh-TW');
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const App = () => {
             },
           });
         } catch(err) {
-          console.log('get iser err', err);
+          console.log('get user err', err);
         }
       };
       fetchUSer();
@@ -57,12 +57,21 @@ const App = () => {
   }, []);
 
   return (
+    // <GlobalContext.Provider value={{user, toastPayload, isLoading, dispatch}}>
+    //   {/* <PrimeReactProvider> */}
+    //     <Loader />
+    //     <RouterProvider router={router} />
+    //     <MyToast />
+    //   {/* </PrimeReactProvider> */}
+    // </GlobalContext.Provider>
     <GlobalContext.Provider value={{user, toastPayload, isLoading, dispatch}}>
-      <Loader />
-      <RouterProvider router={router} />
-      <MyToast />
+      <Suspense fallback={<Loader />}>
+        {/* <Loader /> */}
+        <RouterProvider router={router} />
+        <MyToast />
+      </Suspense>
     </GlobalContext.Provider>
-  )
+      )
 }
 
 export default App

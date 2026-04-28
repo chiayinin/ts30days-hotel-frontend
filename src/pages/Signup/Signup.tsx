@@ -7,7 +7,7 @@ import ValiEmail from './ValiEmail';
 import { verifyEmail, signUp } from "@apis";
 import { Header } from "@components";
 import { Footer } from "@components";
-import registerIMG from '@assets/images/register.png';
+import registerIMG from '@assets/images/register.jpg';
 import { GlobalContext } from '@core';
 import { SignUpForm, ValiEmailForm, UserSignUpForm, User } from '@types';
 

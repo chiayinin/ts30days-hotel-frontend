@@ -1,20 +1,18 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import axios from "axios";
-
-import { getNewsData, getRoomsData, getRoomDetail, getFoodsData, loginGuard } from './apis/index';
+import { getRoomsData, getRoomDetail, loginGuard } from './apis/index';
 
 // 頁面元件
-import Layout from "./pages/Layout/Layout";
-import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import Signup from "./pages/Signup/Signup";
-import RoomMain from "./pages/RoomMain/RoomMain";
-import RoomDetail from "./pages/RoomDetail/RoomDetail";
-import Booking from "./pages/Booking/Booking";
-import BookingSuccess from "./pages/BookingSuccess/BookingSuccess";
-import AccountLayout from "./pages/AccountLayout/AccountLayout";
-import Member from "./pages/Member/Member";
-import NotFound from './pages/NotFound/NotFound';
+const Layout = lazy(() => import("./pages/Layout/Layout"));
+const Home = lazy(() => import("./pages/Home/Home"));
+const Login = lazy(() => import("./pages/Login/Login"));
+const Signup = lazy(() => import("./pages/Signup/Signup"));
+const RoomMain = lazy(() => import("./pages/RoomMain/RoomMain"));
+const RoomDetail = lazy(() => import("./pages/RoomDetail/RoomDetail"));
+const Booking = lazy(() => import("./pages/Booking/Booking"));
+const BookingSuccess = lazy(() => import("./pages/BookingSuccess/BookingSuccess"));
+const AccountLayout = lazy(() => import("./pages/AccountLayout/AccountLayout"));
+const Member = lazy(() => import("./pages/Member/Member"));
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +21,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
-        loader: async () => axios.all([ getNewsData(), getRoomsData(), getFoodsData() ]),
+        // loader: async () => axios.all([ getNewsData(), getRoomsData(), getFoodsData() ]),
         element: <Home />,
       },
       {
@@ -68,8 +66,10 @@ export const router = createBrowserRouter([
       },
     ]
   },
-  {
-    path: '*',
-    element: <NotFound />
-  }
-])
+  // {
+  //   path: '*',
+  //   element: <NotFound />
+  // }
+], {
+  basename: '/',
+})
